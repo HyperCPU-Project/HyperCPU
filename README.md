@@ -111,7 +111,7 @@ $ ./hcemul [-h] [--help] [--version] [-v VAR] [-m VAR] [--memory VAR] binary
 
 We will be happy to hear any feedback from you. Do not hesitate to report bugs or suggest any ideas using "Issues" page.
 
-Want to contribute to the project? Read [CONTRIBUTION.md](CONTRIBUTION.md) firstly.
+Want to contribute to the project? Read [CONTRIBUTING.md](CONTRIBUTING.md) firstly.
 
 Thank you for your interest in HyperCPU.
 
