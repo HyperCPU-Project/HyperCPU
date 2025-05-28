@@ -30,13 +30,13 @@ data:
 .attr(entry) main:
   mov x1, data;
 
-loop:
+print:
   mov xlll2, [x1];
   cmp xlll2, 0u0;
-  jme end;
+  jme print_end;
   write xlll0, xlll2;
   inc x1;
-  jmp loop;
+  jmp print;
 
-end:
+print_end:
   halt;

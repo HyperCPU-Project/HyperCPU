@@ -8,19 +8,19 @@
  */
 
 data:
-	.b8 "Hello, world!\n";
-	.b8 0u0;
+  .b8 "Hello, world!\n";
+  .b8 0u0;
 
 .attr(entry) main:      // Program entry point.
-	mov x1, data;
+  mov x1, data;
 
-loop:
-	mov xlll2, [x1];
-	cmp xlll2, 0u0;     // Is NULL (0u0)?
-	jme end;            // Yes — go to finish.
-	write xlll0, xlll2; // No — write data to console.
-	inc x1;
-	jmp loop;
+print:
+  mov xlll2, [x1];
+  cmp xlll2, 0u0;     // Is NULL (0u0)?
+  jme print_end;      // Yes — go to finish.
+  write xlll0, xlll2; // No — write data to console.
+  inc x1;
+  jmp print;
 
-end:
-	halt;
+print_end:
+  halt;
