@@ -41,7 +41,6 @@ Pre-compiled binaries are currently not available. Sorry.
 Building HyperCPU requires these dependencies to be installed:
 
 * GCC `>=12` or Clang `>=14`;
-* CMake `>=3.25`;
 * GNU make (required for documentation).
 * Bazel `>=8.2.1` (recommended using Bazelisk for installation).
 * Python `>=3.6` with additional modules:
