@@ -28,7 +28,7 @@ See [ROADMAP.md](ROADMAP.md) for project ideas and tasks.
 ### Installation
 
 >[!WARNING]
-> HyperCPU supports GNU/Linux systems only. It is known to be successfully built on `i386`, `amd64`, `armv8l` and `aarch64` architectures.
+> HyperCPU supports GNU/Linux systems only. It is known to be successfully built on `x86_32`, `x86_64` and `ARMv8` architectures.
 >
 > HyperCPU fails to build and/or work properly under \*BSD systems ­— please do not ask us for support of these systems. Windows support is also not planned.
 
