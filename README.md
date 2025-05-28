@@ -41,36 +41,22 @@ Pre-compiled binaries are currently not available. Sorry.
 Building HyperCPU requires these dependencies to be installed:
 
 * GCC `>=12` or Clang `>=14`;
-* GNU make, CMake `>=3.25`;
+* CMake `>=3.25`;
+* GNU make (required for documentation).
 * Bazel `>=8.2.1` (recommended using Bazelisk for installation).
 * Python `>=3.6` with additional modules:
     * `conan` (should be installed with `--break-system-packages` flag);
-    * `sphinx` and `sphinx-rtd-theme`.
+    * `sphinx` and `sphinx-rtd-theme` (required for documentation).
 
-After installing dependencies clone the repository:
+After installing dependencies build the project by executing these commands:
 
 ```bash
-git clone --recursive https://github.com/HyperCPU-Project/HyperCPU
+git clone --recursive https://github.com/HyperCPU-Project/HyperCPU # Clone the repository.
 cd HyperCPU
-```
-
-Download and build all dependencies:
-
-```bash
-conan profile detect && conan install . --build=cmake --build=missing
-```
-
-Finally, build HyperCPU:
-
-```bash
-bazel build //src/... --config=linux-opt
-```
-
-...and make symlinks to compiled executable files:
-
-```bash
-ln -s bazel-bin/src/Assembler/hcasm hcasm
-ln -s bazel-bin/src/Emulator hcemul
+conan profile detect && conan install . --build=cmake --build=missing # Download and compile dependencies.
+bazel build //src/... --config=linux-opt # Build the project.
+ln -s bazel-bin/src/Assembler/hcasm hcasm # Make symlink to hcasm.
+ln -s bazel-bin/src/Emulator hcemul # Make symlink to hcemul.
 ```
 
 Building documentation should not be hard too:
@@ -89,7 +75,7 @@ Check out [examples](examples) folder for interesting code examples that will he
 #### `hcasm` (hASM assembler)
 
 ```bash
-$ ./hcasm [-h] [--help] [--version] [-o VAR] [-c] [-V VAR] source
+$ ./hcasm [-h | --help] [--version] [-o VAR] [-c] [-V VAR] source
 ```
 
 * `source` — source code file to be compiled.
@@ -102,14 +88,14 @@ $ ./hcasm [-h] [--help] [--version] [-o VAR] [-c] [-V VAR] source
 #### `hcemul` (hCPU emulator)
 
 ```bash
-$ ./hcemul [-h] [--help] [--version] [-v VAR] [-m VAR] [--memory VAR] binary
+$ ./hcemul [-h | --help] [--version] [-v VAR] [-m | --memory VAR] binary
 ```
 
 * `binary` — binary file to be executed.
 * `-h`, `--help` — display help message and exit.
 * `--version` — display program version and exit.
 * `-v VAR` — specify verbosity level (`debug`, `info`, `warning`, `error`). Default value is `warning`.
-* `-m`, `--memory` — specify max. memory amount to be used. Postfixes are supported. Default value is `8K`.
+* `-m` (`--memory`) `VAR` — specify max. memory amount to be used. Postfixes are supported. Default value is `8K`.
 
 ### Contributing
 
