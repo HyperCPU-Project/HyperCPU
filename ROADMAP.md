@@ -1,6 +1,6 @@
 # HyperCPU Roadmap
 
-This document describes the roadmap of the project (some kind of TODO-list).
+This file describes the roadmap of the project (some kind of TODO-list).
 
 ### *Release 1.0*
 
