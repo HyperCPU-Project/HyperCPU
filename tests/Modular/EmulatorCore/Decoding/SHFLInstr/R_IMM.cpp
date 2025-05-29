@@ -3,7 +3,8 @@
 TEST_F(DECODER_TEST, SHFL_INSTR_R_IMM_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::SHFL);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_IMM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -27,7 +28,8 @@ TEST_F(DECODER_TEST, SHFL_INSTR_R_IMM_B8) {
 TEST_F(DECODER_TEST, SHFL_INSTR_R_IMM_B16) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::SHFL);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16,  HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_IMM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -51,7 +53,8 @@ TEST_F(DECODER_TEST, SHFL_INSTR_R_IMM_B16) {
 TEST_F(DECODER_TEST, SHFL_INSTR_R_IMM_B32) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::SHFL);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32,  HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_IMM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -75,7 +78,8 @@ TEST_F(DECODER_TEST, SHFL_INSTR_R_IMM_B32) {
 TEST_F(DECODER_TEST, SHFL_INSTR_R_IMM_B64) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::SHFL);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64,  HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_IMM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;

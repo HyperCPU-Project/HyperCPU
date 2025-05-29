@@ -8,10 +8,10 @@
 #include "Emulator/Core/CPU/Decoders/StdDecoder.hpp"
 
 // TODO: лишать кошка жена за такое
-#define dcdr_assert(expr)                        \
+#define dcdr_assert(expr){                       \
   RaiseException((expr));                        \
   if (cpu && cpu->pending_interrupt.has_value()) \
-  return {.m_opcode = Opcode::_CONT, .m_opcode_mode = Mode::b64, .m_op_types = OperandTypes::NONE, .m_op1 = {}, .m_op2 = {}, .addr_extension_status = HyperCPU::AddrExtensionStatus::Disabled, .extension = 0}
+  return {.m_opcode = Opcode::_CONT, .m_opcode_mode = Mode::b64, .m_op_types = OperandTypes::NONE, .m_op1 = {}, .m_op2 = {}, .addr_extension_status = HyperCPU::AddrExtensionStatus::Disabled, .extension = 0};}
 
 void HyperCPU::Decoder::RaiseException(bool expr) noexcept {
   if (!(expr)) {
@@ -64,7 +64,10 @@ HyperCPU::IInstruction HyperCPU::Decoder::FetchAndDecode() {
 
   // Fetch flags, set opcode Mode and verify operand types
   flags = mem_controller->Fetch8(*xip);
-  instruction.m_opcode_mode = static_cast<enum Mode>((flags & 0b00110000) >> 4);
+  instruction.m_opcode_mode = ModePack {
+    static_cast<enum Mode>((flags & 0b11000000) >> 6),
+    static_cast<enum Mode>((flags & 0b00110000) >> 4)
+  };
 
   dcdr_assert((flags & 0b00001111) <= static_cast<decltype(flags)>(OperandTypes::NONE));
   instruction.m_op_types = static_cast<enum OperandTypes>(flags & 0b00001111);
@@ -75,10 +78,30 @@ HyperCPU::IInstruction HyperCPU::Decoder::FetchAndDecode() {
   }
 
   // Check if op Mode is valid for this opcode
+  
   dcdr_assert(AllowedOpModes[opcode][static_cast<std::uint8_t>(instruction.m_op_types)]);
-  dcdr_assert((AllowedOpModes[opcode][static_cast<std::uint8_t>(instruction.m_op_types)] == SUPPORT_ALL) ||
-              CheckSupportedOperandSize(AllowedOpModes[opcode][static_cast<std::uint8_t>(instruction.m_op_types)],
-                                        instruction.m_opcode_mode));
+
+  if (AllowedOpModes[opcode][static_cast<std::uint8_t>(instruction.m_op_types)] == SUPPORT_ALL) {
+    goto skip_op_type_verification;
+  }
+  switch (instruction.m_op_types) {
+    case HyperCPU::OperandTypes::R_R:
+    case HyperCPU::OperandTypes::R_RM:
+    case HyperCPU::OperandTypes::R_M:
+    case HyperCPU::OperandTypes::R_IMM:
+    case HyperCPU::OperandTypes::RM_R:
+    case HyperCPU::OperandTypes::RM_M:
+    case HyperCPU::OperandTypes::RM_IMM:
+    case HyperCPU::OperandTypes::M_R:
+      dcdr_assert((CheckSupportedOperandSize(AllowedOpModes[opcode][static_cast<std::uint8_t>(instruction.m_op_types)], instruction.m_opcode_mode.md2)));
+    case HyperCPU::OperandTypes::R:
+    case HyperCPU::OperandTypes::M:
+    case HyperCPU::OperandTypes::IMM:
+    case HyperCPU::OperandTypes::NONE:
+      dcdr_assert((CheckSupportedOperandSize(AllowedOpModes[opcode][static_cast<std::uint8_t>(instruction.m_op_types)], instruction.m_opcode_mode.md1)));
+  }
+
+skip_op_type_verification:
 
   switch (instruction.m_op_types) {
   case OperandTypes::R_R:
@@ -110,7 +133,7 @@ HyperCPU::IInstruction HyperCPU::Decoder::FetchAndDecode() {
     dcdr_assert(Validator::IsValidRegister(tmp));
     instruction.m_op1 = OperandContainer(HyperCPU::bit_cast<std::uint64_t>(tmp));
 
-    switch (instruction.m_opcode_mode) {
+    switch (instruction.m_opcode_mode.md2) {
     case Mode::b8: {
       std::uint8_t vtmp = mem_controller->Fetch8(*xip);
       instruction.m_op2 = OperandContainer(HyperCPU::bit_cast<std::uint64_t>(vtmp));
@@ -158,7 +181,7 @@ HyperCPU::IInstruction HyperCPU::Decoder::FetchAndDecode() {
     break;
 
   case OperandTypes::IMM:
-    switch (instruction.m_opcode_mode) {
+    switch (instruction.m_opcode_mode.md1) {
     case Mode::b8: {
       std::uint8_t vtmp = mem_controller->Fetch8(*xip);
       instruction.m_op1 = OperandContainer(HyperCPU::bit_cast<std::uint64_t>(vtmp));

@@ -51,7 +51,7 @@ namespace HyperCPU {
 
     std::array<opcode_handler, 128> opcode_handler_assoc;
 
-    std::pair<OperandContainer, OperandContainer> GetOperands(OperandTypes op_types, Mode md, OperandContainer& op1, OperandContainer& op2);
+    std::pair<OperandContainer, OperandContainer> GetOperands(OperandTypes op_types, ModePack md, OperandContainer& op1, OperandContainer& op2);
     OperandContainer GetRegister(OperandContainer& op1);
 
     // Stack

@@ -10,6 +10,11 @@ namespace HyperCPU {
     b64
   };
 
+  struct ModePack {
+    Mode md1;
+    Mode md2;
+  };
+
   enum class OperandTypes {
     R_R = 0,
     R_RM,

@@ -20,7 +20,7 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_R_B8) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_R_B16) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_R));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16,  HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_R));
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -33,7 +33,7 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_R_B16) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_R_B32) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_R));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32,  HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_R));
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -46,7 +46,7 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_R_B32) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_R_B64) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_R));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64,  HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_R));
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -59,7 +59,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_R_B64) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_RM_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_RM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_RM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -72,7 +73,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_RM_B8) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_RM_B16) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_RM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16,  HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_RM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -85,7 +87,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_RM_B16) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_RM_B32) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_RM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32,  HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_RM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -98,7 +101,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_RM_B32) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_RM_B64) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_RM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64,  HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_RM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -111,7 +115,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_RM_B64) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_M_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_M));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_M)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -124,7 +129,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_M_B8) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_M_B16) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_M));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16,  HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_M)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -137,7 +143,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_M_B16) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_M_B32) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_M));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32,  HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_M)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -150,7 +157,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_M_B32) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_M_B64) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_M));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64,  HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_M)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -163,7 +171,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_M_B64) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_IMM_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_IMM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -176,7 +185,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_IMM_B8) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_IMM_B16) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16,  HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_IMM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -189,7 +199,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_IMM_B16) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_IMM_B32) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32,  HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_IMM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -202,7 +213,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_R_IMM_B32) {
 TEST_F(DECODER_TEST, CUDF_INSTR_R_IMM_B64) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64,  HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_IMM)
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -267,7 +279,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_M_R_B64) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_R_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::RM_R));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::RM_R))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -280,7 +293,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_R_B8) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_R_B16) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16, HyperCPU::OperandTypes::RM_R));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16,  HyperCPU::Mode::b16, HyperCPU::OperandTypes::RM_R))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -293,7 +307,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_R_B16) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_R_B32) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32, HyperCPU::OperandTypes::RM_R));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32,  HyperCPU::Mode::b32, HyperCPU::OperandTypes::RM_R))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -306,7 +321,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_R_B32) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_R_B64) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::RM_R));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64,  HyperCPU::Mode::b64, HyperCPU::OperandTypes::RM_R))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -319,7 +335,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_R_B64) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_M_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::RM_M));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::RM_M))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -332,7 +349,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_M_B8) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_M_B16) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16, HyperCPU::OperandTypes::RM_M));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16,  HyperCPU::Mode::b16, HyperCPU::OperandTypes::RM_M))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -345,7 +363,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_M_B16) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_M_B32) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32, HyperCPU::OperandTypes::RM_M));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32,  HyperCPU::Mode::b32, HyperCPU::OperandTypes::RM_M))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -358,7 +377,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_M_B32) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_M_B64) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::RM_M));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64,  HyperCPU::Mode::b64, HyperCPU::OperandTypes::RM_M))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -371,7 +391,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_M_B64) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_IMM_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::RM_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::RM_IMM))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -384,7 +405,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_IMM_B8) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_IMM_B16) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16, HyperCPU::OperandTypes::RM_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16,  HyperCPU::Mode::b16, HyperCPU::OperandTypes::RM_IMM))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -397,7 +419,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_IMM_B16) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_IMM_B32) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32, HyperCPU::OperandTypes::RM_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32,  HyperCPU::Mode::b32, HyperCPU::OperandTypes::RM_IMM))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -410,7 +433,8 @@ TEST_F(DECODER_TEST, CUDF_INSTR_RM_IMM_B32) {
 TEST_F(DECODER_TEST, CUDF_INSTR_RM_IMM_B64) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CUDF);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::RM_IMM));
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64,  HyperCPU::Mode::b64, HyperCPU::OperandTypes::RM_IMM))
+;
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;

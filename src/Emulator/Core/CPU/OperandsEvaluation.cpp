@@ -102,7 +102,7 @@ HyperCPU::OperandContainer HyperCPU::CPU::GetRegister(OperandContainer& op1) {
   }
 }
 
-std::pair<HyperCPU::OperandContainer, HyperCPU::OperandContainer> HyperCPU::CPU::GetOperands(OperandTypes op_types, Mode md, OperandContainer& op1, OperandContainer& op2) {
+std::pair<HyperCPU::OperandContainer, HyperCPU::OperandContainer> HyperCPU::CPU::GetOperands(OperandTypes op_types, ModePack md, OperandContainer& op1, OperandContainer& op2) {
   switch (op_types) {
   case OperandTypes::R_R:
   case OperandTypes::R_RM:
@@ -119,7 +119,7 @@ std::pair<HyperCPU::OperandContainer, HyperCPU::OperandContainer> HyperCPU::CPU:
 
   case OperandTypes::RM_IMM:
   case OperandTypes::R_IMM: {
-    switch (md) {
+    switch (md.md2) {
     case Mode::b8: {
       std::uint8_t imm8;
       std::memcpy(&imm8, &op2, sizeof(std::uint8_t));
