@@ -118,6 +118,8 @@ namespace HyperCPU {
     std::array<read_operation_handler, 256> read_io_handlers;
     std::array<write_operation_handler, 256> write_io_handlers;
     std::unique_ptr<SimpleIOImpl> io_ctl;
+    
+    class CPU_InstrImpl;
 
   public:
     CPU(std::uint16_t core_count, std::uint64_t mem_size, char* binary = nullptr, std::uint64_t binary_size = 0);

@@ -3,8 +3,8 @@
 #include "PCH/CStd.hpp"
 
 namespace HyperCPU {
-  template <typename T>
-  constexpr bool AdditionWillOverflow(T& a, T& b) {
+  template <typename T, typename U>
+  constexpr bool AdditionWillOverflow(T& a, U& b) {
     return (b > 0 && a > std::numeric_limits<T>::max() - b);
   }
 
