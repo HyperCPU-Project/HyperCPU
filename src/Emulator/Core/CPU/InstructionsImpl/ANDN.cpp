@@ -24,7 +24,7 @@ public:
 
   /* R_RM implementation */
   template<typename T1, typename T2>
-  void __hcpu_andn_rrm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+  static constexpr void __hcpu_andn_rrm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T2, std::uint64_t>); // Locked by current CPU specification
 
     T2 ptr = HyperCPU::bit_cast_from<T2>(op2.ptr<T2>());
@@ -36,7 +36,7 @@ public:
 
   /* R_M implementation */
   template<typename T1, typename T2>
-  void __hcpu_andn_rm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+  static constexpr void __hcpu_andn_rm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T2, std::uint64_t>); // Locked by current CPU specification
 
     T2 ptr = HyperCPU::bit_cast<T2>(op2);
@@ -48,12 +48,12 @@ public:
 
   /* R_IMM implementation */
   template<typename T1, typename T2>
-  void __hcpu_andn_rimm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+  static constexpr void __hcpu_andn_rimm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
 
     T1 val = HyperCPU::bit_cast<T1>(op2);
     cpu.ovf = AdditionWillOverflow(op1.deref<T1>(), val);
-    
+
     op1.deref<T1>() = HyperALU::__hcpu_and(HyperALU::__hcpu_not(op1.deref<T1>()), val);
   }
 };
