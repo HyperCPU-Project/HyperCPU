@@ -27,7 +27,7 @@ public:
     static_assert(std::is_same_v<T2, std::uint64_t>); // Locked by current CPU specification
 
     T2 ptr = HyperCPU::bit_cast_from<T2>(op2.ptr<T2>());
-    T1 val = cpu.mem_controller->Read8(ptr);
+    T1 val = cpu.mem_controller->Read<T1>(ptr);
 
     op1.deref<T1>() = HyperALU::__hcpu_and(op1.deref<T1>(), val);
   }
@@ -38,7 +38,7 @@ public:
     static_assert(std::is_same_v<T2, std::uint64_t>); // Locked by current CPU specification
 
     T2 ptr = HyperCPU::bit_cast<T2>(op2);
-    T1 val = cpu.mem_controller->Read8(ptr);
+    T1 val = cpu.mem_controller->Read<T1>(ptr);
 
     op1.deref<T1>() = HyperALU::__hcpu_and(op1.deref<T1>(), val);
   }

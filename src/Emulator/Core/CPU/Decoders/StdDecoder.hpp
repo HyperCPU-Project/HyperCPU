@@ -5,7 +5,7 @@
 #include "Common/LanguageSpec/Flags.hpp"
 #include "Common/LanguageSpec/Opcodes.hpp"
 #include "Emulator/Core/CPU/Decoders/IDecoder.hpp"
-#include "Emulator/Core/MemoryController/IMemoryController.hpp"
+#include "Emulator/Core/MemoryController/MemoryControllerST.hpp"
 #include "Emulator/Misc/bit_cast.hpp"
 
 namespace HyperCPU {
@@ -14,6 +14,8 @@ namespace HyperCPU {
     EnabledOp1 = 0b10,
     EnabledOp2 = 0b11
   };
+
+  class MemoryControllerST;
 
   struct OperandContainer {
   public:
@@ -83,7 +85,7 @@ namespace HyperCPU {
 
   class Decoder final : public IDecoder {
   private:
-    IMemoryController* mem_controller;
+    MemoryControllerST* mem_controller;
     std::uint64_t* xip;
     class CPU* cpu;
     bool decoder_halted;
@@ -93,7 +95,7 @@ namespace HyperCPU {
 
   public:
     explicit Decoder() = default; // For testing purposes - causes UB if used incorrectly
-    explicit Decoder(IMemoryController* mc, std::uint64_t* counter, class CPU* cpu)
+    explicit Decoder(MemoryControllerST* mc, std::uint64_t* counter, class CPU* cpu)
         : mem_controller(mc), xip(counter), cpu(cpu), decoder_halted(false) {
     }
 

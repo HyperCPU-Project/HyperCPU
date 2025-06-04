@@ -7,7 +7,7 @@
 #include "Emulator/Core/MemoryController/MemoryControllerST.hpp"
 
 HyperCPU::CPU::CPU(std::uint16_t core_count, std::uint64_t mem_size, char* binary, std::uint64_t binary_size)
-    : mem_controller(dynamic_cast<IMemoryController*>(new MemoryControllerST(mem_size, this))),
+    : mem_controller(new MemoryControllerST(mem_size, this)),
       core_count(core_count),
       total_mem(mem_size),
       halted(false),

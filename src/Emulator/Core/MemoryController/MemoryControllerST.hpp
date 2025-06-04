@@ -36,10 +36,10 @@ namespace HyperCPU {
 
   template<typename T>
   concept IntConvertable = 
-    (sizeof(T) == 1 && std::is_convertible_v<LoadTypeChooser<std::is_enum_v<T>, T>, std::uint8_t>) ||
-    (sizeof(T) == 2 && std::is_convertible_v<LoadTypeChooser<std::is_enum_v<T>, T>, std::uint16_t>) ||
-    (sizeof(T) == 4 && std::is_convertible_v<LoadTypeChooser<std::is_enum_v<T>, T>, std::uint32_t>) ||
-    (sizeof(T) == 8 && std::is_convertible_v<LoadTypeChooser<std::is_enum_v<T>, T>, std::uint64_t>);
+    (sizeof(T) == 1 && std::is_convertible_v<typename LoadTypeChooser<std::is_enum_v<T>, T>::type, std::uint8_t>) ||
+    (sizeof(T) == 2 && std::is_convertible_v<typename LoadTypeChooser<std::is_enum_v<T>, T>::type, std::uint16_t>) ||
+    (sizeof(T) == 4 && std::is_convertible_v<typename LoadTypeChooser<std::is_enum_v<T>, T>::type, std::uint32_t>) ||
+    (sizeof(T) == 8 && std::is_convertible_v<typename LoadTypeChooser<std::is_enum_v<T>, T>::type, std::uint64_t>);
 
   class MemoryControllerST final {
   private:

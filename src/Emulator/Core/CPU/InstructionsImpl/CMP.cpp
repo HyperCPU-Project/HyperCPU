@@ -8,8 +8,8 @@ public:
   constexpr CPU_InstrImpl() { }
 
   /* R_R implementation */
-  template<typename T1, typename T2, typename T3>
-  static constexpr T3 __hcpu_cmp_rr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+  template<typename T1, typename T2, typename T3 = std::int8_t>
+  static constexpr T3 __hcpu_cmp_rr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& /* cpu */) {
     static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
 
     return HyperALU::__hcpu_cmp(
@@ -19,219 +19,254 @@ public:
   }
 
   /* R_RM implementation */
-  template<typename T1, typename T2, typename T3>
+  template<typename T1, typename T2, typename T3 = std::int8_t>
   static constexpr T3 __hcpu_cmp_rrm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T2, std::uint64_t>); // Locked by current CPU specification
 
+    std::uint64_t ptr;
+    std::memcpy(&ptr, op2.ptr<void>(), sizeof(ptr));
+
     return HyperALU::__hcpu_cmp(
       HyperCPU::bit_cast_from<T1>(op1.ptr<T1>()),
-      HyperCPU::bit_cast_from<T2>(op2.ptr<T2>())
+      cpu.mem_controller->Read<T1>(ptr)
     );
   }
 
   /* R_M implementation */
-  template<typename T1, typename T2, typename T3>
+  template<typename T1, typename T2, typename T3 = std::int8_t>
   static constexpr T3 __hcpu_cmp_rm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T2, std::uint64_t>); // Locked by current CPU specification
 
-    T2 ptr = HyperCPU::bit_cast<T2>(op2);
-    T1 val = cpu.mem_controller->Read8(ptr);
-
-    op1.deref<T1>() = HyperALU::__hcpu_and(op1.deref<T1>(), val);
+    return HyperALU::__hcpu_cmp(
+      HyperCPU::bit_cast_from<T1>(op1.ptr<T1>()),
+      cpu.mem_controller->Read<T1>(op2)
+    );
   }
 
   /* R_IMM implementation */
-  template<typename T1, typename T2, typename T3>
-  static constexpr T3 __hcpu_cmp_rimm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+  template<typename T1, typename T2, typename T3 = std::int8_t>
+  static constexpr T3 __hcpu_cmp_rimm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& /* cpu */) {
     static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
 
-    T1 val = HyperCPU::bit_cast<T1>(op2);
-    
-    op1.deref<T1>() = HyperALU::__hcpu_and(op1.deref<T1>(), val);
+    return HyperALU::__hcpu_cmp(
+      HyperCPU::bit_cast_from<T1>(op1.ptr<T1>()),
+      HyperCPU::bit_cast<T1>(op2)
+    );
+  }
+
+  /* RM_M implementation */
+  template<typename T1, typename T2, typename T3 = std::int8_t>
+  static constexpr T3 __hcpu_cmp_rmm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+    static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
+
+    return HyperALU::__hcpu_cmp(
+      cpu.mem_controller->Read<T1>(op1.deref<std::uint64_t>()),
+      cpu.mem_controller->Read<T2>(HyperCPU::bit_cast<T2>(op2))
+    );
+  }
+
+  /* RM_R implementation */
+  template<typename T1, typename T2, typename T3 = std::int8_t>
+  static constexpr T3 __hcpu_cmp_rmr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+    static_assert(std::is_same_v<T1, std::uint64_t>); // Locked by current CPU specification
+
+    return HyperALU::__hcpu_cmp(
+      cpu.mem_controller->Read<T2>(op1.deref<T1>()),
+      op2.deref<T2>()
+    );
+  }
+
+  /* RM_IMM implementation */
+  template<typename T1, typename T2, typename T3 = std::int8_t>
+  static constexpr T3 __hcpu_cmp_rmimm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+    static_assert(std::is_same_v<T1, std::uint64_t>); // Locked by current CPU specification
+
+    return HyperALU::__hcpu_cmp(
+      cpu.mem_controller->Read<T2>(op1.deref<T1>()),
+      HyperCPU::bit_cast<T2>(op2)
+    );
+  }
+
+  /* M_R implementation */
+  template<typename T1, typename T2, typename T3 = std::int8_t>
+  static constexpr T3 __hcpu_cmp_mr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+    static_assert(std::is_same_v<T1, std::uint64_t>); // Locked by current CPU specification
+
+    return HyperALU::__hcpu_cmp(
+      cpu.mem_controller->Read<T2>(HyperCPU::bit_cast<T1>(op1)),
+      op2.deref<T2>()
+    );
   }
 };
 
 void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, OperandContainer op2) {
+  CPU_InstrImpl impl;
   std::int8_t res = 0;
+
   switch (instr.m_op_types) {
   case OperandTypes::R_R: {
-    switch (instr.m_opcode_mode) {
+    switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint8_t>(op1.ptr<std::uint8_t>()), HyperCPU::bit_cast_from<std::uint8_t>(op2.ptr<std::uint8_t>()));
+      res = impl.__hcpu_cmp_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint16_t>(op1.ptr<std::uint16_t>()), HyperCPU::bit_cast_from<std::uint16_t>(op2.ptr<std::uint16_t>()));
+      res = impl.__hcpu_cmp_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint32_t>(op1.ptr<std::uint32_t>()), HyperCPU::bit_cast_from<std::uint32_t>(op2.ptr<std::uint32_t>()));
+      res = impl.__hcpu_cmp_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint64_t>(op1.ptr<std::uint64_t>()), HyperCPU::bit_cast_from<std::uint64_t>(op2.ptr<std::uint64_t>()));
+      res = impl.__hcpu_cmp_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
   }
 
   case OperandTypes::R_RM: {
-    std::uint64_t ptr;
-    std::memcpy(&ptr, op2.ptr<void>(), 8);
-
-    switch (instr.m_opcode_mode) {
+    switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint8_t>(op1.ptr<std::uint8_t>()), mem_controller->Read8(ptr));
+      res = impl.__hcpu_cmp_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint16_t>(op1.ptr<std::uint16_t>()), mem_controller->Read16(ptr));
+      res = impl.__hcpu_cmp_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint32_t>(op1.ptr<std::uint32_t>()), mem_controller->Read32(ptr));
+      res = impl.__hcpu_cmp_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint64_t>(op1.ptr<std::uint64_t>()), mem_controller->Read64(ptr));
+      res = impl.__hcpu_cmp_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
   }
 
   case OperandTypes::R_M: {
-    std::uint64_t ptr = op2;
-
-    switch (instr.m_opcode_mode) {
+    switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint8_t>(op1.ptr<std::uint8_t>()), mem_controller->Read8(ptr));
+      res = impl.__hcpu_cmp_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint16_t>(op1.ptr<std::uint16_t>()), mem_controller->Read16(ptr));
+      res = impl.__hcpu_cmp_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint32_t>(op1.ptr<std::uint32_t>()), mem_controller->Read32(ptr));
+      res = impl.__hcpu_cmp_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint64_t>(op1.ptr<std::uint64_t>()), mem_controller->Read64(ptr));
+      res = impl.__hcpu_cmp_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
   }
 
   case OperandTypes::R_IMM: {
-    switch (instr.m_opcode_mode) {
+    switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint8_t>(op1.ptr<std::uint8_t>()), HyperCPU::bit_cast<std::uint8_t>(op2));
+      res = impl.__hcpu_cmp_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint16_t>(op1.ptr<std::uint16_t>()), HyperCPU::bit_cast<std::uint16_t>(op2));
+      res = impl.__hcpu_cmp_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint32_t>(op1.ptr<std::uint32_t>()), HyperCPU::bit_cast<std::uint32_t>(op2));
+      res = impl.__hcpu_cmp_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = StdALU::__hcpu_cmp(HyperCPU::bit_cast_from<std::uint64_t>(op1.ptr<std::uint64_t>()), HyperCPU::bit_cast<std::uint64_t>(op2));
+      res = impl.__hcpu_cmp_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
   }
 
   case OperandTypes::RM_M: {
-    std::uint64_t ptr1, ptr2 = 0;
-    std::memcpy(&ptr1, op1.ptr<void>(), 8);
-    ptr2 = HyperCPU::bit_cast<std::uint64_t>(op2);
-
-    switch (instr.m_opcode_mode) {
+    switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = StdALU::__hcpu_cmp(mem_controller->Read8(ptr1), mem_controller->Read8(ptr2));
+      res = impl.__hcpu_cmp_rmm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = StdALU::__hcpu_cmp(mem_controller->Read16(ptr1), mem_controller->Read16(ptr2));
+      res = impl.__hcpu_cmp_rmm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = StdALU::__hcpu_cmp(mem_controller->Read32(ptr1), mem_controller->Read32(ptr2));
+      res = impl.__hcpu_cmp_rmm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = StdALU::__hcpu_cmp(mem_controller->Read64(ptr1), mem_controller->Read64(ptr2));
+      res = impl.__hcpu_cmp_rmm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
   }
 
   case OperandTypes::RM_R: {
-    std::uint64_t ptr = op1.deref<std::uint64_t>();
-
-    switch (instr.m_opcode_mode) {
+    switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = StdALU::__hcpu_cmp(mem_controller->Read8(ptr), HyperCPU::bit_cast_from<std::uint8_t>(op2.ptr<std::uint8_t>()));
+      res = impl.__hcpu_cmp_rmr_impl<std::uint64_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = StdALU::__hcpu_cmp(mem_controller->Read16(ptr), HyperCPU::bit_cast_from<std::uint16_t>(op2.ptr<std::uint16_t>()));
+      res = impl.__hcpu_cmp_rmr_impl<std::uint64_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = StdALU::__hcpu_cmp(mem_controller->Read32(ptr), HyperCPU::bit_cast_from<std::uint32_t>(op2.ptr<std::uint32_t>()));
+      res = impl.__hcpu_cmp_rmr_impl<std::uint64_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = StdALU::__hcpu_cmp(mem_controller->Read64(ptr), HyperCPU::bit_cast_from<std::uint64_t>(op2.ptr<std::uint64_t>()));
+      res = impl.__hcpu_cmp_rmr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
   }
 
   case OperandTypes::RM_IMM: {
-    std::uint64_t ptr = op1.deref<std::uint64_t>();
-
-    switch (instr.m_opcode_mode) {
+    switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = StdALU::__hcpu_cmp(mem_controller->Read8(ptr), HyperCPU::bit_cast<std::uint8_t>(op2));
+      res = impl.__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = StdALU::__hcpu_cmp(mem_controller->Read16(ptr), HyperCPU::bit_cast<std::uint16_t>(op2));
+      res = impl.__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = StdALU::__hcpu_cmp(mem_controller->Read32(ptr), HyperCPU::bit_cast<std::uint32_t>(op2));
+      res = impl.__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = StdALU::__hcpu_cmp(mem_controller->Read64(ptr), HyperCPU::bit_cast<std::uint64_t>(op2));
+      res = impl.__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
   }
 
   case OperandTypes::M_R: {
-    std::size_t ptr = HyperCPU::bit_cast<std::size_t>(op1);
-
-    switch (instr.m_opcode_mode) {
+    switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = StdALU::__hcpu_cmp(mem_controller->Read8(ptr), HyperCPU::bit_cast_from<std::uint8_t>(op2.ptr<std::uint8_t>()));
+      res = impl.__hcpu_cmp_mr_impl<std::uint64_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = StdALU::__hcpu_cmp(mem_controller->Read16(ptr), HyperCPU::bit_cast_from<std::uint16_t>(op2.ptr<std::uint16_t>()));
+      res = impl.__hcpu_cmp_mr_impl<std::uint64_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = StdALU::__hcpu_cmp(mem_controller->Read32(ptr), HyperCPU::bit_cast_from<std::uint32_t>(op2.ptr<std::uint32_t>()));
+      res = impl.__hcpu_cmp_mr_impl<std::uint64_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = StdALU::__hcpu_cmp(mem_controller->Read64(ptr), HyperCPU::bit_cast_from<std::uint64_t>(op2.ptr<std::uint64_t>()));
+      res = impl.__hcpu_cmp_mr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;

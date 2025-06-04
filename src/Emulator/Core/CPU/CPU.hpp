@@ -6,7 +6,7 @@
 #include "Emulator/Core/CPU/Decoders/StdDecoder.hpp"
 #include "Emulator/Core/CPU/IO/Simple.hpp"
 #include "Emulator/Core/CPU/Interrupts/ReservedInterrupts.hpp"
-#include "Emulator/Core/MemoryController/IMemoryController.hpp"
+#include "Emulator/Core/MemoryController/MemoryControllerST.hpp"
 
 #define DECLARE_INSTR(name) void Exec##name(const IInstruction& instr, OperandContainer op1, OperandContainer op2)
 
@@ -23,7 +23,7 @@ namespace HyperCPU {
     using write_operation_handler = std::function<void(std::uint8_t)>;
 
     // Components
-    IMemoryController* mem_controller;
+    MemoryControllerST* mem_controller;
     std::unique_ptr<Decoder> m_decoder;
 
     // Data
