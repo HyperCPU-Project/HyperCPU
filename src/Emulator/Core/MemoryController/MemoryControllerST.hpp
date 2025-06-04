@@ -3,14 +3,51 @@
 #include "PCH/CStd.hpp"
 
 #include "Emulator/Core/CPU/CPU.hpp"
-#include "Emulator/Core/MemoryController/IMemoryController.hpp"
+
+#include "spdlog/spdlog.h"
+
+// TODO: позор партии, убрать и переделать в функцию
+#define mem_ctlr_assert(expr)                                             \
+  do {                                                                    \
+    if (!(expr) && (!cpu || !cpu->CanExecuteInterrupts())) [[unlikely]] { \
+      spdlog::error("Assertion failed: {}", #expr);                       \
+      std::abort();                                                       \
+    } else if (!(expr) && cpu && cpu->CanExecuteInterrupts()) {           \
+      cpu->TriggerInterrupt(HyperCPU::cpu_exceptions::SEGF);              \
+    } else [[likely]] {                                                   \
+    }                                                                     \
+  } while (false)
 
 namespace HyperCPU {
-  class MemoryControllerST final : public IMemoryController {
+  class CPU;
+
+  template <bool, typename T>
+  struct LoadTypeChooser;
+
+  template <typename T>
+  struct LoadTypeChooser<false, T> {
+    using type = T;
+  };
+
+  template <typename T>
+  struct LoadTypeChooser<true, T> {
+    using type = std::underlying_type_t<T>;
+  };
+
+  template<typename T>
+  concept IntConvertable = 
+    (sizeof(T) == 1 && std::is_convertible_v<LoadTypeChooser<std::is_enum_v<T>, T>, std::uint8_t>) ||
+    (sizeof(T) == 2 && std::is_convertible_v<LoadTypeChooser<std::is_enum_v<T>, T>, std::uint16_t>) ||
+    (sizeof(T) == 4 && std::is_convertible_v<LoadTypeChooser<std::is_enum_v<T>, T>, std::uint32_t>) ||
+    (sizeof(T) == 8 && std::is_convertible_v<LoadTypeChooser<std::is_enum_v<T>, T>, std::uint64_t>);
+
+  class MemoryControllerST final {
   private:
     char* memory;
     class CPU* cpu;
     std::size_t total_mem;
+
+
 
   public:
     explicit MemoryControllerST(std::size_t mem_size, class CPU* cpu = nullptr)
@@ -19,87 +56,36 @@ namespace HyperCPU {
       if (!memory)
         throw std::runtime_error("Failed to allocate memory!");
     }
-    inline std::uint8_t Fetch8(std::uint64_t& ptr) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint8_t) - 1 < total_mem);
-      std::uint8_t data;
-      memcpy(&data, &memory[ptr], sizeof(std::uint8_t));
-      ptr += sizeof(std::uint8_t);
+
+    template<IntConvertable T>
+    inline T Fetch(std::uint64_t& ptr) {
+      mem_ctlr_assert(ptr + sizeof(T) - 1 < total_mem);
+
+      T data;
+      std::memcpy(&data, &memory[ptr], sizeof(T));
+      ptr += sizeof(T);
+
       return data;
     }
 
-    inline std::uint16_t Fetch16(std::uint64_t& ptr) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint16_t) - 1 < total_mem);
-      std::uint16_t data;
-      memcpy(&data, &memory[ptr], sizeof(std::uint16_t));
-      ptr += sizeof(std::uint16_t);
+    template<IntConvertable T>
+    inline T Read(std::uint64_t ptr) {
+      mem_ctlr_assert(ptr + sizeof(T) - 1 < total_mem);
+
+      T data;
+      std::memcpy(&data, &memory[ptr], sizeof(T));
+
       return data;
     }
 
-    inline std::uint32_t Fetch32(std::uint64_t& ptr) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint32_t) - 1 < total_mem);
-      std::uint32_t data;
-      memcpy(&data, &memory[ptr], sizeof(std::uint32_t));
-      ptr += sizeof(std::uint32_t);
-      return data;
-    }
+    template<IntConvertable T>
+    inline void Load(std::uint64_t ptr, T data) {
+      mem_ctlr_assert(ptr + sizeof(T) - 1 < total_mem);
 
-    inline std::uint64_t Fetch64(std::uint64_t& ptr) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint64_t) - 1 < total_mem);
-      std::uint64_t data;
-      memcpy(&data, &memory[ptr], sizeof(std::uint64_t));
-      ptr += sizeof(std::uint64_t);
-      return data;
-    }
-
-    inline std::uint8_t Read8(std::uint64_t ptr) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint8_t) - 1 < total_mem);
-      std::uint8_t data;
-      memcpy(&data, &memory[ptr], sizeof(std::uint8_t));
-      return data;
-    }
-
-    inline std::uint16_t Read16(std::uint64_t ptr) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint16_t) - 1 < total_mem);
-      std::uint16_t data;
-      memcpy(&data, &memory[ptr], sizeof(std::uint16_t));
-      return data;
-    }
-
-    inline std::uint32_t Read32(std::uint64_t ptr) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint32_t) - 1 < total_mem);
-      std::uint32_t data;
-      memcpy(&data, &memory[ptr], sizeof(std::uint32_t));
-      return data;
-    }
-
-    inline std::uint64_t Read64(std::uint64_t ptr) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint64_t) - 1 < total_mem);
-      std::uint64_t data;
-      memcpy(&data, &memory[ptr], sizeof(std::uint64_t));
-      return data;
-    }
-
-    inline void load8(std::uint64_t ptr, std::uint8_t data) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint8_t) - 1 < total_mem);
       memcpy(&memory[ptr], &data, sizeof(std::uint8_t));
     }
 
-    inline void load16(std::uint64_t ptr, std::uint16_t data) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint16_t) - 1 < total_mem);
-      memcpy(&memory[ptr], &data, sizeof(std::uint16_t));
-    }
-
-    inline void load32(std::uint64_t ptr, std::uint32_t data) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint32_t) - 1 < total_mem);
-      memcpy(&memory[ptr], &data, sizeof(std::uint32_t));
-    }
-
-    inline void load64(std::uint64_t ptr, std::uint64_t data) override {
-      mem_ctlr_assert(ptr + sizeof(std::uint64_t) - 1 < total_mem);
-      memcpy(&memory[ptr], &data, sizeof(std::uint64_t));
-    }
-
-    std::uint8_t* get_ptr() const noexcept override {
+    std::uint8_t* get_ptr() const noexcept {
       return reinterpret_cast<std::uint8_t*>(memory);
     }
 
