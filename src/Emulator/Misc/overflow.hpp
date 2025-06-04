@@ -9,7 +9,7 @@ namespace HyperCPU {
   }
 
   template <typename T>
-  constexpr bool multiplication_will_overflow(T& a, T& b) {
+  constexpr bool MultiplicationWillOverflow(T& a, T& b) {
     return (a != 0 && (static_cast<T>(a * b)) / a != b);
   }
 } // namespace HyperCPU

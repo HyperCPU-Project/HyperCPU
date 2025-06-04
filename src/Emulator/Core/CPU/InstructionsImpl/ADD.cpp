@@ -19,7 +19,7 @@ public:
     static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
 
     cpu.ovf = AdditionWillOverflow(op1.deref<T1>(), op2.deref<T2>());
-    op1.deref<T1>() = HyperALU::__hcpu_add(op1.deref<T1>(), HyperCPU::bit_cast_from<T2>(op2.ptr<T2>()));
+    op1.deref<T1>() = HyperALU::__hcpu_add<T1>(op1.deref<T1>(), HyperCPU::bit_cast_from<T1>(op2.ptr<T2>()));
   }
 
   /* R_RM implementation */
@@ -31,7 +31,7 @@ public:
     T1 val = cpu.mem_controller->Read<T1>(ptr);
     cpu.ovf = AdditionWillOverflow(op1.deref<T1>(), val);
 
-    op1.deref<T1>() = HyperALU::__hcpu_add(op1.deref<T1>(), val);
+    op1.deref<T1>() = HyperALU::__hcpu_add<T1>(op1.deref<T1>(), val);
   }
 
   /* R_M implementation */
@@ -43,7 +43,7 @@ public:
     T1 val = cpu.mem_controller->Read<T1>(ptr);
     cpu.ovf = AdditionWillOverflow(op1.deref<T1>(), val);
 
-    op1.deref<T1>() = HyperALU::__hcpu_add(op1.deref<T1>(), val);
+    op1.deref<T1>() = HyperALU::__hcpu_add<T1>(op1.deref<T1>(), val);
   }
 
   /* R_IMM implementation */
@@ -54,7 +54,7 @@ public:
     T1 val = HyperCPU::bit_cast<T1>(op2);
     cpu.ovf = AdditionWillOverflow(op1.deref<T1>(), val);
 
-    op1.deref<T1>() = HyperALU::__hcpu_add(op1.deref<T1>(), val);
+    op1.deref<T1>() = HyperALU::__hcpu_add<T1>(op1.deref<T1>(), val);
   }
 };
 

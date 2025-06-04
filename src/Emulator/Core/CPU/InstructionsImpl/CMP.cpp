@@ -12,9 +12,9 @@ public:
   static constexpr T3 __hcpu_cmp_rr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& /* cpu */) {
     static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
 
-    return HyperALU::__hcpu_cmp(
+    return HyperALU::__hcpu_cmp<T1>(
       HyperCPU::bit_cast_from<T1>(op1.ptr<T1>()),
-      HyperCPU::bit_cast_from<T2>(op2.ptr<T2>())
+      HyperCPU::bit_cast_from<T1>(op2.ptr<T2>())
     );
   }
 
@@ -26,7 +26,7 @@ public:
     std::uint64_t ptr;
     std::memcpy(&ptr, op2.ptr<void>(), sizeof(ptr));
 
-    return HyperALU::__hcpu_cmp(
+    return HyperALU::__hcpu_cmp<T1>(
       HyperCPU::bit_cast_from<T1>(op1.ptr<T1>()),
       cpu.mem_controller->Read<T1>(ptr)
     );
@@ -37,7 +37,7 @@ public:
   static constexpr T3 __hcpu_cmp_rm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T2, std::uint64_t>); // Locked by current CPU specification
 
-    return HyperALU::__hcpu_cmp(
+    return HyperALU::__hcpu_cmp<T1>(
       HyperCPU::bit_cast_from<T1>(op1.ptr<T1>()),
       cpu.mem_controller->Read<T1>(op2)
     );
@@ -48,7 +48,7 @@ public:
   static constexpr T3 __hcpu_cmp_rimm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& /* cpu */) {
     static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
 
-    return HyperALU::__hcpu_cmp(
+    return HyperALU::__hcpu_cmp<T1>(
       HyperCPU::bit_cast_from<T1>(op1.ptr<T1>()),
       HyperCPU::bit_cast<T1>(op2)
     );
@@ -59,9 +59,9 @@ public:
   static constexpr T3 __hcpu_cmp_rmm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
 
-    return HyperALU::__hcpu_cmp(
+    return HyperALU::__hcpu_cmp<T1>(
       cpu.mem_controller->Read<T1>(op1.deref<std::uint64_t>()),
-      cpu.mem_controller->Read<T2>(HyperCPU::bit_cast<T2>(op2))
+      cpu.mem_controller->Read<T1>(HyperCPU::bit_cast<T2>(op2))
     );
   }
 
@@ -70,7 +70,7 @@ public:
   static constexpr T3 __hcpu_cmp_rmr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T1, std::uint64_t>); // Locked by current CPU specification
 
-    return HyperALU::__hcpu_cmp(
+    return HyperALU::__hcpu_cmp<T2>(
       cpu.mem_controller->Read<T2>(op1.deref<T1>()),
       op2.deref<T2>()
     );
@@ -81,7 +81,7 @@ public:
   static constexpr T3 __hcpu_cmp_rmimm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T1, std::uint64_t>); // Locked by current CPU specification
 
-    return HyperALU::__hcpu_cmp(
+    return HyperALU::__hcpu_cmp<T2>(
       cpu.mem_controller->Read<T2>(op1.deref<T1>()),
       HyperCPU::bit_cast<T2>(op2)
     );
@@ -92,7 +92,7 @@ public:
   static constexpr T3 __hcpu_cmp_mr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T1, std::uint64_t>); // Locked by current CPU specification
 
-    return HyperALU::__hcpu_cmp(
+    return HyperALU::__hcpu_cmp<T2>(
       cpu.mem_controller->Read<T2>(HyperCPU::bit_cast<T1>(op1)),
       op2.deref<T2>()
     );
