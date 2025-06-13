@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: hyperwin/hcpu-ci:${{ matrix.config.tag }}
-      # see https://github.com/bazelbuild/bazel/issues/13823
+      # NOTE: see https://github.com/bazelbuild/bazel/issues/13823
       options: --init
-    name: "Build on ${{matrix.config.name}}"
+    name: Build on ${{ matrix.config.name }}
     strategy:
       matrix:
         config:
@@ -37,15 +37,22 @@ jobs:
             name: Ubuntu
 
     steps:
-      - run: |
-          set -e
-          DISTRO=$( cat /etc/*-release | tr [:upper:] [:lower:] | grep -Poi '(debian|ubuntu|fedora|gentoo|alpine)' | uniq )
-          if [ "$DISTRO" == "gentoo" ]; then
-            source /etc/profile
-          fi
-          git clone https://github.com/${{ github.event.pull_request.head.repo.full_name }}.git && cd HyperCPU
-          git checkout ${{ github.event.pull_request.head.sha }}
-          git submodule update --init --recursive
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+        
+      - name: Run with sourced profile (only for gentoo)
+        if: contains(${{ matrix.config.name }}, 'gentoo')
+        run: |
+          source /etc/profile \
+          && conan profile detect && conan install . --build=missing \
+          && bazel test //src/... //tests/... --config=linux-opt
 
-          conan profile detect && conan install . --build=cmake --build=missing
-          bazelisk build //src/... //tests/... --config=linux-opt
+      - name: Install conan dependencies
+        if: ! contains(${{ matrix.config.name }}, 'gentoo')
+        run: conan profile detect && conan install . --build=missing
+
+      - name: Build and test on Release profile
+        if: ! contains(${{ matrix.config.name }}, 'gentoo')
+        run: bazel test //src/... //tests/... --config=linux-opt
