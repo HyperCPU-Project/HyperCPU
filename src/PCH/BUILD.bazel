@@ -1,7 +1,7 @@
-load("//tools/bazel:pch.bzl", "precompiled_headers")
+load("@rules_cc//cc:defs.bzl", "cc_library")
 
-precompiled_headers(
+cc_library(
     name = "pch_cstd",
-    main = "CStd.hpp",
-    visibility = ["//visibility:public"],
+    hdrs = ["CStd.hpp"],
+    visibility = ["//visibility:public"]
 )

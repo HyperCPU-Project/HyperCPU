@@ -1,24 +1,13 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
-load("//tools/bazel:pch.bzl", "precompiled_headers")
 
 cc_library(
-    name = "pog_core",
+    name = "pog",
     hdrs = glob(
-        ["**/*.hpp"],
-        exclude = ["Pog.hpp"],
+        ["**/*.hpp"]
     ),
-    visibility = ["//visibility:private"],
+    visibility = ["//visibility:public"],
     deps = [
         "@fmt",
         "@re2",
-    ],
-)
-
-precompiled_headers(
-    name = "pog",
-    main = "Pog.hpp",
-    visibility = ["//visibility:public"],
-    deps = [
-        ":pog_core",
     ],
 )

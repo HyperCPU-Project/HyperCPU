@@ -8,10 +8,8 @@ on:
 jobs:
   versioning-patch-increment:
     runs-on: ubuntu-latest
-    container:
-      image: hyperwin/hcpu-ci:debian-unstable
-      options: --user root
-    if: "contains(github.event.head_commit.message, '[ci patch inc]')"
+    container: hyperwin/hcpu-ci:debian-unstable
+    if: contains(github.event.head_commit.message, '[ci patch inc]')
     permissions:
       contents: write
 
@@ -19,26 +17,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: "0"
+          fetch-depth: 0
 
       - name: Setup git user
         uses: fregante/setup-git-user@v1
 
       - name: Increment version (patch)
-        run: |
-          tools/increment_version.py --increment patch
+        run: tools/increment_version.py --increment patch
 
-      - name: Push changes to master branch
-        run: |
-          git config --global --add safe.directory '*'
-          git add .
-          git commit -m "[auto]: Increment patch version"
-          git push origin master
+      - name: Auto-commit version bump
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "[auto]: Increment patch version"
+          branch: master
 
   versioning-minor-increment:
     runs-on: ubuntu-latest
     container: hyperwin/hcpu-ci:debian-unstable
-    if: "contains(github.event.head_commit.message, '[ci minor inc]')"
+    if: contains(github.event.head_commit.message, '[ci minor inc]')
     permissions:
       contents: write
 
@@ -46,18 +42,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: "0"
+          fetch-depth: 0
 
       - name: Setup git user
         uses: fregante/setup-git-user@v1
 
       - name: Increment version (minor)
-        run: |
-          tools/increment_version.py --increment minor
+        run: tools/increment_version.py --increment minor
 
-      - name: Push changes to master branch
-        run: |
-          git config --global --add safe.directory '*'
-          git add .
-          git commit -m "[auto]: Increment minor version"
-          git push origin master
+      - name: Auto-commit version bump
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "[auto]: Increment minor version"
+          branch: master
