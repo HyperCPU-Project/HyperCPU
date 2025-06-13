@@ -50,9 +50,9 @@ jobs:
           && bazel test //src/... //tests/... --config=linux-opt
 
       - name: Install conan dependencies
-        if: ! contains(matrix.config.name, 'gentoo')
+        if: ${{ ! contains(matrix.config.name, 'gentoo') }}
         run: conan profile detect && conan install . --build=missing
 
       - name: Build and test on Release profile
-        if: ! contains(matrix.config.name, 'gentoo')
+        if: ${{ ! contains(matrix.config.name, 'gentoo') }}
         run: bazel test //src/... //tests/... --config=linux-opt
