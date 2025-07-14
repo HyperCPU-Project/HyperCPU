@@ -2,8 +2,6 @@
 
 class HyperCPU::CPU::CPU_InstrImpl {
 public:
-  constexpr CPU_InstrImpl() { }
-
   /* R_R implementation */
   template<typename T1, typename T2>
   static constexpr void __hcpu_mov_rr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& /* cpu */) {
@@ -70,25 +68,23 @@ public:
 };
 
 void HyperCPU::CPU::ExecMOV(const IInstruction& instr, OperandContainer op1, OperandContainer op2) {
-  CPU_InstrImpl impl;
-
   switch (instr.m_op_types) {
   case OperandTypes::R_R: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mov_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mov_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mov_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mov_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -97,19 +93,19 @@ void HyperCPU::CPU::ExecMOV(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_RM: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mov_rrm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rrm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mov_rrm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rrm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mov_rrm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rrm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mov_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -118,19 +114,19 @@ void HyperCPU::CPU::ExecMOV(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_M: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mov_rm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mov_rm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mov_rm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mov_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -139,19 +135,19 @@ void HyperCPU::CPU::ExecMOV(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_IMM: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mov_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mov_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mov_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mov_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -160,19 +156,19 @@ void HyperCPU::CPU::ExecMOV(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::RM_M: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mov_rmm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mov_rmm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mov_rmm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mov_rmm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -181,19 +177,19 @@ void HyperCPU::CPU::ExecMOV(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::RM_R: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mov_rmr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mov_rmr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mov_rmr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mov_rmr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -202,19 +198,19 @@ void HyperCPU::CPU::ExecMOV(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::RM_IMM: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mov_rmimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mov_rmimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mov_rmimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mov_rmimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_rmimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -223,19 +219,19 @@ void HyperCPU::CPU::ExecMOV(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::M_R: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mov_mr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_mr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mov_mr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_mr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mov_mr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_mr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mov_mr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mov_mr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;

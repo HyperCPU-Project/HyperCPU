@@ -107,19 +107,19 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_R: {
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = impl.__hcpu_cmp_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = impl.__hcpu_cmp_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = impl.__hcpu_cmp_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = impl.__hcpu_cmp_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -128,19 +128,19 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_RM: {
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = impl.__hcpu_cmp_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = impl.__hcpu_cmp_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = impl.__hcpu_cmp_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = impl.__hcpu_cmp_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -149,19 +149,19 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_M: {
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = impl.__hcpu_cmp_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = impl.__hcpu_cmp_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = impl.__hcpu_cmp_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = impl.__hcpu_cmp_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -170,19 +170,19 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_IMM: {
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = impl.__hcpu_cmp_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = impl.__hcpu_cmp_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = impl.__hcpu_cmp_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = impl.__hcpu_cmp_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -191,19 +191,19 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::RM_M: {
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = impl.__hcpu_cmp_rmm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = impl.__hcpu_cmp_rmm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = impl.__hcpu_cmp_rmm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = impl.__hcpu_cmp_rmm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -212,19 +212,19 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::RM_R: {
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = impl.__hcpu_cmp_rmr_impl<std::uint64_t, std::uint8_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmr_impl<std::uint64_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = impl.__hcpu_cmp_rmr_impl<std::uint64_t, std::uint16_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmr_impl<std::uint64_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = impl.__hcpu_cmp_rmr_impl<std::uint64_t, std::uint32_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmr_impl<std::uint64_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = impl.__hcpu_cmp_rmr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -233,19 +233,19 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::RM_IMM: {
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = impl.__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint8_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = impl.__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint16_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = impl.__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint32_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = impl.__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_rmimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -254,19 +254,19 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::M_R: {
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      res = impl.__hcpu_cmp_mr_impl<std::uint64_t, std::uint8_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_mr_impl<std::uint64_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      res = impl.__hcpu_cmp_mr_impl<std::uint64_t, std::uint16_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_mr_impl<std::uint64_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      res = impl.__hcpu_cmp_mr_impl<std::uint64_t, std::uint32_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_mr_impl<std::uint64_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      res = impl.__hcpu_cmp_mr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      res = CPU_InstrImpl::__hcpu_cmp_mr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;

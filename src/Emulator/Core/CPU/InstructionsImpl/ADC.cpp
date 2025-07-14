@@ -19,7 +19,7 @@ public:
     static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
 
     cpu.ovf = AdditionWillOverflow(op1.deref<T1>(), op2.deref<T2>());
-    op1.deref<T1>() = HyperALU::__hcpu_add(op1.deref<T1>(), HyperCPU::bit_cast_from<T2>(op2.ptr<T2>()));
+    op1.deref<T1>() = HyperALU::__hcpu_add<T1>(op1.deref<T1>(), HyperCPU::bit_cast_from<T1>(op2.ptr<T2>()));
 
     if (cpu.crf)
       ++op1.deref<T1>();
@@ -34,7 +34,7 @@ public:
     T1 val = cpu.mem_controller->Read<T1>(ptr);
     cpu.ovf = AdditionWillOverflow(op1.deref<T1>(), val);
 
-    op1.deref<T1>() = HyperALU::__hcpu_add(op1.deref<T1>(), val);
+    op1.deref<T1>() = HyperALU::__hcpu_add<T1>(op1.deref<T1>(), val);
 
     if (cpu.crf)
       ++op1.deref<T1>();
@@ -49,7 +49,7 @@ public:
     T1 val = cpu.mem_controller->Read<T1>(ptr);
     cpu.ovf = AdditionWillOverflow(op1.deref<T1>(), val);
 
-    op1.deref<T1>() = HyperALU::__hcpu_add(op1.deref<T1>(), val);
+    op1.deref<T1>() = HyperALU::__hcpu_add<T1>(op1.deref<T1>(), val);
 
     if (cpu.crf)
       ++op1.deref<T1>();
@@ -62,26 +62,28 @@ public:
 
     T1 val = HyperCPU::bit_cast<T1>(op2);
     cpu.ovf = AdditionWillOverflow(op1.deref<T1>(), val);
-    op1.deref<T1>() = HyperALU::__hcpu_add(op1.deref<T1>(), val);
+    op1.deref<T1>() = HyperALU::__hcpu_add<T1>(op1.deref<T1>(), val);
 
     if (cpu.crf)
       ++op1.deref<T1>();
   }
 };
 
+/*
 template<typename T1, typename TImpl>
 [[gnu::always_inline]]
 void ResolveOP2Mode(HyperCPU::Mode md2, HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, HyperCPU::CPU& cpu) {
   TImpl impl;
 
   switch (md2) {
-    case HyperCPU::Mode::b8:  impl.template invoke<T1, std::uint8_t>(op1, op2, cpu);  break;
-    case HyperCPU::Mode::b16: impl.template invoke<T1, std::uint16_t>(op1, op2, cpu); break;
-    case HyperCPU::Mode::b32: impl.template invoke<T1, std::uint32_t>(op1, op2, cpu); break;
-    case HyperCPU::Mode::b64: impl.template invoke<T1, std::uint64_t>(op1, op2, cpu); break;
+    case HyperCPU::Mode::b8:  CPU_InstrImpl::template invoke<T1, std::uint8_t>(op1, op2, cpu);  break;
+    case HyperCPU::Mode::b16: CPU_InstrImpl::template invoke<T1, std::uint16_t>(op1, op2, cpu); break;
+    case HyperCPU::Mode::b32: CPU_InstrImpl::template invoke<T1, std::uint32_t>(op1, op2, cpu); break;
+    case HyperCPU::Mode::b64: CPU_InstrImpl::template invoke<T1, std::uint64_t>(op1, op2, cpu); break;
     default: std::abort();
   }
 }
+*/
 
 void HyperCPU::CPU::ExecADC(const IInstruction& instr, OperandContainer op1, OperandContainer op2) {
   CPU_InstrImpl impl;
@@ -96,16 +98,16 @@ void HyperCPU::CPU::ExecADC(const IInstruction& instr, OperandContainer op1, Ope
     /* ADC R_R does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_adc_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_adc_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_adc_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_adc_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -120,16 +122,16 @@ void HyperCPU::CPU::ExecADC(const IInstruction& instr, OperandContainer op1, Ope
     /* ADC R_RM does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_adc_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_adc_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_adc_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_adc_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -144,16 +146,16 @@ void HyperCPU::CPU::ExecADC(const IInstruction& instr, OperandContainer op1, Ope
     /* ADC R_RM does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_adc_rm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_adc_rm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_adc_rm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_adc_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -168,16 +170,16 @@ void HyperCPU::CPU::ExecADC(const IInstruction& instr, OperandContainer op1, Ope
     /* ADC R_RM does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_adc_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_adc_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_adc_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_adc_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_adc_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;

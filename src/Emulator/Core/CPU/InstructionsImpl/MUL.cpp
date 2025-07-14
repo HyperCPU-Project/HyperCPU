@@ -57,19 +57,19 @@ void HyperCPU::CPU::ExecMUL(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_R: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mul_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mul_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mul_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mul_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -78,19 +78,19 @@ void HyperCPU::CPU::ExecMUL(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_RM: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mul_rrm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rrm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mul_rrm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rrm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mul_rrm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rrm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mul_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -99,19 +99,19 @@ void HyperCPU::CPU::ExecMUL(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_M: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mul_rm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mul_rm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mul_rm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mul_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -120,19 +120,19 @@ void HyperCPU::CPU::ExecMUL(const IInstruction& instr, OperandContainer op1, Ope
   case OperandTypes::R_IMM: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      impl.__hcpu_mul_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      impl.__hcpu_mul_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      impl.__hcpu_mul_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      impl.__hcpu_mul_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_mul_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;

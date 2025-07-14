@@ -71,16 +71,16 @@ void HyperCPU::CPU::ExecADD(const IInstruction& instr, OperandContainer op1, Ope
     /* ADD R_R does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_add_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_add_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_add_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_add_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -95,16 +95,16 @@ void HyperCPU::CPU::ExecADD(const IInstruction& instr, OperandContainer op1, Ope
     /* ADD R_RM does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_add_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_add_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_add_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_add_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -119,16 +119,16 @@ void HyperCPU::CPU::ExecADD(const IInstruction& instr, OperandContainer op1, Ope
     /* ADD R_RM does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_add_rm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_add_rm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_add_rm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_add_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -143,16 +143,16 @@ void HyperCPU::CPU::ExecADD(const IInstruction& instr, OperandContainer op1, Ope
     /* ADD R_RM does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_add_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_add_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_add_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_add_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_add_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;

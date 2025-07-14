@@ -18,7 +18,7 @@ public:
   static constexpr void __hcpu_and_rr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
     static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
 
-    op1.deref<T1>() = HyperALU::__hcpu_and(op1.deref<T1>(), HyperCPU::bit_cast_from<T2>(op2.ptr<T2>()));
+    op1.deref<T1>() = HyperALU::__hcpu_and<T1>(op1.deref<T1>(), HyperCPU::bit_cast_from<T2>(op2.ptr<T2>()));
   }
 
   /* R_RM implementation */
@@ -29,7 +29,7 @@ public:
     T2 ptr = HyperCPU::bit_cast_from<T2>(op2.ptr<T2>());
     T1 val = cpu.mem_controller->Read<T1>(ptr);
 
-    op1.deref<T1>() = HyperALU::__hcpu_and(op1.deref<T1>(), val);
+    op1.deref<T1>() = HyperALU::__hcpu_and<T1>(op1.deref<T1>(), val);
   }
 
   /* R_M implementation */
@@ -40,7 +40,7 @@ public:
     T2 ptr = HyperCPU::bit_cast<T2>(op2);
     T1 val = cpu.mem_controller->Read<T1>(ptr);
 
-    op1.deref<T1>() = HyperALU::__hcpu_and(op1.deref<T1>(), val);
+    op1.deref<T1>() = HyperALU::__hcpu_and<T1>(op1.deref<T1>(), val);
   }
 
   /* R_IMM implementation */
@@ -50,7 +50,7 @@ public:
 
     T1 val = HyperCPU::bit_cast<T1>(op2);
 
-    op1.deref<T1>() = HyperALU::__hcpu_and(op1.deref<T1>(), val);
+    op1.deref<T1>() = HyperALU::__hcpu_and<T1>(op1.deref<T1>(), val);
   }
 };
 
@@ -67,16 +67,16 @@ void HyperCPU::CPU::ExecAND(const IInstruction& instr, OperandContainer op1, Ope
     /* AND R_R does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_and_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_and_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_and_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_and_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -91,16 +91,16 @@ void HyperCPU::CPU::ExecAND(const IInstruction& instr, OperandContainer op1, Ope
     /* AND R_RM does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_and_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_and_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_and_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_and_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -115,16 +115,16 @@ void HyperCPU::CPU::ExecAND(const IInstruction& instr, OperandContainer op1, Ope
     /* AND R_RM does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_and_rm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_and_rm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_and_rm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_and_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;
@@ -139,16 +139,16 @@ void HyperCPU::CPU::ExecAND(const IInstruction& instr, OperandContainer op1, Ope
     /* AND R_RM does not support different register sizes - we can call implementation directly */
     switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
-      impl.__hcpu_and_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rimm_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
     case Mode::b16:
-      impl.__hcpu_and_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rimm_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
     case Mode::b32:
-      impl.__hcpu_and_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rimm_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
     case Mode::b64:
-      impl.__hcpu_and_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
+      CPU_InstrImpl::__hcpu_and_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;

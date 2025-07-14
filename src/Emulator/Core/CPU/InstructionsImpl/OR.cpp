@@ -1,26 +1,34 @@
 #include "Emulator/Core/CPU/ALU.hpp"
 #include "Emulator/Core/CPU/CPU.hpp"
 
-using namespace HyperALU;
+class HyperCPU::CPU::CPU_InstrImpl {
+  /* R_R implementation */
+  template<typename T1, typename T2>
+  static constexpr void __hcpu_or_rr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+    static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
+
+    op1.deref<T1>() = HyperALU::__hcpu_or<T1>(op1.deref<T1>(), op2.deref<T1>());
+  }
+};
 
 void HyperCPU::CPU::ExecOR(const IInstruction& instr, OperandContainer op1, OperandContainer op2) {
   switch (instr.m_op_types) {
   case OperandTypes::R_R: {
     switch (instr.m_opcode_mode) {
     case Mode::b8:
-      op1.deref<std::uint8_t>() = __hcpu_or(op1.deref<std::uint8_t>(), HyperCPU::bit_cast_from<std::uint8_t>(op2.ptr<std::uint8_t>()));
+      CPU_InstrImpl::__hcpu_or_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
 
     case Mode::b16:
-      op1.deref<std::uint16_t>() = __hcpu_or(op1.deref<std::uint16_t>(), HyperCPU::bit_cast_from<std::uint16_t>(op2.ptr<std::uint16_t>()));
+      CPU_InstrImpl::__hcpu_or_rr_impl<std::uint16_t, std::uint16_t>(op1, op2, *this);
       break;
 
     case Mode::b32:
-      op1.deref<std::uint32_t>() = __hcpu_or(op1.deref<std::uint32_t>(), HyperCPU::bit_cast_from<std::uint32_t>(op2.ptr<std::uint32_t>()));
+      CPU_InstrImpl::__hcpu_or_rr_impl<std::uint32_t, std::uint32_t>(op1, op2, *this);
       break;
 
     case Mode::b64:
-      op1.deref<std::uint64_t>() = __hcpu_or(op1.deref<std::uint64_t>(), HyperCPU::bit_cast_from<std::uint64_t>(op2.ptr<std::uint64_t>()));
+      CPU_InstrImpl::__hcpu_or_rr_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
     }
     break;

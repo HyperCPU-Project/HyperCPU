@@ -17,10 +17,10 @@ void ResolveOP2Mode(HyperCPU::Mode md2, HyperCPU::OperandContainer& op1, HyperCP
   TImpl impl;
 
   switch (md2) {
-  case HyperCPU::Mode::b8:  impl.template __hcpu_lodsb_rimm_impl<T1, std::int8_t>(op1, op2, cpu);  break;
-  case HyperCPU::Mode::b16: impl.template __hcpu_lodsb_rimm_impl<T1, std::int16_t>(op1, op2, cpu); break;
-  case HyperCPU::Mode::b32: impl.template __hcpu_lodsb_rimm_impl<T1, std::int32_t>(op1, op2, cpu); break;
-  case HyperCPU::Mode::b64: impl.template __hcpu_lodsb_rimm_impl<T1, std::int64_t>(op1, op2, cpu); break;
+  case HyperCPU::Mode::b8:  CPU_InstrImpl::template __hcpu_lodsb_rimm_impl<T1, std::int8_t>(op1, op2, cpu);  break;
+  case HyperCPU::Mode::b16: CPU_InstrImpl::template __hcpu_lodsb_rimm_impl<T1, std::int16_t>(op1, op2, cpu); break;
+  case HyperCPU::Mode::b32: CPU_InstrImpl::template __hcpu_lodsb_rimm_impl<T1, std::int32_t>(op1, op2, cpu); break;
+  case HyperCPU::Mode::b64: CPU_InstrImpl::template __hcpu_lodsb_rimm_impl<T1, std::int64_t>(op1, op2, cpu); break;
   default: std::abort();
   }
 }
