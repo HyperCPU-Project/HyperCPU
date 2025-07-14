@@ -3,8 +3,7 @@
 TEST_F(DECODER_TEST, ADC_INSTR_R_M_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::ADC);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_M)
-;
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_M));
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -28,8 +27,7 @@ TEST_F(DECODER_TEST, ADC_INSTR_R_M_B8) {
 TEST_F(DECODER_TEST, ADC_INSTR_R_M_B16) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::ADC);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16,  HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_M)
-;
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b16,  HyperCPU::Mode::b16, HyperCPU::OperandTypes::R_M));
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -53,8 +51,7 @@ TEST_F(DECODER_TEST, ADC_INSTR_R_M_B16) {
 TEST_F(DECODER_TEST, ADC_INSTR_R_M_B32) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::ADC);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32,  HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_M)
-;
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b32,  HyperCPU::Mode::b32, HyperCPU::OperandTypes::R_M));
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
@@ -78,8 +75,7 @@ TEST_F(DECODER_TEST, ADC_INSTR_R_M_B32) {
 TEST_F(DECODER_TEST, ADC_INSTR_R_M_B64) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::ADC);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64,  HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_M)
-;
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64,  HyperCPU::Mode::b64, HyperCPU::OperandTypes::R_M));
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;

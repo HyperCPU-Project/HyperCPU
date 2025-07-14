@@ -3,15 +3,16 @@
 #include "PCH/CStd.hpp"
 
 #include "Common/LanguageSpec/Flags.hpp"
-#include "Emulator/Core/CPU/Decoders/StdDecoder.hpp"
 #include "Emulator/Core/CPU/IO/Simple.hpp"
 #include "Emulator/Core/CPU/Interrupts/ReservedInterrupts.hpp"
-#include "Emulator/Core/MemoryController/MemoryControllerST.hpp"
 
 #define DECLARE_INSTR(name) void Exec##name(const IInstruction& instr, OperandContainer op1, OperandContainer op2)
 
 namespace HyperCPU {
+  class OperandContainer;
   class MemoryControllerST;
+  class IInstruction;
+  class Decoder;
 
   class CPU {
   private:
@@ -68,13 +69,6 @@ namespace HyperCPU {
     // Interrupts
     void TriggerInterrupt(HyperCPU::cpu_exceptions exception);
     void RunInterruptSubroutine();
-
-    // Pipeline implementation
-    std::atomic<bool> buffer_used, interrupt_active;
-    IInstruction buffer, _buffer;
-    std::optional<std::uint64_t> pending_interrupt;
-    void DecodingThread();
-    void ExecutingThread();
 
     // All instructions
     DECLARE_INSTR(ADD);

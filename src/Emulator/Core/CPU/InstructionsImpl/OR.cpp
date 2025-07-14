@@ -2,6 +2,7 @@
 #include "Emulator/Core/CPU/CPU.hpp"
 
 class HyperCPU::CPU::CPU_InstrImpl {
+public:
   /* R_R implementation */
   template<typename T1, typename T2>
   static constexpr void __hcpu_or_rr_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
@@ -9,12 +10,42 @@ class HyperCPU::CPU::CPU_InstrImpl {
 
     op1.deref<T1>() = HyperALU::__hcpu_or<T1>(op1.deref<T1>(), op2.deref<T1>());
   }
+
+  /* R_RM implementation */
+  template<typename T1, typename T2>
+  static constexpr void __hcpu_or_rrm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+    static_assert(std::is_same_v<T2, std::uint64_t>); // Locked by current CPU specification
+
+    T1 val = cpu.mem_controller->Read<T1>(HyperCPU::bit_cast_from<T2>(op2.ptr<T2>()));
+
+    op1.deref<T1>() = HyperALU::__hcpu_or<T1>(op1.deref<T1>(), val);
+  }
+
+  /* R_M implementation */
+  template<typename T1, typename T2>
+  static constexpr void __hcpu_or_rm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+    static_assert(std::is_same_v<T2, std::uint64_t>); // Locked by current CPU specification
+
+    T1 val = cpu.mem_controller->Read<T1>(HyperCPU::bit_cast<T2>(op2));
+
+    op1.deref<T1>() = HyperALU::__hcpu_or<T1>(op1.deref<T1>(), val);
+  }
+
+  /* R_IMM implementation */
+  template<typename T1, typename T2>
+  static constexpr void __hcpu_or_rimm_impl(HyperCPU::OperandContainer& op1, HyperCPU::OperandContainer& op2, CPU& cpu) {
+    static_assert(std::is_same_v<T1, T2>); // Locked by current CPU specification
+
+    T1 val = HyperCPU::bit_cast<T1>(op2);
+
+    op1.deref<T1>() = HyperALU::__hcpu_or<T1>(op1.deref<T1>(), val);
+  }
 };
 
 void HyperCPU::CPU::ExecOR(const IInstruction& instr, OperandContainer op1, OperandContainer op2) {
   switch (instr.m_op_types) {
-  case OperandTypes::R_R: {
-    switch (instr.m_opcode_mode) {
+  case OperandTypes::R_R:
+    switch (instr.m_opcode_mode.md1) {
     case Mode::b8:
       CPU_InstrImpl::__hcpu_or_rr_impl<std::uint8_t, std::uint8_t>(op1, op2, *this);
       break;
@@ -32,98 +63,66 @@ void HyperCPU::CPU::ExecOR(const IInstruction& instr, OperandContainer op1, Oper
       break;
     }
     break;
-  }
 
-  case OperandTypes::R_RM: {
-    std::uint64_t ptr = HyperCPU::bit_cast_from<std::uint64_t>(op2.ptr<std::uint64_t>());
-
-    switch (instr.m_opcode_mode) {
-    case Mode::b8: {
-      std::uint8_t val = mem_controller->Read8(ptr);
-      op1.deref<std::uint8_t>() = __hcpu_or(op1.deref<std::uint8_t>(), val);
+  case OperandTypes::R_RM:
+    switch (instr.m_opcode_mode.md1) {
+    case Mode::b8: 
+      CPU_InstrImpl::__hcpu_or_rrm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
 
-    case Mode::b16: {
-      std::uint16_t val = mem_controller->Read16(ptr);
-      op1.deref<std::uint16_t>() = __hcpu_or(op1.deref<std::uint16_t>(), val);
+    case Mode::b16: 
+      CPU_InstrImpl::__hcpu_or_rrm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
 
-    case Mode::b32: {
-      std::uint32_t val = mem_controller->Read32(ptr);
-      op1.deref<std::uint32_t>() = __hcpu_or(op1.deref<std::uint32_t>(), val);
+    case Mode::b32:
+      CPU_InstrImpl::__hcpu_or_rrm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
 
-    case Mode::b64: {
-      std::uint64_t val = mem_controller->Read64(ptr);
-      op1.deref<std::uint64_t>() = __hcpu_or(op1.deref<std::uint64_t>(), val);
+    case Mode::b64:
+      CPU_InstrImpl::__hcpu_or_rrm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
     }
     break;
-  }
 
-  case OperandTypes::R_M: {
-    std::uint64_t ptr = HyperCPU::bit_cast<std::uint64_t>(op2);
-
-    switch (instr.m_opcode_mode) {
-    case Mode::b8: {
-      std::uint8_t val = mem_controller->Read8(ptr);
-      op1.deref<std::uint8_t>() = __hcpu_or(op1.deref<std::uint8_t>(), val);
+  case OperandTypes::R_M:
+    switch (instr.m_opcode_mode.md1) {
+    case Mode::b8: 
+      CPU_InstrImpl::__hcpu_or_rm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
 
-    case Mode::b16: {
-      std::uint16_t val = mem_controller->Read16(ptr);
-      op1.deref<std::uint16_t>() = __hcpu_or(op1.deref<std::uint16_t>(), val);
+    case Mode::b16: 
+      CPU_InstrImpl::__hcpu_or_rm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
 
-    case Mode::b32: {
-      std::uint32_t val = mem_controller->Read32(ptr);
-      op1.deref<std::uint32_t>() = __hcpu_or(op1.deref<std::uint32_t>(), val);
+    case Mode::b32:
+      CPU_InstrImpl::__hcpu_or_rm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
 
-    case Mode::b64: {
-      std::uint64_t val = mem_controller->Read64(ptr);
-      op1.deref<std::uint64_t>() = __hcpu_or(op1.deref<std::uint64_t>(), val);
+    case Mode::b64:
+      CPU_InstrImpl::__hcpu_or_rm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
     }
     break;
-  }
 
-  case OperandTypes::R_IMM: {
-    switch (instr.m_opcode_mode) {
-    case Mode::b8: {
-      std::uint8_t val = HyperCPU::bit_cast<std::uint8_t>(op2);
-      op1.deref<std::uint8_t>() = __hcpu_or(op1.deref<std::uint8_t>(), val);
+  case OperandTypes::R_IMM:
+    switch (instr.m_opcode_mode.md1) {
+    case Mode::b8: 
+      CPU_InstrImpl::__hcpu_or_rimm_impl<std::uint8_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
 
-    case Mode::b16: {
-      std::uint16_t val = HyperCPU::bit_cast<std::uint16_t>(op2);
-      op1.deref<std::uint16_t>() = __hcpu_or(op1.deref<std::uint16_t>(), val);
+    case Mode::b16: 
+      CPU_InstrImpl::__hcpu_or_rimm_impl<std::uint16_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
 
-    case Mode::b32: {
-      std::uint32_t val = HyperCPU::bit_cast<std::uint32_t>(op2);
-      op1.deref<std::uint32_t>() = __hcpu_or(op1.deref<std::uint32_t>(), val);
+    case Mode::b32:
+      CPU_InstrImpl::__hcpu_or_rimm_impl<std::uint32_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
 
-    case Mode::b64: {
-      std::uint64_t val = HyperCPU::bit_cast<std::uint64_t>(op2);
-      op1.deref<std::uint64_t>() = __hcpu_or(op1.deref<std::uint64_t>(), val);
+    case Mode::b64:
+      CPU_InstrImpl::__hcpu_or_rimm_impl<std::uint64_t, std::uint64_t>(op1, op2, *this);
       break;
-    }
     }
     break;
-  }
 
   default:
     break;

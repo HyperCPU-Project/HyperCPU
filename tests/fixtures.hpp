@@ -138,11 +138,11 @@ protected:
     *cpu.xsp = 512;
     *cpu.xbp = 512;
     *cpu.xivt = 2048;
-    cpu.mem_controller->Load64(2048, 1536);
-    cpu.mem_controller->Load64(2056, 1536);
-    cpu.mem_controller->Load64(2064, 1536);
-    cpu.mem_controller->Load64(1536, static_cast<std::uint64_t>(HyperCPU::Opcode::HALT));
-    cpu.mem_controller->Load64(1538, static_cast<std::uint64_t>(HyperCPU::OperandTypes::NONE));
+    cpu.mem_controller->Load(2048, 1536ULL);
+    cpu.mem_controller->Load(2056, 1536ULL);
+    cpu.mem_controller->Load(2064, 1536ULL);
+    cpu.mem_controller->Load(1536, static_cast<std::uint64_t>(HyperCPU::Opcode::HALT));
+    cpu.mem_controller->Load(1538, static_cast<std::uint64_t>(HyperCPU::OperandTypes::NONE));
     cpu.ivt_initialized = true;
   }
 };

@@ -3,6 +3,7 @@
 #include "PCH/CStd.hpp"
 
 #include "Emulator/Core/CPU/CPU.hpp"
+#include "Emulator/Core/CPU/Interrupts/ReservedInterrupts.hpp"
 
 #include "spdlog/spdlog.h"
 
@@ -19,8 +20,6 @@
   } while (false)
 
 namespace HyperCPU {
-  class CPU;
-
   template <bool, typename T>
   struct LoadTypeChooser;
 
@@ -42,13 +41,6 @@ namespace HyperCPU {
     (sizeof(T) == 8 && std::is_convertible_v<typename LoadTypeChooser<std::is_enum_v<T>, T>::type, std::uint64_t>);
 
   class MemoryControllerST final {
-  private:
-    char* memory;
-    class CPU* cpu;
-    std::size_t total_mem;
-
-
-
   public:
     explicit MemoryControllerST(std::size_t mem_size, class CPU* cpu = nullptr)
         : cpu(cpu), total_mem(mem_size) {
@@ -60,6 +52,7 @@ namespace HyperCPU {
     template<IntConvertable T>
     inline T Fetch(std::uint64_t& ptr) {
       mem_ctlr_assert(ptr + sizeof(T) - 1 < total_mem);
+      auto t = cpu->CanExecuteInterrupts();
 
       T data;
       std::memcpy(&data, &memory[ptr], sizeof(T));
@@ -92,5 +85,10 @@ namespace HyperCPU {
     ~MemoryControllerST() {
       free(memory);
     }
+
+  private:
+    char* memory;
+    class CPU* cpu;
+    std::size_t total_mem;
   };
 } // namespace HyperCPU

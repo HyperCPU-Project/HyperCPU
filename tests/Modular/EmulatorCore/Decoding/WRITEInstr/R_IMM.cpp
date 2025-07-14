@@ -3,8 +3,7 @@
 TEST_F(DECODER_TEST, WRITE_INSTR_R_IMM_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::WRITE);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_IMM)
-;
+  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_IMM));
   ++counter;
   decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
   ++counter;
