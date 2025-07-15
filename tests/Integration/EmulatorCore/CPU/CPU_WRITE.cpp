@@ -7,12 +7,12 @@ TEST_F(CPU_TEST, INSTR_WRITE) {
     t = arg;
   };
 
-  cpu.mem_controller->Load16(*cpu.xip, HyperCPU::Opcode::WRITE);
-  cpu.mem_controller->Load8(*cpu.xip + 2, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_IMM));
-  cpu.mem_controller->Load8(*cpu.xip + 3, HyperCPU::Reg::XLLL0);
-  cpu.mem_controller->Load8(*cpu.xip + 4, 0x55);
-  cpu.mem_controller->Load16(*cpu.xip + 5, HyperCPU::Opcode::HALT);
-  cpu.mem_controller->Load8(*cpu.xip + 7, HyperCPU::OperandTypes::NONE);
+  cpu.mem_controller->Load(*cpu.xip, HyperCPU::Opcode::WRITE);
+  cpu.mem_controller->Load(*cpu.xip + 2, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_IMM));
+  cpu.mem_controller->Load(*cpu.xip + 3, HyperCPU::Reg::XLLL0);
+  cpu.mem_controller->Load(*cpu.xip + 4, 0x55);
+  cpu.mem_controller->Load(*cpu.xip + 5, HyperCPU::Opcode::HALT);
+  cpu.mem_controller->Load(*cpu.xip + 7, HyperCPU::OperandTypes::NONE);
   *cpu.xlll0 = 1;
 
   cpu.Run();

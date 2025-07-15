@@ -4,10 +4,10 @@
 #include "tests/fixtures.hpp"
 
 TEST_F(CPU_TEST, INSTR_CUDF_SET) {
-  cpu.mem_controller->Load16(*cpu.xip, HyperCPU::Opcode::CUDF);
-  cpu.mem_controller->Load8(*cpu.xip + 2, HyperCPU::OperandTypes::NONE);
-  cpu.mem_controller->Load16(*cpu.xip + 3, HyperCPU::Opcode::HALT);
-  cpu.mem_controller->Load8(*cpu.xip + 5, HyperCPU::OperandTypes::NONE);
+  cpu.mem_controller->Load(*cpu.xip, HyperCPU::Opcode::CUDF);
+  cpu.mem_controller->Load(*cpu.xip + 2, HyperCPU::OperandTypes::NONE);
+  cpu.mem_controller->Load(*cpu.xip + 3, HyperCPU::Opcode::HALT);
+  cpu.mem_controller->Load(*cpu.xip + 5, HyperCPU::OperandTypes::NONE);
   cpu.udf = true;
 
   cpu.Run();
@@ -16,10 +16,10 @@ TEST_F(CPU_TEST, INSTR_CUDF_SET) {
 }
 
 TEST_F(CPU_TEST, INSTR_CUDF_NOTSET) {
-  cpu.mem_controller->Load16(*cpu.xip, HyperCPU::Opcode::CUDF);
-  cpu.mem_controller->Load8(*cpu.xip + 2, HyperCPU::OperandTypes::NONE);
-  cpu.mem_controller->Load16(*cpu.xip + 3, HyperCPU::Opcode::HALT);
-  cpu.mem_controller->Load8(*cpu.xip + 5, HyperCPU::OperandTypes::NONE);
+  cpu.mem_controller->Load(*cpu.xip, HyperCPU::Opcode::CUDF);
+  cpu.mem_controller->Load(*cpu.xip + 2, HyperCPU::OperandTypes::NONE);
+  cpu.mem_controller->Load(*cpu.xip + 3, HyperCPU::Opcode::HALT);
+  cpu.mem_controller->Load(*cpu.xip + 5, HyperCPU::OperandTypes::NONE);
   cpu.udf = false;
 
   cpu.Run();

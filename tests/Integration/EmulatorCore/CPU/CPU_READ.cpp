@@ -5,11 +5,11 @@ TEST_F(CPU_TEST, INSTR_READ) {
     return 0x55;
   };
 
-  cpu.mem_controller->Load16(*cpu.xip, HyperCPU::Opcode::READ);
-  cpu.mem_controller->Load8(*cpu.xip + 2, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::IMM));
-  cpu.mem_controller->Load8(*cpu.xip + 3, 1);
-  cpu.mem_controller->Load16(*cpu.xip + 4, HyperCPU::Opcode::HALT);
-  cpu.mem_controller->Load8(*cpu.xip + 6, HyperCPU::OperandTypes::NONE);
+  cpu.mem_controller->Load(*cpu.xip, HyperCPU::Opcode::READ);
+  cpu.mem_controller->Load(*cpu.xip + 2, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::IMM));
+  cpu.mem_controller->Load(*cpu.xip + 3, 1);
+  cpu.mem_controller->Load(*cpu.xip + 4, HyperCPU::Opcode::HALT);
+  cpu.mem_controller->Load(*cpu.xip + 6, HyperCPU::OperandTypes::NONE);
 
   cpu.Run();
 

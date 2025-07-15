@@ -1,13 +1,13 @@
 #include "tests/fixtures.hpp"
 
 TEST_F(DECODER_TEST, ADDR_ADDITION_DISABLED) {
-  decoder.mem_controller->Load16(counter, HyperCPU::Opcode::MOV);
+  decoder.mem_controller->Load(counter, HyperCPU::Opcode::MOV);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::RM_IMM)));
+  decoder.mem_controller->Load(counter, EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::RM_IMM)));
   ++counter;
-  decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
+  decoder.mem_controller->Load(counter, HyperCPU::Reg::X3);
   ++counter;
-  decoder.mem_controller->Load8(counter, 0x55);
+  decoder.mem_controller->Load(counter, 0x55);
   counter = 0;
 
   HyperCPU::Reg reg1;
@@ -26,15 +26,15 @@ TEST_F(DECODER_TEST, ADDR_ADDITION_DISABLED) {
 }
 
 TEST_F(DECODER_TEST, ADDR_ADDITION_OP1) {
-  decoder.mem_controller->Load16(counter, HyperCPU::Opcode::MOV);
+  decoder.mem_controller->Load(counter, HyperCPU::Opcode::MOV);
   counter += 2;
-  decoder.mem_controller->Load8(counter, (0b10 << 6) | EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::RM_IMM)));
+  decoder.mem_controller->Load(counter, (0b10 << 6) | EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::RM_IMM)));
   ++counter;
-  decoder.mem_controller->Load8(counter, 16);
+  decoder.mem_controller->Load(counter, 16);
   ++counter;
-  decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
+  decoder.mem_controller->Load(counter, HyperCPU::Reg::X3);
   ++counter;
-  decoder.mem_controller->Load8(counter, 0x55);
+  decoder.mem_controller->Load(counter, 0x55);
   counter = 0;
 
   HyperCPU::Reg reg1;
@@ -54,15 +54,15 @@ TEST_F(DECODER_TEST, ADDR_ADDITION_OP1) {
 }
 
 TEST_F(DECODER_TEST, ADDR_ADDITION_OP2) {
-  decoder.mem_controller->Load16(counter, HyperCPU::Opcode::MOV);
+  decoder.mem_controller->Load(counter, HyperCPU::Opcode::MOV);
   counter += 2;
-  decoder.mem_controller->Load8(counter, (0b11 << 6) | EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_RM));
+  decoder.mem_controller->Load(counter, (0b11 << 6) | EncodeTestFlags(HyperCPU::Mode::b8,  HyperCPU::Mode::b8, HyperCPU::OperandTypes::R_RM));
   ++counter;
-  decoder.mem_controller->Load8(counter, 16);
+  decoder.mem_controller->Load(counter, 16);
   ++counter;
-  decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
+  decoder.mem_controller->Load(counter, HyperCPU::Reg::X3);
   ++counter;
-  decoder.mem_controller->Load8(counter, HyperCPU::Reg::X7);
+  decoder.mem_controller->Load(counter, HyperCPU::Reg::X7);
   counter = 0;
 
   HyperCPU::Reg reg1, reg2;

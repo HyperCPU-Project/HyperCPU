@@ -1,13 +1,13 @@
 #include "tests/fixtures.hpp"
 
 TEST_F(DECODER_TEST, JMGR_INSTR_R) {
-  decoder.mem_controller->Load16(counter, HyperCPU::Opcode::JMGR);
+  decoder.mem_controller->Load(counter, HyperCPU::Opcode::JMGR);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::R));
+  decoder.mem_controller->Load(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::R));
   ++counter;
-  decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
+  decoder.mem_controller->Load(counter, HyperCPU::Reg::X3);
   ++counter;
-  decoder.mem_controller->Load8(counter, HyperCPU::Reg::X7);
+  decoder.mem_controller->Load(counter, HyperCPU::Reg::X7);
   counter = 0;
 
   HyperCPU::IInstruction instr = decoder.FetchAndDecode();

@@ -1,11 +1,11 @@
 #include "tests/fixtures.hpp"
 
 TEST_F(DECODER_TEST, JMP_INSTR_IMM) {
-  decoder.mem_controller->Load16(counter, HyperCPU::Opcode::JMP);
+  decoder.mem_controller->Load(counter, HyperCPU::Opcode::JMP);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::IMM));
+  decoder.mem_controller->Load(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::IMM));
   ++counter;
-  decoder.mem_controller->Load64(counter, MEM_PTR);
+  decoder.mem_controller->Load(counter, MEM_PTR);
   counter = 0;
 
   std::uint64_t mem_ptr;

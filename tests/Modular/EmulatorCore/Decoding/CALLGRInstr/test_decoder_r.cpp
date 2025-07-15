@@ -1,13 +1,13 @@
 #include "tests/fixtures.hpp"
 
 TEST_F(DECODER_TEST, CALLGR_INSTR_R) {
-  decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CALLGR);
+  decoder.mem_controller->Load(counter, HyperCPU::Opcode::CALLGR);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::R));
+  decoder.mem_controller->Load(counter, EncodeTestFlags(HyperCPU::Mode::b64, HyperCPU::OperandTypes::R));
   ++counter;
-  decoder.mem_controller->Load8(counter, HyperCPU::Reg::X3);
+  decoder.mem_controller->Load(counter, HyperCPU::Reg::X3);
   ++counter;
-  decoder.mem_controller->Load8(counter, HyperCPU::Reg::X7);
+  decoder.mem_controller->Load(counter, HyperCPU::Reg::X7);
   counter = 0;
 
   HyperCPU::IInstruction instr = decoder.FetchAndDecode();

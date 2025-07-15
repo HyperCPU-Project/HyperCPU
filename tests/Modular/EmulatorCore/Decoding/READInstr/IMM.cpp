@@ -1,11 +1,11 @@
 #include "tests/fixtures.hpp"
 
 TEST_F(DECODER_TEST, READ_INSTR_IMM) {
-  decoder.mem_controller->Load16(counter, HyperCPU::Opcode::READ);
+  decoder.mem_controller->Load(counter, HyperCPU::Opcode::READ);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::IMM));
+  decoder.mem_controller->Load(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::IMM));
   ++counter;
-  decoder.mem_controller->Load8(counter, 0x55);
+  decoder.mem_controller->Load(counter, 0x55);
   counter = 0;
 
   HyperCPU::IInstruction instr = decoder.FetchAndDecode();
@@ -18,11 +18,11 @@ TEST_F(DECODER_TEST, READ_INSTR_IMM) {
 }
 
 TEST_F(DECODER_TEST, READ_INSTR_R) {
-  decoder.mem_controller->Load16(counter, HyperCPU::Opcode::READ);
+  decoder.mem_controller->Load(counter, HyperCPU::Opcode::READ);
   counter += 2;
-  decoder.mem_controller->Load8(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::R));
+  decoder.mem_controller->Load(counter, EncodeTestFlags(HyperCPU::Mode::b8, HyperCPU::OperandTypes::R));
   ++counter;
-  decoder.mem_controller->Load8(counter, HyperCPU::Reg::XLLL0);
+  decoder.mem_controller->Load(counter, HyperCPU::Reg::XLLL0);
   counter = 0;
 
   HyperCPU::IInstruction instr = decoder.FetchAndDecode();
