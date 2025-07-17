@@ -253,11 +253,6 @@ void HyperCPU::CPU::Run() {
       continue;
     }
     
-    if ((*xip) >= binary_size) {
-      halted = true;
-      break;
-    }
-
     buffer = m_decoder->FetchAndDecode();
 
     switch (buffer.m_opcode) {
