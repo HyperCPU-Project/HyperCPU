@@ -140,6 +140,11 @@ int main(int argc, char** argv) {
     spdlog::error("Invalid type field!");
     return 1;
   }
+  
+  if (binarysize <= 0) {
+    spdlog::error("No executable code found!");
+    return 1;
+  }
 
   std::unique_ptr<char[]> buf(new char[binarysize]);
   file.read(buf.get(), binarysize);
