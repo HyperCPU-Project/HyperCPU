@@ -10,6 +10,7 @@ HyperCPU::CPU::CPU(std::uint16_t core_count, std::uint64_t mem_size, char* binar
     : mem_controller(dynamic_cast<IMemoryController*>(new MemoryControllerST(mem_size, this))),
       core_count(core_count),
       total_mem(mem_size),
+      binary_size(binary_size),
       halted(false),
       ivt_initialized(false),
       io_ctl(std::make_unique<SimpleIOImpl>()) {
@@ -250,6 +251,11 @@ void HyperCPU::CPU::Run() {
       *xip = pending_interrupt.value();
       pending_interrupt.reset();
       continue;
+    }
+    
+    if ((*xip) >= binary_size) {
+      halted = true;
+      break;
     }
 
     buffer = m_decoder->FetchAndDecode();

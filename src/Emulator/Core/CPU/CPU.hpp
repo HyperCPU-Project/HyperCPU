@@ -29,6 +29,7 @@ namespace HyperCPU {
     // Data
     std::uint16_t core_count;
     std::uint64_t total_mem;
+    std::uint64_t binary_size;
     bool halted;
 
     // General space for registers
