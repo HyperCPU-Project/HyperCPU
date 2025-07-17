@@ -141,11 +141,16 @@ int main(int argc, char** argv) {
     return 1;
   }
   
-  if (binarysize <= 0) {
-    spdlog::error("No executable code found!");
+  if (std::filesystem::file_size(source) < sizeof(HyperCPU::GenericHeader)) {
+    spdlog::error("Invalid binary header! (excepted {} bytes, got {})", sizeof(HyperCPU::GenericHeader), std::filesystem::file_size(source));
     return 1;
   }
-
+  
+  if (std::filesystem::file_size(source) != (sizeof(HyperCPU::GenericHeader) + header.code_size)) {
+    spdlog::error("Invalid binary code! (expected {} bytes, got {})", header.code_size, binarysize);
+    return 1;
+  }
+  
   std::unique_ptr<char[]> buf(new char[binarysize]);
   file.read(buf.get(), binarysize);
 
