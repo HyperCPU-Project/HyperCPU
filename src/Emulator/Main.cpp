@@ -75,8 +75,13 @@ std::uint64_t ParseMemoryString(const std::string& str) {
   return result * multiplier;
 }
 
-int VerifyBinaryFile(std::string source, HyperCPU::GenericHeader header) {
- if (header.magic != HyperCPU::magic) {
+int VerifyBinaryFile(std::int64_t filesize, HyperCPU::GenericHeader header) {
+  if (filesize < sizeof(HyperCPU::GenericHeader)) {
+    spdlog::error("Invalid binary header! (excepted {} bytes, got {})", sizeof(HyperCPU::GenericHeader), filesize);
+    return 1;
+  }
+  
+  if (header.magic != HyperCPU::magic) {
     spdlog::error("Invalid magic!");
     return 1;
   }
@@ -101,16 +106,11 @@ int VerifyBinaryFile(std::string source, HyperCPU::GenericHeader header) {
       return 1;
   }
   
-  if (std::filesystem::file_size(source) < sizeof(HyperCPU::GenericHeader)) {
-    spdlog::error("Invalid binary header! (excepted {} bytes, got {})", sizeof(HyperCPU::GenericHeader), std::filesystem::file_size(source));
+  if (filesize != (sizeof(HyperCPU::GenericHeader) + header.code_size)) {
+    spdlog::error("Invalid binary code! (expected {} bytes, got {})", header.code_size, (filesize - sizeof(HyperCPU::GenericHeader)));
     return 1;
   }
   
-  if (std::filesystem::file_size(source) != (sizeof(HyperCPU::GenericHeader) + header.code_size)) {
-    spdlog::error("Invalid binary code! (expected {} bytes, got {})", header.code_size, (std::filesystem::file_size(source) - sizeof(HyperCPU::GenericHeader)));
-    return 1;
-  }
-
   return 0;
 }
 
@@ -155,12 +155,13 @@ int main(int argc, char** argv) {
     spdlog::error("The binary file is too small! (No binary header?)");
     return 1;
   }
-
-  std::int64_t binarysize = std::filesystem::file_size(source) - sizeof(HyperCPU::GenericHeader);
+  
+  std::int64_t filesize = std::filesystem::file_size(source);
+  std::int64_t binarysize = filesize - sizeof(HyperCPU::GenericHeader);
 
   HyperCPU::GenericHeader header = ParseHeader(file);
 
-  if (!VerifyBinaryFile(source, header)) {
+  if (VerifyBinaryFile(filesize, header)) {
     return 1;
   }
   
