@@ -92,7 +92,7 @@ protected:
   HyperCPU::CPU cpu;
 
   CPU_TEST()
-      : cpu(1, 4096) {
+      : cpu(1, 4096, nullptr, 4096) {
   }
 };
 
@@ -131,7 +131,7 @@ protected:
   HyperCPU::CPU cpu;
 
   EXCEPTION_TEST()
-      : cpu(1, 4096) {
+      : cpu(1, 4096, nullptr, 4096) {
   }
 
   virtual void SetUp() {
