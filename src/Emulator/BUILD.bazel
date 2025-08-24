@@ -9,10 +9,10 @@ cc_library(
     hdrs = glob(["**/*.hpp"]),
     visibility = ["//visibility:public"],
     deps = [
+        "//foreign:eternal",
         "//src/Assembler:assembler_core",
         "//src/PCH:pch_cstd",
         "//src/Pog:pog",
-        "@eternal",
         "@fmt",
     ],
 )
@@ -20,7 +20,7 @@ cc_library(
 cc_binary(
     name = "hcemul",
     srcs = ["Main.cpp"],
-    visibility = ["//visibility:private"],
+    visibility = ["//visibility:public"],
     deps = [
         ":emulator_core",
         "@argparse",

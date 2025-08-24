@@ -73,10 +73,9 @@ Value HCAsm::ParseOperand4(pog::Parser<Value>& parser, std::vector<pog::TokenWit
         parser,
         fmt::format("unknown data size specified: \"{}\"", Mode));
   } else if (std::get<std::string>(args[1].value.val) != "ptr") {
-    ThrowError(
-        args[1],
-        parser,
-        fmt::format("unknown keyword \"{}\" specified, \"ptr\" expected", std::get<std::string>(args[1].value.val)));
+    ThrowError(args[1], parser,
+               fmt::format(R"(unknown keyword "{}" specified, "ptr" expected)",
+                           std::get<std::string>(args[1].value.val)));
   }
 
   return {
@@ -103,10 +102,9 @@ Value HCAsm::ParseOperand5(pog::Parser<Value>& parser, std::vector<pog::TokenWit
         parser,
         fmt::format("unknown data size specified: \"{}\"", Mode));
   } else if (std::get<std::string>(args[1].value.val) != "ptr") [[unlikely]] {
-    ThrowError(
-        args[1],
-        parser,
-        fmt::format("unknown keyword \"{}\" specified, \"ptr\" expected", std::get<std::string>(args[1].value.val)));
+    ThrowError(args[1], parser,
+               fmt::format(R"(unknown keyword "{}" specified, "ptr" expected)",
+                           std::get<std::string>(args[1].value.val)));
   }
 
   return {
@@ -133,10 +131,9 @@ Value HCAsm::ParseOperand6(pog::Parser<Value>& parser, std::vector<pog::TokenWit
         parser,
         fmt::format("unknown data size specified: \"{}\"", Mode));
   } else if (std::get<std::string>(args[1].value.val) != "ptr") {
-    ThrowError(
-        args[1],
-        parser,
-        fmt::format("unknown keyword \"{}\" specified, \"ptr\" expected", std::get<std::string>(args[1].value.val)));
+    ThrowError(args[1], parser,
+               fmt::format(R"(unknown keyword "{}" specified, "ptr" expected)",
+                           std::get<std::string>(args[1].value.val)));
   } else if (std::get<std::uint64_t>(args[5].value.val) > 255) [[unlikely]] {
     ThrowError(
         args[5],

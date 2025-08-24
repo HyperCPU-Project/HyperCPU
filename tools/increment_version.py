@@ -94,7 +94,7 @@ class Incrementors:
         module = self.__bazel_find_module(contents)
         current_version = self.__bazel_find_version(module)
         newly_versioned_module = module.replace(
-            current_version, f"version = \"{str(version)}\""
+            current_version, f'version = "{str(version)}"'
         )
         contents = contents.replace(module, newly_versioned_module)
 
@@ -106,7 +106,7 @@ class Incrementors:
         with open(file, "r") as fd:
             content = fd.read()
 
-        new_version = f'<img src=\"https://img.shields.io/badge/version-{version}-red\"'
+        new_version = f'<img src="https://img.shields.io/badge/version-{version}-red"'
         pattern = r'<img src=\"https:\/\/img\.shields\.io\/badge\/version-[^"]*\"'
         content = re.sub(pattern, new_version, content)
         with open(file, "w") as fd:
@@ -149,9 +149,11 @@ def main():
             new_version.patch = 0
             new_version.minor += 1
 
-    for name, method in inspect.getmembers(incrementors, predicate=inspect.ismethod):
+    for _, method in inspect.getmembers(incrementors, predicate=inspect.ismethod):
         if hasattr(method, "is_dispatcher"):
             method(version=new_version)
+
+    print(new_version)
 
 
 if __name__ == "__main__":

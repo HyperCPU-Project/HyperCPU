@@ -8,10 +8,6 @@ cc_library(
         exclude = ["Pog.hpp"],
     ),
     visibility = ["//visibility:private"],
-    deps = [
-        "@fmt",
-        "@re2",
-    ],
 )
 
 precompiled_headers(
@@ -20,5 +16,7 @@ precompiled_headers(
     visibility = ["//visibility:public"],
     deps = [
         ":pog_core",
+        "@fmt",
+        "@re2",
     ],
 )

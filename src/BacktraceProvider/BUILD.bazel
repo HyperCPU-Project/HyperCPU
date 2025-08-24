@@ -8,7 +8,6 @@ cc_library(
     deps = [
         "//src/PCH:pch_cstd",
         "@fmt",
-        "@libbacktrace",
         "@libunwind",
     ],
 )

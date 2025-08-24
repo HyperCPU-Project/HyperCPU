@@ -28,7 +28,7 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   }
 
   case OperandTypes::R_RM: {
-    std::uint64_t ptr;
+    std::uint64_t ptr = 0;
     std::memcpy(&ptr, op2.ptr<void>(), 8);
 
     switch (instr.m_opcode_mode) {
@@ -96,7 +96,7 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   }
 
   case OperandTypes::RM_M: {
-    std::uint64_t ptr1, ptr2 = 0;
+    std::uint64_t ptr1 = 0, ptr2 = 0;
     std::memcpy(&ptr1, op1.ptr<void>(), 8);
     ptr2 = HyperCPU::bit_cast<std::uint64_t>(op2);
 
@@ -167,7 +167,7 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
   }
 
   case OperandTypes::M_R: {
-    std::size_t ptr = HyperCPU::bit_cast<std::size_t>(op1);
+    auto ptr = HyperCPU::bit_cast<std::size_t>(op1);
 
     switch (instr.m_opcode_mode) {
     case Mode::b8:
@@ -195,16 +195,16 @@ void HyperCPU::CPU::ExecCMP(const IInstruction& instr, OperandContainer op1, Ope
 
   switch (res) {
   case -1:
-    zrf = 0;
-    crf = 1;
+    zrf = false;
+    crf = true;
     break;
   case 0:
-    zrf = 1;
-    crf = 0;
+    zrf = true;
+    crf = false;
     break;
   case 1:
-    zrf = 0;
-    crf = 0;
+    zrf = false;
+    crf = false;
     break;
   }
 }

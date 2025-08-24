@@ -1,0 +1,24 @@
+"Foreign deps"
+
+# Here we have projects that we rely on, but
+# cannot fetch from registry.
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(
+    default_visibility = [
+        "//:__subpackages__",
+    ],
+)
+
+cc_library(
+    name = "hpool",
+    hdrs = ["HPool/hpool.hpp"],
+    includes = ["HPool"],
+)
+
+cc_library(
+    name = "eternal",
+    hdrs = ["eternal/include/mapbox/eternal.hpp"],
+    includes = ["eternal/include"],
+)

@@ -1,0 +1,52 @@
+name: HyperCPU CI/CD Pipeline (compile project)
+
+on:
+  workflow_call:
+
+jobs:
+  testing:
+    name: Compile (${{ matrix.compiler }})
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/hypercpu-project/hypercpu-builder:latest
+      options: --init
+    permissions:
+      contents: read
+      packages: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Cache Bazel
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/bazel
+          key: bazel-${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('**/*.bazel', '**/*.bzl') }}
+          restore-keys: |
+            bazel-${{ runner.os }}-${{ matrix.compiler }}-
+            bazel-${{ runner.os }}-
+
+      - name: Fix permissions
+        run: chown -R ci:ci "$GITHUB_WORKSPACE"
+
+      - name: Bazel build (linux-opt mode, with ${{ matrix.compiler }} compiler)
+        run: sudo -u ci bazelisk build //... --config=linux-opt --compiler=${{ matrix.compiler }}
+
+      - name: Upload package tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: hcpu-tarballs-${{ matrix.compiler }}
+          path: |
+            bazel-bin/tools/packaging/*.tar.gz
+            !bazel-bin/tools/packaging/hcpu.tar.gz
+          if-no-files-found: error

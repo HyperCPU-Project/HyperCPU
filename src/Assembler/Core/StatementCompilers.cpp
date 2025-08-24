@@ -15,10 +15,10 @@ Value HCAsm::CompileStatement1([[maybe_unused]] pog::Parser<Value>& parser, std:
 
   ++current_index;
 
-  current_state->ir.push_back(Instruction{
-      opcode_assoc.at(instr_name.c_str()),
-      std::get<Operand>(args[1].value.val),
-      std::get<Operand>(args[3].value.val)});
+  current_state->ir.emplace_back(
+      Instruction{.opcode = opcode_assoc.at(instr_name.c_str()),
+                  .op1 = std::get<Operand>(args[1].value.val),
+                  .op2 = std::get<Operand>(args[3].value.val)});
 
   if (std::get<Operand>(args[1].value.val).type == OperandType::label) {
     parser.get_compiler_state()->pending_resolves.push_back(PendingLabelReferenceResolve{
@@ -44,10 +44,10 @@ Value HCAsm::CompileStatement2(pog::Parser<Value>& parser, std::vector<pog::Toke
 
   auto& tmp_op = std::get<Operand>(args[1].value.val);
 
-  current_state->ir.push_back(Instruction{
-      opcode_assoc.at(instr_name.c_str()),
-      tmp_op,
-      {HCAsm::OperandType::none}});
+  current_state->ir.emplace_back(
+      Instruction{.opcode = opcode_assoc.at(instr_name.c_str()),
+                  .op1 = tmp_op,
+                  .op2 = {.type = HCAsm::OperandType::none}});
 
   if (tmp_op.type == OperandType::label) {
     parser.get_compiler_state()->pending_resolves.push_back(PendingLabelReferenceResolve{
@@ -67,10 +67,10 @@ Value HCAsm::CompileStatement3(pog::Parser<Value>& parser, std::vector<pog::Toke
 
   ++current_index;
 
-  current_state->ir.push_back(Instruction{
-      opcode_assoc.at(instr_name.c_str()),
-      {HCAsm::OperandType::none},
-      {HCAsm::OperandType::none}});
+  current_state->ir.emplace_back(
+      Instruction{.opcode = opcode_assoc.at(instr_name.c_str()),
+                  .op1 = {.type = HCAsm::OperandType::none},
+                  .op2 = {.type = HCAsm::OperandType::none}});
   return {};
 }
 
@@ -86,7 +86,8 @@ Value HCAsm::CompileLabel(pog::Parser<Value>& parser, std::vector<pog::TokenWith
     ThrowError(args[0], parser, fmt::format("redefinition of label", name));
   }
 
-  current_state->ir.push_back(HCAsm::Label{name, current_index++, false});
+  current_state->ir.emplace_back(HCAsm::Label{
+      .name = name, .index = current_index++, .is_entry_point = false});
   current_state->labels[name] = current_index - 1;
   return {};
 }
@@ -103,7 +104,8 @@ Value HCAsm::CompileEntryLabel(pog::Parser<Value>& parser, std::vector<pog::Toke
     ThrowError(args[0], parser, fmt::format("redefinition of label", name));
   }
 
-  current_state->ir.push_back(HCAsm::Label{name, current_index++, true});
+  current_state->ir.emplace_back(HCAsm::Label{
+      .name = name, .index = current_index++, .is_entry_point = true});
   current_state->labels[name] = current_index - 1;
   return {};
 }
@@ -112,7 +114,8 @@ Value HCAsm::CompileRawValueb8(pog::Parser<Value>& parser, std::vector<pog::Toke
   if (std::get<Operand>(args[1].value.val).type != OperandType::uint) {
     ThrowError(*std::get<Operand>(args[1].value.val).tokens[0], parser, "invalid operand type for directive '.b8', expected uint");
   }
-  current_state->ir.push_back(HCAsm::RawValue{Mode::b8, std::get<Operand>(args[1].value.val)});
+  current_state->ir.emplace_back(HCAsm::RawValue{
+      .mode = Mode::b8, .value = std::get<Operand>(args[1].value.val)});
   return {};
 }
 
@@ -121,10 +124,10 @@ Value HCAsm::CompileRawValueb8_str([[maybe_unused]] pog::Parser<Value>& parser, 
     ThrowError(*std::get<Operand>(args[1].value.val).tokens[0], parser, "invalid operand type for directive '.b8' expected uint or string");
   }
 
-  current_state->ir.push_back(HCAsm::RawValue{
-      Mode::b8_str,
-      Operand{
-          .variant = std::make_shared<std::string>(std::move(std::get<std::string>(args[1].value.val)))}});
+  current_state->ir.emplace_back(HCAsm::RawValue{
+      .mode = Mode::b8_str,
+      .value = Operand{.variant = std::make_shared<std::string>(std::move(
+                           std::get<std::string>(args[1].value.val)))}});
 
   return {};
 }
@@ -133,7 +136,8 @@ Value HCAsm::CompileRawValueb16(pog::Parser<Value>& parser, std::vector<pog::Tok
   if (std::get<Operand>(args[1].value.val).type != OperandType::uint) {
     ThrowError(*std::get<Operand>(args[1].value.val).tokens[0], parser, "invalid operand type for directive '.b16' expected uint");
   }
-  current_state->ir.push_back(HCAsm::RawValue{Mode::b16, std::get<Operand>(args[1].value.val)});
+  current_state->ir.emplace_back(HCAsm::RawValue{
+      .mode = Mode::b16, .value = std::get<Operand>(args[1].value.val)});
   return {};
 }
 
@@ -141,7 +145,8 @@ Value HCAsm::CompileRawValueb32(pog::Parser<Value>& parser, std::vector<pog::Tok
   if (std::get<Operand>(args[1].value.val).type != OperandType::uint) {
     ThrowError(*std::get<Operand>(args[1].value.val).tokens[0], parser, "invalid operand type for directive '.b32', expected uint");
   }
-  current_state->ir.push_back(HCAsm::RawValue{Mode::b32, std::get<Operand>(args[1].value.val)});
+  current_state->ir.emplace_back(HCAsm::RawValue{
+      .mode = Mode::b32, .value = std::get<Operand>(args[1].value.val)});
   return {};
 }
 
@@ -150,10 +155,12 @@ Value HCAsm::CompileRawValueb64(pog::Parser<Value>& parser, std::vector<pog::Tok
 
   switch (op.type) {
   case HCAsm::OperandType::uint:
-    current_state->ir.push_back(HCAsm::RawValue{Mode::b64, op});
+    current_state->ir.emplace_back(
+        HCAsm::RawValue{.mode = Mode::b64, .value = op});
     break;
   case HCAsm::OperandType::label:
-    current_state->ir.push_back(HCAsm::RawValue{Mode::b64_label, op});
+    current_state->ir.emplace_back(
+        HCAsm::RawValue{.mode = Mode::b64_label, .value = op});
     break;
   default:
     ThrowError(*std::get<Operand>(args[1].value.val).tokens[0], parser, "invalid operand type for directive '.b64', label or uint expected");

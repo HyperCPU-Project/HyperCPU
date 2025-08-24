@@ -6,58 +6,42 @@ on:
       - master
 
 jobs:
-  versioning-patch-increment:
+  versioning-increment:
     runs-on: ubuntu-latest
     container:
       image: hyperwin/hcpu-ci:debian-unstable
-      options: --user root
-    if: "contains(github.event.head_commit.message, '[ci patch inc]')"
+
     permissions:
       contents: write
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: "0"
+    strategy:
+      matrix:
+        include:
+          - increment: patch
+            marker: '[ci-patch-increase]'
+          - increment: minor
+            marker: '[ci-minor-increase]'
+          - increment: major
+            marker: '[ci-major-increase]'
 
-      - name: Setup git user
-        uses: fregante/setup-git-user@v1
-
-      - name: Increment version (patch)
-        run: |
-          tools/increment_version.py --increment patch
-
-      - name: Push changes to master branch
-        run: |
-          git config --global --add safe.directory '*'
-          git add .
-          git commit -m "[auto]: Increment patch version"
-          git push origin master
-
-  versioning-minor-increment:
-    runs-on: ubuntu-latest
-    container: hyperwin/hcpu-ci:debian-unstable
-    if: "contains(github.event.head_commit.message, '[ci minor inc]')"
-    permissions:
-      contents: write
+    if: >
+      contains(github.event.head_commit.message, '[ci-patch-increase]') ||
+      contains(github.event.head_commit.message, '[ci-minor-increase]') ||
+      contains(github.event.head_commit.message, '[ci-major-increase]')
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: "0"
+          fetch-depth: 0
 
-      - name: Setup git user
-        uses: fregante/setup-git-user@v1
+      - uses: fregante/setup-git-user@v1
 
-      - name: Increment version (minor)
+      - name: Fire increment version script (${{ matrix.increment }})
+        id: increment
         run: |
-          tools/increment_version.py --increment minor
+          tools/increment_version.py --increment ${{ matrix.increment }} >> $GITHUB_OUTPUT
 
-      - name: Push changes to master branch
-        run: |
-          git config --global --add safe.directory '*'
-          git add .
-          git commit -m "[auto]: Increment minor version"
-          git push origin master
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "Increment ${{ matrix.increment }} version to ${{ steps.increment.outputs }}"

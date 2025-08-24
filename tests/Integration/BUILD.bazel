@@ -1,16 +1,31 @@
-load("@rules_cc//cc:defs.bzl", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
-cc_test(
-    name = "integration-test",
+cc_library(
+    name = "integration_tests_lib",
     srcs = glob(["**/*.cpp"]),
-    linkstatic = True,
     deps = [
         "//src/Assembler:assembler_core",
         "//src/Emulator:emulator_core",
         "//src/PCH:pch_cstd",
         "//tests:pch_gtest",
         "//tests:test_fixtures",
-        "@fmt",
-        "@gtest//:gtest-gmock_main",
+    ],
+    alwayslink = True,
+)
+
+cc_test(
+    name = "integration-test",
+    deps = [
+        ":integration_tests_lib",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "packaged-integration-test",
+    visibility = ["//tools/packaging:__pkg__"],
+    deps = [
+        ":integration_tests_lib",
+        "@googletest//:gtest_main",
     ],
 )

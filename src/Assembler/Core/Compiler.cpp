@@ -2,8 +2,8 @@
 
 #include "Assembler/Core/BinaryTransformer.hpp"
 #include "Assembler/Core/Compiler.hpp"
-#include "Common/Helpers/Classes.hpp"
 #include "Common/Exit.hpp"
+#include "Common/Helpers/Classes.hpp"
 #include "PCH/CStd.hpp"
 #include "Pog/Pog.hpp"
 
@@ -21,8 +21,8 @@ HCAsm::HCAsmCompiler::HCAsmCompiler()
         parser.get_line_offset() += tok.length();
         return {};
       });
-  parser.token("\\/\\/.*");              // Single line comment
-  parser.token("\\/\\*[\\S\\s]+\\*\\/"); /* Multi-line comment */
+  parser.token("\\/\\/.*");           // Single line comment
+  parser.token(R"(\/\*[\S\s]+\*\/)"); /* Multi-line comment */
   parser.token(R"(\+)")
       .symbol("+");
   parser.token(R"(-)")
@@ -66,7 +66,7 @@ HCAsm::HCAsmCompiler::HCAsmCompiler()
   parser.token("[a-zA-Z_][a-zA-Z0-9_]*")
       .symbol("ident")
       .action(TokenizeIdentifier);
-  parser.token("\"((?:\\\\[\\s\\S]|[^\"\\\\])*)\"")
+  parser.token(R"lit("((?:\\[\s\S]|[^"\\])*)")lit")
       .symbol("string")
       .action(TokenizeString);
   parser.token(R"(0s[0-9]+)")
@@ -313,35 +313,27 @@ HCAsm::BinaryResult HCAsm::HCAsmCompiler::TransformToBinary(HCAsm::CompilerState
   spdlog::info("Running pass 1 - counting code size");
 
   for (auto& instr : ir.ir) {
-    VisitVariant(instr, 
-    [this, &ir](Instruction& instruction) mutable -> void { 
-      ir.code_size += InstructionSize(instruction); 
-    }, 
-    [&ir](Label& label) mutable -> void {
+    VisitVariant(instr, [this, &ir](Instruction& instruction) mutable -> void { ir.code_size += InstructionSize(instruction); }, [&ir](Label& label) mutable -> void {
       ir.labels[label.name] = ir.code_size;
       if (label.is_entry_point) {
         ir.entry_point = ir.code_size;
-      } 
-    },
-    [&ir](RawValue& raw) mutable -> void { 
-      ir.code_size += [&raw]() -> std::uint8_t {
-        switch (raw.mode) {
-        case Mode::b8_str:
-          return std::get<std::shared_ptr<std::string>>(raw.value.variant)->size();
-        case Mode::b8:
-          return 1;
-        case Mode::b16:
-          return 2;
-        case Mode::b32:
-          return 4;
-        case Mode::b64_label:
-        case Mode::b64:
-          return 8;
-        default:
-          std::abort();
-        }
-      }(); 
-    });
+      } }, [&ir](RawValue& raw) mutable -> void { ir.code_size += [&raw]() -> std::uint8_t {
+                                                                                                                                                                                                                   switch (raw.mode) {
+                                                                                                                                                                                                                   case Mode::b8_str:
+                                                                                                                                                                                                                     return std::get<std::shared_ptr<std::string>>(raw.value.variant)->size();
+                                                                                                                                                                                                                   case Mode::b8:
+                                                                                                                                                                                                                     return 1;
+                                                                                                                                                                                                                   case Mode::b16:
+                                                                                                                                                                                                                     return 2;
+                                                                                                                                                                                                                   case Mode::b32:
+                                                                                                                                                                                                                     return 4;
+                                                                                                                                                                                                                   case Mode::b64_label:
+                                                                                                                                                                                                                   case Mode::b64:
+                                                                                                                                                                                                                     return 8;
+                                                                                                                                                                                                                   default:
+                                                                                                                                                                                                                     std::abort();
+                                                                                                                                                                                                                   }
+                                                                                                                                                                                                                 }(); });
   }
 
   // Resolve references - pass 2
@@ -374,11 +366,7 @@ HCAsm::BinaryResult HCAsm::HCAsmCompiler::TransformToBinary(HCAsm::CompilerState
   BinaryTransformer transformer(binary, &ir);
 
   for (auto& instr : ir.ir) {
-    VisitVariant(instr, 
-    [&transformer](Instruction& instruction) mutable -> void { 
-      transformer.EncodeInstruction(instruction); 
-    }, 
-    [&binary, &ir, this](RawValue& raw) mutable -> void {
+    VisitVariant(instr, [&transformer](Instruction& instruction) mutable -> void { transformer.EncodeInstruction(instruction); }, [&binary, &ir, this](RawValue& raw) mutable -> void {
       switch (raw.mode) {
         case Mode::b8_str:
           binary.push(*std::get<std::shared_ptr<std::string>>(raw.value.variant));
@@ -403,10 +391,7 @@ HCAsm::BinaryResult HCAsm::HCAsmCompiler::TransformToBinary(HCAsm::CompilerState
           break;
         default:
           HyperCPU::unreachable();
-      } 
-    }, 
-    [](Label&) {}
-    );
+      } }, [](Label&) {});
   }
 
   binary.entry_point = ir.entry_point;
@@ -449,7 +434,7 @@ std::string_view HCAsm::FindLine(const pog::LineSpecialization& line_spec, const
 }
 
 void HCAsm::WriteResultFile(HyperCPU::FileType type, HCAsm::BinaryResult& result, std::ofstream& output, std::uint32_t code_size, std::uint32_t entry_point) {
-  HyperCPU::GenericHeader gen_header;
+  HyperCPU::GenericHeader gen_header{};
   gen_header.type = type;
   gen_header.magic = HyperCPU::magic;
   gen_header.version = HyperCPU::current_version;

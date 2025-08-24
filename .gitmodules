@@ -1,3 +1,12 @@
 [submodule "dist/HPool"]
 	path = dist/HPool
 	url = https://github.com/randommfs/HPool
+[submodule "foreign/eternal"]
+	path = foreign/eternal
+	url = https://github.com/mapbox/eternal
+[submodule "foreign/HPool"]
+	path = foreign/HPool
+	url = https://github.com/randommfs/HPool
+[submodule "foreign/libbacktrace"]
+	path = foreign/libbacktrace
+	url = https://github.com/ianlancetaylor/libbacktrace

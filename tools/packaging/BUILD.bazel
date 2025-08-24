@@ -1,0 +1,49 @@
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files")
+load("//tools/packaging:vars.bzl", "pkg_vars")
+
+config_setting(
+    name = "linux",
+    constraint_values = ["@platforms//os:linux"],
+)
+
+pkg_files(
+    name = "dist_files",
+    srcs = [
+        "//src/Assembler:hcasm",
+        "//src/Emulator:hcemul",
+    ],
+    prefix = "usr/bin",
+)
+
+pkg_files(
+    name = "dist_tests",
+    srcs = [
+        "//tests/Integration:packaged-integration-test",
+        "//tests/Modular:packaged-modular-test",
+        "//tests/Pog:packaged-test-pog",
+    ],
+    prefix = "opt/hcpu/tests",
+)
+
+pkg_vars(
+    name = "dist_vars",
+    platform = select({
+        ":linux": "linux",
+        "//conditions:default": "unknown",
+    }),
+    product_name = "hyper-cpu",
+    version = module_version(),
+)
+
+pkg_tar(
+    name = "hcpu",
+    srcs = [
+        ":dist_files",
+        ":dist_tests",
+    ],
+    extension = "tar.gz",
+    include_runfiles = True,
+    package_file_name = "{product_name}-{version}-{compiler}.tar.gz",
+    package_variables = ":dist_vars",
+)

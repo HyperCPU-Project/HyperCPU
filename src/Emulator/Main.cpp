@@ -11,7 +11,7 @@
 #endif
 
 HyperCPU::GenericHeader ParseHeader(std::ifstream& file) {
-  HyperCPU::GenericHeader header;
+  HyperCPU::GenericHeader header{};
   file.read(reinterpret_cast<char*>(&header), sizeof(header));
 
   return header;
@@ -44,7 +44,7 @@ std::uint64_t ParseMemoryString(const std::string& str) {
     return std::numeric_limits<std::uint64_t>::max();
   }
 
-  std::uint64_t multiplier;
+  std::uint64_t multiplier = 0;
   switch (suffix) {
   case 'K':
     multiplier = 1024ULL;
@@ -62,7 +62,7 @@ std::uint64_t ParseMemoryString(const std::string& str) {
     return std::numeric_limits<std::uint64_t>::max();
   }
 
-  std::uint64_t result;
+  std::uint64_t result = 0;
   auto [ptr, ec] = std::from_chars(numeric_part.data(), numeric_part.end(), result);
   if (ec != std::errc() || ptr != numeric_part.end()) {
     return std::numeric_limits<std::uint64_t>::max();

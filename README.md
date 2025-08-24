@@ -1,15 +1,35 @@
 <div align="center">
-    <img alt="HyperCPU" src="images/logo.png">
-    <h1>HyperCPU</h1>
-    <p>
-        <a href="https://github.com/HyperWinX/HyperCPU/issues"><img src="https://img.shields.io/github/issues/HyperWinX/HyperCPU" alt="GitHub opened issues"></a>
-        <img src="https://img.shields.io/badge/version-0.5.2-red" alt="Version">
-        <img src="https://img.shields.io/github/actions/workflow/status/HyperWinX/HyperCPU/testing.yml?branch=dev" alt="CI status">
-        <img src="https://img.shields.io/badge/status-in_development-red" alt="Status">
-        <img src="https://img.shields.io/github/license/HyperWinX/HyperCPU" alt="License">
-        <img src="https://img.shields.io/github/stars/HyperWinX/HyperCPU?color=lime" alt="Stars">
-    </p>
+     <picture>
+          <source media="(prefers-color-scheme: dark)" srcset=".github/images/logo_dark.png">
+          <source media="(prefers-color-scheme: light)" srcset=".github/images/logo.png">
+          <img alt="HyperCPU" src=".github/images/logo.png">
+     </picture>
 </div>
+
+<h4 align="center">HyperCPU — the <i>hyper</i> toolkit for custom <i>hyper</i> ISA</h4>
+
+<p align="center">
+     <a href="https://github.com/HyperWinX/HyperCPU/issues">
+     <img src="https://img.shields.io/github/issues/HyperWinX/HyperCPU"
+          alt="GitHub opened issues"></a>
+     <img src="https://img.shields.io/badge/version-0.5.0-red"
+          alt="Version">
+     <img src="https://img.shields.io/github/actions/workflow/status/HyperWinX/HyperCPU/testing.yml?branch=dev"
+          alt="CI status">
+     <img src="https://img.shields.io/badge/status-in_development-red"
+          alt="Status">
+     <img src="https://img.shields.io/github/license/HyperWinX/HyperCPU"
+          alt="License">
+     <img src="https://img.shields.io/github/stars/HyperWinX/HyperCPU?color=lime"
+          alt="Stars">
+</p>
+
+>[!IMPORTANT]
+> HyperCPU is almost ready for use! Wait for 1.0 release to try it out or build the project yourself, test it and report issues.
+
+<img alt="HyperCPU screenshot" src=".github/images/screenshot.png">
+
+### What is this
 
 HyperCPU is a set of programs created to work with my own simple ISA (instruction set architecture). The project was created for fun, but it took a lot of time (and nerves), and I learned a lot while working on it.
 
@@ -23,7 +43,7 @@ See [ROADMAP.md](ROADMAP.md) for project ideas and tasks.
 >[!IMPORTANT]
 > HyperCPU is almost ready for use! Wait for 1.0 release to try it out or build the project yourself, test it and report issues.
 
-<img alt="HyperCPU screenshot" src="images/screenshot.png">
+<img alt="HyperCPU screenshot" src=".github/images/screenshot.png">
 
 ### Installation
 

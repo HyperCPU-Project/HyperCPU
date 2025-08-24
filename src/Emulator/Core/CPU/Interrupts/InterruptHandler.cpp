@@ -29,7 +29,7 @@ void HyperCPU::CPU::TriggerInterrupt(HyperCPU::cpu_exceptions exception) {
 }
 
 void HyperCPU::CPU::RunInterruptSubroutine() {
-  while (1) {
+  while (true) {
     if (halted)
       return;
 

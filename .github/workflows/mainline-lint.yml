@@ -1,0 +1,28 @@
+name: HyperCPU CI/CD Pipeline (lint)
+
+on:
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/hypercpu-project/hypercpu-builder:latest
+      options: --init
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Fix permissions
+        run: chown -R ci:ci "$GITHUB_WORKSPACE"
+
+      - name: Run linters
+        continue-on-error: true
+        run: sudo -u ci bazelisk lint //src/... --aspect:interactive=false -k --config=linux-dbg
