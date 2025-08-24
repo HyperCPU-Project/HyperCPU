@@ -36,6 +36,5 @@ jobs:
         run: |
           for archive in artifacts/*.tar.gz; do
             tar -xzf "$archive" -C / --overwrite --recursive-unlink
-            chmod -R +x /opt/hcpu/tests/*
             for test in /opt/hcpu/tests/*; do $test; done
           done

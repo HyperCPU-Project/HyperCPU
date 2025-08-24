@@ -1,5 +1,5 @@
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
-load("@rules_pkg//pkg:mappings.bzl", "pkg_files")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "pkg_attributes")
 load("//tools/packaging:vars.bzl", "pkg_vars")
 
 config_setting(
@@ -9,6 +9,9 @@ config_setting(
 
 pkg_files(
     name = "dist_files",
+    attributes = pkg_attributes(
+        mode = "755"
+    ),
     srcs = [
         "//src/Assembler:hcasm",
         "//src/Emulator:hcemul",
@@ -18,6 +21,9 @@ pkg_files(
 
 pkg_files(
     name = "dist_tests",
+    attributes = pkg_attributes(
+        mode = "755"
+    ),
     srcs = [
         "//tests/Integration:packaged-integration-test",
         "//tests/Modular:packaged-modular-test",
@@ -25,6 +31,8 @@ pkg_files(
     ],
     prefix = "opt/hcpu/tests",
 )
+
+
 
 pkg_vars(
     name = "dist_vars",
