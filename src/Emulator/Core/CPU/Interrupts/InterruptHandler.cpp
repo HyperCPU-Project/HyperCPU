@@ -10,7 +10,7 @@ void HyperCPU::CPU::TriggerInterrupt(HyperCPU::cpu_exceptions exception) {
     spdlog::error("XIP exceeded the binary size, aborting!");
     std::abort();
   }
-  
+
   if (!ivt_initialized || pending_interrupt.has_value()) {
     spdlog::error("Interrupt was triggered, but failed to execute handler! XIP: {}", *xip);
     std::abort();

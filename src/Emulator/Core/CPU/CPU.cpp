@@ -247,7 +247,7 @@ void HyperCPU::CPU::Run() {
       pending_interrupt.reset();
       continue;
     }
-    
+
     buffer = m_decoder->FetchAndDecode();
 
     switch (buffer.m_opcode) {
