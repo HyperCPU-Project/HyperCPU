@@ -35,6 +35,7 @@ jobs:
       - name: Extract and run tarballs
         run: |
           for archive in artifacts/*.tar.gz; do
-            tar -xzf "$archive" -C / --no-same-owner --no-same-permissions
-            for test in /opt/hcpu/tests/*; do ./$test; done
+            tar -xzf "$archive" -C / --overwrite --recursive-unlink
+            chmod -R +x /opt/hcpu/tests/*
+            for test in /opt/hcpu/tests/*; do $test; done
           done
