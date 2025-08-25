@@ -1,0 +1,4 @@
+lint:
+  aspects:
+    - //tools/bazel:lint.bzl%ruff
+    - //tools/bazel:lint.bzl%clang_tidy

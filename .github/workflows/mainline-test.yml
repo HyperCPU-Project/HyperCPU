@@ -1,0 +1,42 @@
+name: HyperCPU CI/CD Pipeline (install & smoke)
+
+on:
+  workflow_call:
+    inputs:
+      artifact_name:
+        type: string
+        default: "hcpu-tarballs*"
+
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Debian
+            image: debian:stable
+          - name: Fedora
+            image: fedora:latest
+          - name: Arch Linux
+            image: archlinux:base-devel
+
+    container:
+      image: ${{ matrix.image }}
+
+    steps:
+      - name: Download tarball artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ${{ inputs.artifact_name }}
+          merge-multiple: true
+          path: artifacts/
+
+      - name: Extract and run tarballs
+        run: |
+          for archive in artifacts/*.tar.gz; do
+            tar -xpf "$archive" -C / --overwrite
+            for f in /opt/hcpu/tests/*; do
+              [ -f "$f" ] && [ -x "$f" ] && "$f"
+            done
+          done

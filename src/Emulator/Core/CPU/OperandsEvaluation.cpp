@@ -121,22 +121,22 @@ std::pair<HyperCPU::OperandContainer, HyperCPU::OperandContainer> HyperCPU::CPU:
   case OperandTypes::R_IMM: {
     switch (md) {
     case Mode::b8: {
-      std::uint8_t imm8;
+      std::uint8_t imm8 = 0;
       std::memcpy(&imm8, &op2, sizeof(std::uint8_t));
       return std::make_pair(GetRegister(op1), OperandContainer{HyperCPU::bit_cast<std::uint64_t>(imm8)});
     }
     case Mode::b16: {
-      std::uint16_t imm16;
+      std::uint16_t imm16 = 0;
       std::memcpy(&imm16, &op2, sizeof(std::uint16_t));
       return std::make_pair(GetRegister(op1), OperandContainer{HyperCPU::bit_cast<std::uint64_t>(imm16)});
     }
     case Mode::b32: {
-      std::uint32_t imm32;
+      std::uint32_t imm32 = 0;
       std::memcpy(&imm32, &op2, sizeof(std::uint32_t));
       return std::make_pair(GetRegister(op1), OperandContainer{HyperCPU::bit_cast<std::uint64_t>(imm32)});
     }
     case Mode::b64: {
-      std::uint64_t imm64;
+      std::uint64_t imm64 = 0;
       std::memcpy(&imm64, &op2, sizeof(std::uint64_t));
       return std::make_pair(GetRegister(op1), OperandContainer{HyperCPU::bit_cast<std::uint64_t>(imm64)});
     }

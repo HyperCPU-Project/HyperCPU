@@ -12,7 +12,7 @@ void HyperCPU::CPU::ExecDIV(const IInstruction& instr, OperandContainer op1, Ope
 
   switch (instr.m_opcode_mode) {
   case Mode::b8: {
-    std::uint8_t& dst = op1.deref<std::uint8_t>();
+    auto& dst = op1.deref<std::uint8_t>();
     *x1 = __hcpu_div_remainder(dst, static_cast<std::uint8_t>(*x2));
     dst = __hcpu_div(dst, static_cast<std::uint8_t>(*x2));
     break;

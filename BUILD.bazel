@@ -16,6 +16,7 @@ config_setting(
 
 refresh_compile_commands(
     name = "refresh_compile_commands",
+    exclude_external_sources = True,
     targets = {
         "//src/...": "--config=linux-dbg",
         "//tests/...": "--config=linux-dbg",
@@ -30,6 +31,14 @@ refresh_compile_commands(
     #     },
     #     no_match_error = 'Could not determine host OS toolchain flags, running this target is pointless'
     # )
+)
+
+exports_files(
+    [
+        ".ruff.toml",
+        ".clang-tidy",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 format_multirun(

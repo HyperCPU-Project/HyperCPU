@@ -44,8 +44,8 @@ bool HyperCPU::Decoder::IsHalted() const noexcept {
 }
 
 HyperCPU::IInstruction HyperCPU::Decoder::FetchAndDecode() {
-  std::uint16_t opcode;
-  std::uint8_t flags;
+  std::uint16_t opcode = 0;
+  std::uint8_t flags = 0;
   IInstruction instruction;
 
   // Fetch opcode and check if its valid

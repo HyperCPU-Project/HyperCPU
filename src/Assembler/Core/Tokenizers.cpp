@@ -88,7 +88,7 @@ Value HCAsm::TokenizeChar(std::string_view str) {
 }
 
 Value HCAsm::TokenizeHexadecimal(std::string_view str) {
-  std::uint64_t x;
+  std::uint64_t x = 0;
   std::stringstream ss;
   ss << std::hex << str.begin() + 2;
   ss >> x;

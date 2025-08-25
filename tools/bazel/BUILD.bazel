@@ -1,1 +1,9 @@
 "Common macros, rules etc. used by HyperCPU"
+
+load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
+
+native_binary(
+    name = "clang_tidy",
+    src = "@llvm_toolchain//:bin/clang-tidy",
+    out = "clang_tidy",
+)

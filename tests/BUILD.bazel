@@ -11,7 +11,7 @@ precompiled_headers(
     name = "pch_gtest",
     main = "gtest.hpp",
     deps = [
-        "@gtest//:gtest-libgtest",
+        "@googletest//:gtest",
     ],
 )
 

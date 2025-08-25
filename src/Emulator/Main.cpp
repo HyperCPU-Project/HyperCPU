@@ -11,7 +11,7 @@
 #endif
 
 HyperCPU::GenericHeader ParseHeader(std::ifstream& file) {
-  HyperCPU::GenericHeader header;
+  HyperCPU::GenericHeader header{};
   file.read(reinterpret_cast<char*>(&header), sizeof(header));
 
   return header;
@@ -44,7 +44,7 @@ std::uint64_t ParseMemoryString(const std::string& str) {
     return std::numeric_limits<std::uint64_t>::max();
   }
 
-  std::uint64_t multiplier;
+  std::uint64_t multiplier = 0;
   switch (suffix) {
   case 'K':
     multiplier = 1024ULL;
@@ -62,7 +62,7 @@ std::uint64_t ParseMemoryString(const std::string& str) {
     return std::numeric_limits<std::uint64_t>::max();
   }
 
-  std::uint64_t result;
+  std::uint64_t result = 0;
   auto [ptr, ec] = std::from_chars(numeric_part.data(), numeric_part.end(), result);
   if (ec != std::errc() || ptr != numeric_part.end()) {
     return std::numeric_limits<std::uint64_t>::max();
@@ -80,37 +80,37 @@ int VerifyBinaryFile(std::int64_t filesize, HyperCPU::GenericHeader header) {
     spdlog::error("Invalid binary header! (excepted {} bytes, got {})", sizeof(HyperCPU::GenericHeader), filesize);
     return 1;
   }
-  
+
   if (header.magic != HyperCPU::magic) {
     spdlog::error("Invalid magic!");
     return 1;
   }
 
   switch (header.version) {
-    case HyperCPU::Version::PreRelease:
-    case HyperCPU::Version::Release1_0:
-      break;
-    default:
-      spdlog::error("Invalid release field!");
-      return 1;
+  case HyperCPU::Version::PreRelease:
+  case HyperCPU::Version::Release1_0:
+    break;
+  default:
+    spdlog::error("Invalid release field!");
+    return 1;
   }
 
   switch (header.type) {
-    case HyperCPU::FileType::Binary:
-      break;
-    case HyperCPU::FileType::Object:
-      spdlog::error("Executing object files is not supported, please link it first!");
-      return 1;
-    default:
-      spdlog::error("Invalid type field!");
-      return 1;
+  case HyperCPU::FileType::Binary:
+    break;
+  case HyperCPU::FileType::Object:
+    spdlog::error("Executing object files is not supported, please link it first!");
+    return 1;
+  default:
+    spdlog::error("Invalid type field!");
+    return 1;
   }
-  
+
   if (filesize != (sizeof(HyperCPU::GenericHeader) + header.code_size)) {
     spdlog::error("Invalid binary code! (expected {} bytes, got {})", header.code_size, (filesize - sizeof(HyperCPU::GenericHeader)));
     return 1;
   }
-  
+
   return 0;
 }
 
@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
     spdlog::error("The binary file is too small! (No binary header?)");
     return 1;
   }
-  
+
   std::int64_t filesize = std::filesystem::file_size(source);
   std::int64_t binarysize = filesize - sizeof(HyperCPU::GenericHeader);
 
@@ -164,7 +164,7 @@ int main(int argc, char** argv) {
   if (VerifyBinaryFile(filesize, header)) {
     return 1;
   }
-  
+
   std::unique_ptr<char[]> buf(new char[binarysize]);
   file.read(buf.get(), binarysize);
 

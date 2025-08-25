@@ -5,7 +5,7 @@
 #include <optional>
 #include <string>
 
-#include <re2/re2.h>
+#include "re2/re2.h"
 
 #include "Pog/Symbol.hpp"
 

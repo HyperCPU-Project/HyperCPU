@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
   }
 
   spdlog::error("Source and destination files handles acquired");
-  HyperCPU::GenericHeader hdr;
+  HyperCPU::GenericHeader hdr{};
   src.read(reinterpret_cast<char*>(&hdr), sizeof(hdr));
   if (hdr.magic == HyperCPU::magic) {
     HyperCPU::PrintUnsupported("Linking object files is not implemented!");
@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
       (std::istreambuf_iterator<char>(src)),
       std::istreambuf_iterator<char>());
 
-  std::uint32_t code_size;
+  std::uint32_t code_size = 0;
 
   auto binary = compiler.Compile(contents, code_size);
 

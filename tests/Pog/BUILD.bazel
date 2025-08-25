@@ -1,14 +1,29 @@
-load("@rules_cc//cc:defs.bzl", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
-cc_test(
-    name = "test-pog",
+cc_library(
+    name = "pog_tests_lib",
     srcs = glob(["**/*.cpp"]),
     deps = [
         "//src/PCH:pch_cstd",
         "//src/Pog:pog",
         "//tests:pch_gtest",
-        "@fmt",
-        "@gtest//:gtest-gmock_main",
-        "@re2",
+    ],
+    alwayslink = True,
+)
+
+cc_test(
+    name = "test-pog",
+    deps = [
+        ":pog_tests_lib",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "packaged-test-pog",
+    visibility = ["//tools/packaging:__pkg__"],
+    deps = [
+        ":pog_tests_lib",
+        "@googletest//:gtest_main",
     ],
 )

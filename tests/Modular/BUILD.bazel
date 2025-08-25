@@ -1,19 +1,31 @@
-load("@rules_cc//cc:defs.bzl", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
-cc_test(
-    name = "modular-test",
-    # TODO: remove when tests are fixed
-    srcs = glob(
-        ["**/*.cpp"]
-    ),
-    linkstatic = True,
+cc_library(
+    name = "modular_tests_lib",
+    srcs = glob(["**/*.cpp"]),
     deps = [
         "//src/Assembler:assembler_core",
         "//src/Emulator:emulator_core",
         "//src/PCH:pch_cstd",
         "//tests:pch_gtest",
         "//tests:test_fixtures",
-        "@fmt",
-        "@gtest//:gtest-gmock_main",
+    ],
+    alwayslink = True,
+)
+
+cc_test(
+    name = "modular-test",
+    deps = [
+        ":modular_tests_lib",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "packaged-modular-test",
+    visibility = ["//tools/packaging:__pkg__"],
+    deps = [
+        ":modular_tests_lib",
+        "@googletest//:gtest_main",
     ],
 )

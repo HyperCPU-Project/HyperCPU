@@ -1,0 +1,28 @@
+# Main workflow file. This complex workflow declares
+# primary automated jobs that are relevant to
+# building and testing HyperCPU.
+
+name: HyperCPU CI/CD Pipeline
+
+on:
+  push:
+
+jobs:
+  prepare:
+    uses: ./.github/workflows/mainline-prepare.yml
+
+  package:
+    needs: prepare
+    uses: ./.github/workflows/mainline-compile.yml
+
+  format:
+    needs: prepare
+    uses: ./.github/workflows/mainline-format.yml
+
+  lint:
+    needs: prepare
+    uses: ./.github/workflows/mainline-lint.yml
+
+  tests:
+    needs: package
+    uses: ./.github/workflows/mainline-test.yml

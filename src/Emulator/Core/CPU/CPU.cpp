@@ -6,68 +6,63 @@
 #include "Emulator/Core/CPU/Decoders/StdDecoder.hpp"
 #include "Emulator/Core/MemoryController/MemoryControllerST.hpp"
 
-HyperCPU::CPU::CPU(std::uint16_t core_count, std::uint64_t mem_size, char* binary, std::uint64_t binary_size)
-    : mem_controller(dynamic_cast<IMemoryController*>(new MemoryControllerST(mem_size, this))),
+HyperCPU::CPU::CPU(std::uint16_t core_count, std::uint64_t mem_size,
+                   char* binary, std::uint64_t binary_size)
+    : mem_controller(dynamic_cast<IMemoryController*>(
+          new MemoryControllerST(mem_size, this))),
       core_count(core_count),
       total_mem(mem_size),
       binary_size(binary_size),
       halted(false),
+      x0(&data[0]),
+      x1(&data[1]),
+      x2(&data[2]),
+      x3(&data[3]),
+      x4(&data[4]),
+      x5(&data[5]),
+      x6(&data[6]),
+      x7(&data[7]),
+      xl0(reinterpret_cast<std::uint32_t*>(&data[0])),
+      xl1(reinterpret_cast<std::uint32_t*>(&data[1])),
+      xl2(reinterpret_cast<std::uint32_t*>(&data[2])),
+      xl3(reinterpret_cast<std::uint32_t*>(&data[3])),
+      xl4(reinterpret_cast<std::uint32_t*>(&data[4])),
+      xl5(reinterpret_cast<std::uint32_t*>(&data[5])),
+      xl6(reinterpret_cast<std::uint32_t*>(&data[6])),
+      xl7(reinterpret_cast<std::uint32_t*>(&data[7])),
+      xh0(reinterpret_cast<std::uint32_t*>(&data[0]) + 1),
+      xh1(reinterpret_cast<std::uint32_t*>(&data[1]) + 1),
+      xh2(reinterpret_cast<std::uint32_t*>(&data[2]) + 1),
+      xh3(reinterpret_cast<std::uint32_t*>(&data[3]) + 1),
+      xh4(reinterpret_cast<std::uint32_t*>(&data[4]) + 1),
+      xh5(reinterpret_cast<std::uint32_t*>(&data[5]) + 1),
+      xh6(reinterpret_cast<std::uint32_t*>(&data[6]) + 1),
+      xh7(reinterpret_cast<std::uint32_t*>(&data[7]) + 1),
+      xll0(reinterpret_cast<std::uint16_t*>(&data[0])),
+      xll1(reinterpret_cast<std::uint16_t*>(&data[1])),
+      xll2(reinterpret_cast<std::uint16_t*>(&data[2])),
+      xll3(reinterpret_cast<std::uint16_t*>(&data[3])),
+      xllh0(reinterpret_cast<std::uint8_t*>(&data[0]) + 1),
+      xllh1(reinterpret_cast<std::uint8_t*>(&data[1]) + 1),
+      xllh2(reinterpret_cast<std::uint8_t*>(&data[2]) + 1),
+      xllh3(reinterpret_cast<std::uint8_t*>(&data[3]) + 1),
+      xlll0(reinterpret_cast<std::uint8_t*>(&data[0])),
+      xlll1(reinterpret_cast<std::uint8_t*>(&data[1])),
+      xlll2(reinterpret_cast<std::uint8_t*>(&data[2])),
+      xlll3(reinterpret_cast<std::uint8_t*>(&data[3])),
+      xbp(&data[8]),
+      xsp(&data[9]),
+      xip(&data[10]),
+      xgdp(&data[11]),
+      xivt(&data[12]),
       ivt_initialized(false),
+      crf(false),
+      ovf(false),
+      udf(false),
+      zrf(false),
       io_ctl(std::make_unique<SimpleIOImpl>()) {
   // Initializing all register pointers
   std::memset(&data, 0, sizeof(data));
-  x0 = &data[0];
-  x1 = &data[1];
-  x2 = &data[2];
-  x3 = &data[3];
-  x4 = &data[4];
-  x5 = &data[5];
-  x6 = &data[6];
-  x7 = &data[7];
-
-  xl0 = reinterpret_cast<std::uint32_t*>(&data[0]);
-  xl1 = reinterpret_cast<std::uint32_t*>(&data[1]);
-  xl2 = reinterpret_cast<std::uint32_t*>(&data[2]);
-  xl3 = reinterpret_cast<std::uint32_t*>(&data[3]);
-  xl4 = reinterpret_cast<std::uint32_t*>(&data[4]);
-  xl5 = reinterpret_cast<std::uint32_t*>(&data[5]);
-  xl6 = reinterpret_cast<std::uint32_t*>(&data[6]);
-  xl7 = reinterpret_cast<std::uint32_t*>(&data[7]);
-
-  xh0 = reinterpret_cast<std::uint32_t*>(&data[0]) + 1;
-  xh1 = reinterpret_cast<std::uint32_t*>(&data[1]) + 1;
-  xh2 = reinterpret_cast<std::uint32_t*>(&data[2]) + 1;
-  xh3 = reinterpret_cast<std::uint32_t*>(&data[3]) + 1;
-  xh4 = reinterpret_cast<std::uint32_t*>(&data[4]) + 1;
-  xh5 = reinterpret_cast<std::uint32_t*>(&data[5]) + 1;
-  xh6 = reinterpret_cast<std::uint32_t*>(&data[6]) + 1;
-  xh7 = reinterpret_cast<std::uint32_t*>(&data[7]) + 1;
-
-  xll0 = reinterpret_cast<std::uint16_t*>(&data[0]);
-  xll1 = reinterpret_cast<std::uint16_t*>(&data[1]);
-  xll2 = reinterpret_cast<std::uint16_t*>(&data[2]);
-  xll3 = reinterpret_cast<std::uint16_t*>(&data[3]);
-
-  xllh0 = reinterpret_cast<std::uint8_t*>(&data[0]) + 1;
-  xllh1 = reinterpret_cast<std::uint8_t*>(&data[1]) + 1;
-  xllh2 = reinterpret_cast<std::uint8_t*>(&data[2]) + 1;
-  xllh3 = reinterpret_cast<std::uint8_t*>(&data[3]) + 1;
-
-  xlll0 = reinterpret_cast<std::uint8_t*>(&data[0]);
-  xlll1 = reinterpret_cast<std::uint8_t*>(&data[1]);
-  xlll2 = reinterpret_cast<std::uint8_t*>(&data[2]);
-  xlll3 = reinterpret_cast<std::uint8_t*>(&data[3]);
-
-  xbp = &data[8];
-  xsp = &data[9];
-  xip = &data[10];
-  xgdp = &data[11];
-  xivt = &data[12];
-
-  crf = false;
-  ovf = false;
-  udf = false;
-  zrf = false;
 
   // TODO: Use std::bind instead of lambdas
   opcode_handler_assoc[static_cast<std::uint16_t>(HyperCPU::Opcode::HALT)] =
@@ -252,7 +247,7 @@ void HyperCPU::CPU::Run() {
       pending_interrupt.reset();
       continue;
     }
-    
+
     buffer = m_decoder->FetchAndDecode();
 
     switch (buffer.m_opcode) {
