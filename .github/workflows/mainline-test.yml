@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: Download tarball artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: ${{ inputs.artifact_name }}
           merge-multiple: true
