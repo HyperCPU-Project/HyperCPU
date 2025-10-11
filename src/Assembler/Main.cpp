@@ -1,6 +1,7 @@
 #include <argparse/argparse.hpp>
 #include <mapbox/eternal.hpp>
 #include <spdlog/spdlog.h>
+#include "fmt/format.h"
 
 #include "Assembler/Core/Compiler.hpp"
 #include "Common/NotImplemented.hpp"
@@ -66,7 +67,7 @@ int main(int argc, char** argv) {
 
   // Verify that files are available
   if (!std::filesystem::is_regular_file(source)) {
-    spdlog::error("Source file \"{}\" is not a regular file!", source);
+    spdlog::error(fmt::format("Source file \"{}\" is not a regular file!", source));
     return 1;
   }
 

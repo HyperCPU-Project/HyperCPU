@@ -13,6 +13,7 @@ find_package(argparse REQUIRED)
 find_package(eternal REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(fmt REQUIRED)
+find_package(re2 REQUIRED)
 add_subdirectory(foreign/HPool)
 include_directories(foreign/HPool)
 

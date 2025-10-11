@@ -8,11 +8,13 @@ class HyperCPU(ConanFile):
     settings = ["os", "compiler", "build_type", "arch"]
     author = "HyperCPU Project"
     requires = [
+        "abseil/20240116.1",
         "gtest/1.14.0",
         "spdlog/1.15.0",
         "argparse/3.2",
         "eternal/1.0.1",
-        "fmt/11.0.2"
+        "fmt/11.0.2",
+        "re2/20250722"
     ]
     generators = ["CMakeToolchain", "CMakeDeps"]
 

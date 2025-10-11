@@ -7,5 +7,5 @@ add_executable(hcasm
   Core/Tokenizers.cpp
 )
 target_include_directories(hcasm PUBLIC ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(hcasm PUBLIC argparse::argparse eternal::eternal spdlog::spdlog)
+target_link_libraries(hcasm PUBLIC argparse::argparse eternal::eternal spdlog::spdlog re2::re2)
 
