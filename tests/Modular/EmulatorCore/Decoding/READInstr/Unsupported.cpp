@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 #ifdef __HCPU_DEBUG
 #define HCPU_ASSERT_EXIT(statement, x, regex) ASSERT_DEATH(statement, regex)
 #else

@@ -1,7 +1,7 @@
 #include "Emulator/Core/CPU/Decoders/StdDecoder.hpp"
 #include <Common/LanguageSpec/Flags.hpp>
 
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(OPERAND_EVAL_TEST, PROPER_REGISTERS_EVALUATION) {
   HyperCPU::OperandContainer arg = 0;

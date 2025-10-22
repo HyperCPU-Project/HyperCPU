@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(DECODER_TEST, CMP_INSTR_RM_IMM_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::CMP);

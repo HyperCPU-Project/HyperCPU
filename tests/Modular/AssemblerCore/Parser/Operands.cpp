@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(ASM_PARSER_TEST, OPERAND1) {
   std::string data = "[0x15FA]";

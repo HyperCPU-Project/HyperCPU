@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(DECODER_TEST, ANDN_INSTR_R_IMM_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::ANDN);

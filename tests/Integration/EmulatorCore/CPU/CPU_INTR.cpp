@@ -1,7 +1,7 @@
 #include <Common/LanguageSpec/Flags.hpp>
 #include <Common/LanguageSpec/Registers.hpp>
 
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(CPU_TEST, INSTR_INTR_R_b64) {
   // Setup stack

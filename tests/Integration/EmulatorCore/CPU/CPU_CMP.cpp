@@ -1,7 +1,7 @@
 #include <Common/LanguageSpec/Flags.hpp>
 #include <Common/LanguageSpec/Registers.hpp>
 
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(CPU_TEST, INSTR_CMP_R_R_b8_LE) {
   cpu.mem_controller->Load16(*cpu.xip, HyperCPU::Opcode::CMP);

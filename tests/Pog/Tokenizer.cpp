@@ -1,7 +1,7 @@
 #include "Pog/Tokenizer.hpp"
 
 #include "PCH/CStd.hpp"
-#include "tests/gtest.hpp"
+#include "gtest.hpp"
 
 using namespace pog;
 

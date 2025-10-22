@@ -1,7 +1,7 @@
 #include <Common/LanguageSpec/Flags.hpp>
 #include <Common/LanguageSpec/Registers.hpp>
 
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(CPU_TEST, INSTR_CALLGR_R_TRUE) {
   cpu.mem_controller->Load16(*cpu.xip, HyperCPU::Opcode::CALLGR);

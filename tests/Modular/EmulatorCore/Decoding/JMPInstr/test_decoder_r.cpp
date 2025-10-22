@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(DECODER_TEST, JMP_INSTR_R) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::JMP);

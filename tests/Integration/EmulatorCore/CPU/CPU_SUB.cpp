@@ -1,7 +1,7 @@
 #include <Common/LanguageSpec/Flags.hpp>
 #include <Common/LanguageSpec/Registers.hpp>
 
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 static constexpr std::uint8_t BYTE_DATA1 = 0x60;
 static constexpr std::uint8_t BYTE_DATA2 = 0x55;

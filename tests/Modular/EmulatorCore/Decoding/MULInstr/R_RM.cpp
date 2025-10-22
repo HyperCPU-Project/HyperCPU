@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(DECODER_TEST, MUL_INSTR_R_RM_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::MUL);

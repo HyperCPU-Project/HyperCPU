@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(CPU_TEST, INSTR_WRITE) {
   std::uint8_t t = 0;
