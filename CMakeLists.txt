@@ -33,4 +33,4 @@ elseif("${CMAKE_BUILD_TYPE}" STREQUAL "release")
 endif()
 
 add_subdirectory(src)
-#add_subdirectory(tests)
+add_subdirectory(tests)
