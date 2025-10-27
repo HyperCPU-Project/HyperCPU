@@ -43,7 +43,7 @@ jobs:
         run: sudo -u ci bazelisk build //... --config=linux-opt --compiler=${{ matrix.compiler }}
 
       - name: Upload package tarball
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hcpu-tarballs-${{ matrix.compiler }}
           path: |
