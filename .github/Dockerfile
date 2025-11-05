@@ -4,10 +4,12 @@ ARG USER=ci
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates curl git      \
-    build-essential gcc g++         \
-    clang lld ninja-build sudo      \
-    python3 cmake                   \
+    build-essential gcc g++       \
+    clang lld ninja-build sudo    \
+    python3 python3-pip cmake     \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip install conan
 
 RUN useradd -m ${USER} \
     && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
