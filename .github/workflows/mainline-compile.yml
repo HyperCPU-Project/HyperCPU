@@ -31,7 +31,6 @@ jobs:
 
       - name: Install dependencies with Conan
         run: |
-          sudo -u ci
           if [ "${{ matrix.compiler }}" = "clang" ]; then
             export CC=clang
             export CXX=clang++
