@@ -35,7 +35,7 @@ jobs:
             export CC=gcc
             export CXX=g++
           fi
-          sudo -u env CC=$CC CXX=$CXX ci conan profile detect
+          sudo -u ci env CC=$CC CXX=$CXX ci conan profile detect
           
       - name: Fix permissions
         run: chown -R ci:ci "$GITHUB_WORKSPACE"
