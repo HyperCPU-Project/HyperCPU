@@ -29,11 +29,11 @@ jobs:
       - name: Install dependencies with Conan
         run: |
           if [ "${{ matrix.compiler }}" = "clang" ]; then
-            export CC=clang
-            export CXX=clang++
+            export CC=$(which clang)
+            export CXX=$(which clang++)
           else
-            export CC=gcc
-            export CXX=g++
+            export CC=$(which gcc)
+            export CXX=$(which g++)
           fi
           sudo -u ci env CC=$CC CXX=$CXX conan profile detect
           
@@ -45,7 +45,7 @@ jobs:
           sudo -u ci conan install . --build=missing
           sudo -u ci cmake --preset conan-release
           sudo -u ci cmake --build build/Release -j$(nproc)
-          sudo -u ci cmake --build build/Release package
+          sudo -u ci cmake --build build/Release --target package
 
       - name: Upload package tarball
         uses: actions/upload-artifact@v4
