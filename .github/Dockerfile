@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential gcc g++         \
     clang lld ninja-build sudo      \
     python3 cmake                   \
-    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m ${USER} \
     && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
