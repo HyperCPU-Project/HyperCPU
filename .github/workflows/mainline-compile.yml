@@ -26,9 +26,6 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - name: Fix permissions
-        run: chown -R ci:ci "$GITHUB_WORKSPACE"
-
       - name: Install dependencies with Conan
         run: |
           if [ "${{ matrix.compiler }}" = "clang" ]; then
@@ -39,6 +36,9 @@ jobs:
             export CXX=g++
           fi
           sudo -E -u ci conan profile detect
+          
+      - name: Fix permissions
+        run: chown -R ci:ci "$GITHUB_WORKSPACE"
 
       - name: Build project (Release, with ${{ matrix.compiler }} compiler)
         run: |
