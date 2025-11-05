@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-pip cmake     \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install conan
+RUN pip install conan --break-system-packages
 
 RUN useradd -m ${USER} \
     && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
