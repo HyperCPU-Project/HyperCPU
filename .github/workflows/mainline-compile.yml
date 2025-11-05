@@ -26,21 +26,25 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - name: Cache Bazel
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/bazel
-          key: bazel-${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('**/*.bazel', '**/*.bzl') }}
-          restore-keys: |
-            bazel-${{ runner.os }}-${{ matrix.compiler }}-
-            bazel-${{ runner.os }}-
-
       - name: Fix permissions
         run: chown -R ci:ci "$GITHUB_WORKSPACE"
 
-      - name: Bazel build (linux-opt mode, with ${{ matrix.compiler }} compiler)
-        run: sudo -u ci bazelisk build //... --config=linux-opt --compiler=${{ matrix.compiler }}
+      - name: Install dependencies with Conan
+        run: |
+          sudo -u ci
+          if [ "${{ matrix.compiler }}" = "clang" ]; then
+            export CC=clang
+            export CXX=clang++
+          else
+            export CC=gcc
+            export CXX=g++
+          fi
+          conan profile detect
+
+      - name: Build project (Release, with ${{ matrix.compiler }} compiler)
+        run: |
+          sudo -u ci cmake --preset conan-release
+          sudo -u ci cmake --build build/Release -j$(nproc)
 
       - name: Upload package tarball
         uses: actions/upload-artifact@v4
