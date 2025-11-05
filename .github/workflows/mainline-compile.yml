@@ -38,7 +38,7 @@ jobs:
             export CC=gcc
             export CXX=g++
           fi
-          conan profile detect
+          sudo -E -u ci conan profile detect
 
       - name: Build project (Release, with ${{ matrix.compiler }} compiler)
         run: |
