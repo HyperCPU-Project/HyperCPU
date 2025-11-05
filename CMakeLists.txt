@@ -2,11 +2,14 @@ cmake_minimum_required(VERSION 3.28)
 project(HyperCPU VERSION 0.5.0 LANGUAGES CXX)
 
 include(CheckIPOSupported)
+include(CPack)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 set(EXPORT_COMPILE_COMMANDS TRUE)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CPACK_GENERATOR "TGZ")
+set(CPACK_PACKAGE_FILE_NAME "hypercpu-${CMAKE_BUILD_TYPE}")
 
 find_package(GTest REQUIRED)
 find_package(argparse REQUIRED)

@@ -45,12 +45,12 @@ jobs:
           sudo -u ci conan install . --build=missing
           sudo -u ci cmake --preset conan-release
           sudo -u ci cmake --build build/Release -j$(nproc)
+          sudo -u ci cmake --build build/Release package
 
       - name: Upload package tarball
         uses: actions/upload-artifact@v4
         with:
           name: hcpu-tarballs-${{ matrix.compiler }}
           path: |
-            bazel-bin/tools/packaging/*.tar.gz
-            !bazel-bin/tools/packaging/hcpu.tar.gz
+            build/Release/*.tar.gz
           if-no-files-found: error

@@ -5,7 +5,7 @@ on:
     inputs:
       artifact_name:
         type: string
-        default: "hcpu-tarballs*"
+        default: "hypercpu-*"
 
 jobs:
   install-and-test:

@@ -10,6 +10,7 @@ target_link_libraries(hcasm-core PUBLIC
     eternal::eternal
     spdlog::spdlog
     re2::re2
+    argparse::argparse
     hcpu-common
 )
 
