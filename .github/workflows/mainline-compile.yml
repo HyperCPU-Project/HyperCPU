@@ -35,7 +35,7 @@ jobs:
       - name: Build project (Release, with ${{ matrix.compiler }} compiler)
         run: |
           sudo -u ci conan install . --build=missing
-          sudo -u ci cmake --preset conan-release
+          sudo -u ci cmake --preset conan-release -DINSTALL_TESTS=1
           sudo -u ci cmake --build build/Release -j$(nproc)
           sudo -u ci cmake --build build/Release --target package
 
