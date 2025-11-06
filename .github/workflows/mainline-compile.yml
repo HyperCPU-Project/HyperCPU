@@ -46,3 +46,4 @@ jobs:
           path: |
             build/Release/*.tar.gz
           if-no-files-found: error
+          compression-level: '0'
