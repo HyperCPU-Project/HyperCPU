@@ -33,18 +33,21 @@ jobs:
           path: artifacts/
 
       - name: Extract and run tarballs
+        shell: bash
         run: |
-          if [ "${{ matrix.image }}" == "debian:stable" ]; then
+          if [[ "${{ matrix.image }}" == "debian:stable" ]]; then
             apt update && apt install unzip -y
-          elif [ "${{ matrix.image }}" == "fedora:latest" ]; then
+          elif [[ "${{ matrix.image }}" == "fedora:latest" ]]; then
             dnf update -y && dnf install unzip -y
           else
             pacman -Sy --noconfirm && pacman -S unzip --noconfirm
           fi
-          for archive in artifacts/*.tar.gz; do
-            mkdir unpacked
+          for archive in artifacts/*.zip; do
+            mkdir -p unpacked
             unzip -q "$archive" -d unpacked
-            tar -xpf "unpacked/$archive" -C / --overwrite
+            for subarchive in unpacked/*; do
+              tar -xpf "$subarchive" -C / --overwrite
+            done
             for f in /opt/hcpu/tests/*; do
               [ -f "$f" ] && [ -x "$f" ] && "$f"
             done
