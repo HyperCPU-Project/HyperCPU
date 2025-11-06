@@ -43,14 +43,9 @@ jobs:
             pacman -Sy --noconfirm && pacman -S unzip --noconfirm
           fi
           ls -la artifacts
-          for archive in artifacts/*.zip; do
-            mkdir -p unpacked
-            unzip -q "$archive" -d unpacked
-            for subarchive in unpacked/*; do
-              tar -xpf "$subarchive" -C / --overwrite
-            done
+          for archive in artifacts/*.tar.gz; do
+            tar -xpf "$archive" -C / --overwrite
             for f in /opt/hcpu/tests/*; do
               [ -f "$f" ] && [ -x "$f" ] && "$f"
             done
-            rm -rf unpacked
           done
