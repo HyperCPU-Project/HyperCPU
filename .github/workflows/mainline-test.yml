@@ -45,7 +45,7 @@ jobs:
           ls -la artifacts
           file artifacts/*.tar.gz
           for archive in artifacts/*.tar.gz; do
-            tar -xpf "$subarchive" -C / --overwrite
+            tar -xpf "$archive" -C / --overwrite
             for f in /opt/hcpu/tests/*; do
               [ -f "$f" ] && [ -x "$f" ] && "$f"
             done
