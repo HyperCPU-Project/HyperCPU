@@ -42,6 +42,7 @@ jobs:
           else
             pacman -Sy --noconfirm && pacman -S unzip --noconfirm
           fi
+          ls -la artifacts
           for archive in artifacts/*.zip; do
             mkdir -p unpacked
             unzip -q "$archive" -d unpacked
