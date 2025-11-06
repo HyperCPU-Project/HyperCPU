@@ -11,6 +11,6 @@ if (DEFINED INSTALL_TESTS)
             integration-tests
             modular-tests
         DESTINATION
-            bin
+            opt/hcpu/tests
     )
 endif()
