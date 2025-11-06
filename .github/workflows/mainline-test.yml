@@ -34,6 +34,13 @@ jobs:
 
       - name: Extract and run tarballs
         run: |
+          if [ "${{ matrix.image }}" == "debian:stable" ]; then
+            apt update && apt install unzip -y
+          elif [ "${{ matrix.image }}" == "fedora:latest" ]; then
+            dnf update -y && dnf install unzip -y
+          else
+            pacman -Sy --noconfirm && pacman -S unzip --noconfirm
+          fi
           for archive in artifacts/*.tar.gz; do
             mkdir unpacked
             unzip -q "$archive" -d unpacked
