@@ -8,7 +8,7 @@ jobs:
     name: Compile (${{ matrix.compiler }})
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/hypercpu-project/hypercpu-builder:latest
+      image: ghcr.io/hypercpu-project/hypercpu-builder-${{ matrix.compiler }}:latest
       options: --init
     permissions:
       contents: read
@@ -27,15 +27,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install dependencies with Conan
-        run: |
-          if [ "${{ matrix.compiler }}" = "clang" ]; then
-            export CC=$(which clang)
-            export CXX=$(which clang++)
-          else
-            export CC=$(which gcc)
-            export CXX=$(which g++)
-          fi
-          sudo -u ci env CC=$CC CXX=$CXX conan profile detect
+        run: sudo -u ci conan profile detect
           
       - name: Fix permissions
         run: chown -R ci:ci "$GITHUB_WORKSPACE"
