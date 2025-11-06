@@ -4,7 +4,7 @@ ARG USER=ci
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates curl git      \
-    build-essential               \
+    build-essential unzip         \
     clang lld ninja-build sudo    \
     python3 python3-pip cmake     \
     && rm -rf /var/lib/apt/lists/*
