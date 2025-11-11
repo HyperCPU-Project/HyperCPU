@@ -4,7 +4,7 @@ ARG USER=ci
 
 RUN pacman -Syu --noconfirm \
     ca-certificates curl git \
-    gcc make unzip \
+    gcc make unzip clang-format \
     ninja sudo python3 python-pip cmake \
     && rm -rf /var/cache/pacman/pkg/
 
