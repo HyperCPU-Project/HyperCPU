@@ -10,6 +10,12 @@ jobs:
       contents: read
       packages: write
 
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [ gcc, clang ]
+        distribution: [ ubuntu, debian, fedora, arch ]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -28,18 +34,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: .github/docker/clang/Dockerfile
+          file: .github/docker/${{ matrix.compiler }}/Dockerfile-${{ matrix.distribution }}
           push: true
-          tags: ghcr.io/hypercpu-project/hypercpu-builder-clang:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build and push gcc image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: .github/docker/gcc/Dockerfile
-          push: true
-          tags: ghcr.io/hypercpu-project/hypercpu-builder-gcc:latest
+          tags: ghcr.io/hypercpu-project/hypercpu-builder-${{ matrix.compiler }}-${{ matrix.distribution }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -5,10 +5,10 @@ on:
 
 jobs:
   testing:
-    name: Compile (${{ matrix.compiler }})
+    name: Compile (${{ matrix.compiler }} on ${{ matrix.distribution }})
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/hypercpu-project/hypercpu-builder-${{ matrix.compiler }}:latest
+      image: ghcr.io/hypercpu-project/hypercpu-builder-${{ matrix.compiler }}-${{ matrix.distribution }}:latest
       options: --init
     permissions:
       contents: read
@@ -18,6 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [gcc, clang]
+        distribution: [debian, ubuntu, fedora, arch]
 
     steps:
       - name: Checkout code
@@ -39,10 +40,7 @@ jobs:
           sudo -u ci cmake --build build/Release -j$(nproc)
           sudo -u ci cmake --build build/Release --target package
 
-      - name: Upload package tarball
-        uses: actions/upload-artifact@v4
-        with:
-          name: hcpu-tarballs-${{ matrix.compiler }}
-          path: |
-            build/Release/*.tar.gz
-          if-no-files-found: error
+      - name: Run all tests
+        run: |
+          sudo -u ci build/Release/tests/Integration/integration-tests
+          sudo -u ci build/Release/tests/Modular/modular-tests
