@@ -9,8 +9,8 @@ RUN pacman -Syu --noconfirm \
     && rm -rf /var/cache/pacman/pkg/
 
 RUN git clone https://aur.archlinux.org/clang-format-static-bin.git \
-    cd clang-format-static-bin \
-    makepkg -si --noconfirm
+    && cd clang-format-static-bin \
+    && makepkg -si --noconfirm
 
 RUN pip install conan --break-system-packages
 
