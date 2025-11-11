@@ -4,7 +4,7 @@ ARG USER=ci
 
 RUN dnf update -y && dnf -y install \
     ca-certificates curl git \
-    make g++ unzip \
+    make g++ unzip libasan \
     clang lld ninja-build sudo \
     python3 python3-pip cmake \
     && rm -rf /var/cache/dnf/*
