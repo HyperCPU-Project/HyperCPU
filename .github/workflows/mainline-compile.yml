@@ -42,10 +42,10 @@ jobs:
           else
             sudo -u ci cmake --preset conan-debug -DINSTALL_TESTS=1
           fi
-          sudo -u ci cmake --build build/Release -j$(nproc)
-          sudo -u ci cmake --build build/Release --target package
+          sudo -u ci cmake --build build/${{ matrix.build-type }} -j$(nproc)
+          sudo -u ci cmake --build build/${{ matrix.build-type }} --target package
 
       - name: Run all tests
         run: |
-          sudo -u ci build/Release/tests/Integration/integration-tests
-          sudo -u ci build/Release/tests/Modular/modular-tests
+          sudo -u ci build/${{ matrix.build-type }}/tests/Integration/integration-tests
+          sudo -u ci build/${{ matrix.build-type }}/tests/Modular/modular-tests
