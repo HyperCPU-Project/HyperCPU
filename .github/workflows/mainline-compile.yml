@@ -37,7 +37,7 @@ jobs:
       - name: Build project (Release, with ${{ matrix.compiler }} compiler)
         run: |
           sudo -u ci conan install . --build=missing -s build_type=${{ matrix.build-type }}
-          if [[ "${{ matrix.build-type }}" = "Release" ]]; then
+          if [ "${{ matrix.build-type }}" = "Release" ]; then
             sudo -u ci cmake --preset conan-release -DINSTALL_TESTS=1
           else
             sudo -u ci cmake --preset conan-debug -DINSTALL_TESTS=1
