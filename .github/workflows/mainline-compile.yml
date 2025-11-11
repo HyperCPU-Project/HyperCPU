@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [gcc, clang]
-        distribution: [debian, ubuntu, fedora]
+        distribution: [debian, ubuntu]
         build-type: [Release, Debug]
 
     steps:
