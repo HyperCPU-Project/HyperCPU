@@ -5,7 +5,7 @@ ARG USER=ci
 RUN pacman -Syu --noconfirm \
     ca-certificates curl git \
     gcc make unzip \
-    ninja sudo python3 python3-pip cmake \
+    ninja sudo python3 python-pip cmake \
     && rm -rf /var/cache/pacman/pkg/
 
 
