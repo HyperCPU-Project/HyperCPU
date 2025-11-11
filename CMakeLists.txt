@@ -37,3 +37,18 @@ endif()
 
 add_subdirectory(src)
 add_subdirectory(tests)
+
+# Find formatters
+find_program(CLANG_FORMAT NAMES clang-format REQUIRED)
+
+# Collect source files (customize as needed)
+file(GLOB_RECURSE CPP_SOURCES CONFIGURE_DEPENDS
+        src/**.cpp src/**.hpp tests/**.cpp tests/**.hpp
+)
+
+# Create formatting target
+add_custom_target(format
+        COMMAND ${CLANG_FORMAT} -i ${CPP_SOURCES}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Formatting code with clang-format and cmake-format"
+)

@@ -4,10 +4,13 @@ ARG USER=ci
 
 RUN pacman -Syu --noconfirm \
     ca-certificates curl git \
-    gcc make unzip clang-format \
+    base-devel make unzip \
     ninja sudo python3 python-pip cmake \
     && rm -rf /var/cache/pacman/pkg/
 
+RUN git clone https://aur.archlinux.org/clang-format-static-bin.git \
+    cd clang-format-static-bin \
+    makepkg -si --noconfirm
 
 RUN pip install conan --break-system-packages
 
