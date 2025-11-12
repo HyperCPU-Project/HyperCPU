@@ -1,7 +1,7 @@
+#include "fmt/format.h"
 #include <argparse/argparse.hpp>
 #include <mapbox/eternal.hpp>
 #include <spdlog/spdlog.h>
-#include "fmt/format.h"
 
 #include "Assembler/Core/Compiler.hpp"
 #include "Common/NotImplemented.hpp"

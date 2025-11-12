@@ -427,9 +427,9 @@ std::string_view HCAsm::FindLine(const pog::LineSpecialization& line_spec, const
   auto line = FindLine(err_token.line_spec, parser.get_top_file());
   spdlog::debug(fmt::format("{} | {}", err_token.line_spec.line, line));
   spdlog::debug(fmt::format("{:<{}} | {:<{}}{}",
-                "", std::to_string(err_token.line_spec.line).length(),
-                "", err_token.line_spec.offset,
-                std::string(err_token.line_spec.length, '^')));
+                            "", std::to_string(err_token.line_spec.line).length(),
+                            "", err_token.line_spec.offset,
+                            std::string(err_token.line_spec.length, '^')));
   HyperCPU::exit(1);
 }
 
