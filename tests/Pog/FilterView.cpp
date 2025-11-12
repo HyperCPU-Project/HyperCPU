@@ -1,7 +1,7 @@
 #include "Pog/FilterView.hpp"
 
 #include "PCH/CStd.hpp"
-#include "tests/gtest.hpp"
+#include "gtest.hpp"
 
 class TestFilterView : public ::testing::Test {};
 

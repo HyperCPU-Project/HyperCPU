@@ -337,7 +337,7 @@ HCAsm::BinaryResult HCAsm::HCAsmCompiler::TransformToBinary(HCAsm::CompilerState
   }
 
   // Resolve references - pass 2
-  spdlog::info("{} label references are waiting for resolve", ir.pending_resolves.size());
+  spdlog::info(fmt::format("{} label references are waiting for resolve", ir.pending_resolves.size()));
   if (!ir.pending_resolves.empty()) {
     spdlog::info("Resolving label references");
 
@@ -423,13 +423,13 @@ std::string_view HCAsm::FindLine(const pog::LineSpecialization& line_spec, const
 }
 
 [[noreturn]] void HCAsm::ThrowError(pog::TokenWithLineSpec<Value>& err_token, pog::Parser<Value>& parser, std::string err_msg) {
-  spdlog::error("error: {}", err_msg);
+  spdlog::error(fmt::format("error: {}", err_msg));
   auto line = FindLine(err_token.line_spec, parser.get_top_file());
-  spdlog::debug("{} | {}", err_token.line_spec.line, line);
-  spdlog::debug("{:<{}} | {:<{}}{}",
-                "", std::to_string(err_token.line_spec.line).length(),
-                "", err_token.line_spec.offset,
-                std::string(err_token.line_spec.length, '^'));
+  spdlog::debug(fmt::format("{} | {}", err_token.line_spec.line, line));
+  spdlog::debug(fmt::format("{:<{}} | {:<{}}{}",
+                            "", std::to_string(err_token.line_spec.line).length(),
+                            "", err_token.line_spec.offset,
+                            std::string(err_token.line_spec.length, '^')));
   HyperCPU::exit(1);
 }
 

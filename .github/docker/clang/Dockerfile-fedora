@@ -1,0 +1,18 @@
+FROM fedora:latest
+
+ARG USER=ci
+
+RUN dnf update -y && dnf -y install \
+    ca-certificates curl git \
+    make g++ unzip libasan libubsan \
+    clang lld ninja-build sudo \
+    python3 python3-pip cmake \
+    && rm -rf /var/cache/dnf/*
+
+
+RUN pip install conan --break-system-packages
+
+RUN useradd -m ${USER} \
+    && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+WORKDIR /home/${USER}/workspace

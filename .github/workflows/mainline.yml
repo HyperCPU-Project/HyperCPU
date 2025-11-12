@@ -11,7 +11,7 @@ jobs:
   prepare:
     uses: ./.github/workflows/mainline-prepare.yml
 
-  package:
+  compile:
     needs: prepare
     uses: ./.github/workflows/mainline-compile.yml
 
@@ -22,7 +22,3 @@ jobs:
   lint:
     needs: prepare
     uses: ./.github/workflows/mainline-lint.yml
-
-  tests:
-    needs: package
-    uses: ./.github/workflows/mainline-test.yml

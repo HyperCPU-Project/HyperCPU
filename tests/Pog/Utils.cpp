@@ -1,7 +1,7 @@
 #include "Pog/Utils.hpp"
 
 #include "PCH/CStd.hpp"
-#include "tests/gtest.hpp"
+#include "gtest.hpp"
 
 class TestUtils : public ::testing::Test {};
 

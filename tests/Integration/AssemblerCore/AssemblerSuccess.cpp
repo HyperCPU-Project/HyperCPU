@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(ASSEMBLER, ASM_R_R_b8) {
   std::string data = "mov xlll0, xlll1;";

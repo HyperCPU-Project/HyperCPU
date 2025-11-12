@@ -1,5 +1,5 @@
 #include "PCH/CStd.hpp"
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 #define private public
 #include "Emulator/Core/MemoryController/MemoryControllerST.hpp"

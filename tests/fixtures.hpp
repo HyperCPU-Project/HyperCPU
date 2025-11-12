@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PCH/CStd.hpp"
-#include "tests/gtest.hpp"
+#include "gtest.hpp"
 
 #define private public
 #include "Assembler/Core/Compiler.hpp"

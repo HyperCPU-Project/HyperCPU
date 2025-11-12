@@ -1,0 +1,17 @@
+FROM debian:latest
+
+ARG USER=ci
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl git      \
+    build-essential unzip clang-format \
+    clang lld ninja-build sudo    \
+    python3 python3-pip cmake     \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install conan --break-system-packages
+
+RUN useradd -m ${USER} \
+    && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+WORKDIR /home/${USER}/workspace

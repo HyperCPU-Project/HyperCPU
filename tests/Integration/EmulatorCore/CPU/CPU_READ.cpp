@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(CPU_TEST, INSTR_READ) {
   cpu.read_io_handlers[1] = []() -> std::uint8_t {

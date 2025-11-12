@@ -1,7 +1,7 @@
 #include "Pog/Precedence.hpp"
 
 #include "PCH/CStd.hpp"
-#include "tests/gtest.hpp"
+#include "gtest.hpp"
 
 class TestPrecedence : public ::testing::Test {};
 

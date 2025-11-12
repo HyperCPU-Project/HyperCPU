@@ -7,7 +7,7 @@ namespace HyperCPU {
     as using this can cause serious bugs. When we are on release profile - allow these things to behave how they were intented.
   */
 
-  [[noreturn]] constexpr void exit([[maybe_unused]] int code) {
+  [[noreturn, gnu::always_inline]] inline void exit([[maybe_unused]] int code) {
 #ifdef NDEBUG
     std::abort();
 #else
@@ -15,7 +15,7 @@ namespace HyperCPU {
 #endif
   }
 
-  constexpr void unreachable() {
+  inline void unreachable() {
 #ifdef NDEBUG
     std::abort();
 #else

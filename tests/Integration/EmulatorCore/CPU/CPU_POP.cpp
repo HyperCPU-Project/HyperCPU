@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 // TODO: fix constexpr naming
 static constexpr std::uint8_t BYTE_DATA1 = 0x55;

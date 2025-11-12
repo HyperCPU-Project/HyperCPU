@@ -1,4 +1,4 @@
-#include "tests/fixtures.hpp"
+#include "fixtures.hpp"
 
 TEST_F(DECODER_TEST, SHFL_INSTR_R_R_B8) {
   decoder.mem_controller->Load16(counter, HyperCPU::Opcode::SHFL);
