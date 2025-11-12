@@ -7,7 +7,7 @@ jobs:
   format:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/hypercpu-project/hypercpu-builder:latest
+      image: ghcr.io/hypercpu-project/hypercpu-builder-gcc-debian:latest
       options: --init
     permissions:
       contents: read
@@ -21,7 +21,10 @@ jobs:
         run: chown -R ci:ci "$GITHUB_WORKSPACE"
 
       - name: Run formatters
-        run: sudo -u ci cmake --build build/* --target format
+        run: |
+          sudo -u ci conan profile detect
+          sudo -u ci conan install . --build=missing
+          sudo -u ci cmake --build build/Release --target format
 
       - name: Check diff
         run: sudo -u ci git diff --quiet
