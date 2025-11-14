@@ -1,7 +1,0 @@
-load("//tools/bazel:pch.bzl", "precompiled_headers")
-
-precompiled_headers(
-    name = "pch_cstd",
-    main = "CStd.hpp",
-    visibility = ["//visibility:public"],
-)
