@@ -39,6 +39,8 @@ namespace HyperCPU {
     JMGR = 0x0021,
     JML = 0x0022,
     CMP = 0x0023,
+    LODSB = 0x0024,
+    STDSB = 0x0025,
     MOV = 0x007F,
     _CONT = 0x6934
   };
@@ -82,6 +84,8 @@ namespace HyperCPU {
       case Opcode::JMGR:
       case Opcode::JML:
       case Opcode::CMP:
+      case Opcode::LODSB:
+      case Opcode::STDSB:
         return true;
       default:
         return false;

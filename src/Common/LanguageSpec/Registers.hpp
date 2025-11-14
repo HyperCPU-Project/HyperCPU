@@ -45,7 +45,8 @@ namespace HyperCPU {
     XSP,
     XIP,
     XGDP,
-    XIVT
+    XIVT,
+    XFST
   };
 
   namespace Validator {
@@ -93,6 +94,7 @@ namespace HyperCPU {
       case Reg::XIP:
       case Reg::XGDP:
       case Reg::XIVT:
+      case Reg::XFST:
         return true;
       default:
         return false;

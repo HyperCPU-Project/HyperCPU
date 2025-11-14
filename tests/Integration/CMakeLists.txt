@@ -37,6 +37,7 @@ add_executable(integration-tests
     EmulatorCore/CPU/CPU_SHFR.cpp
     EmulatorCore/CPU/CPU_SUB.cpp
     EmulatorCore/CPU/CPU_WRITE.cpp
+    EmulatorCore/CPU/CPU_LODSB.cpp
     EmulatorCore/CPU/OperandsEvaluation.cpp
     EmulatorCore/Exceptions/Exceptions.cpp
 )

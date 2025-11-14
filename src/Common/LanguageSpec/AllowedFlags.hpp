@@ -41,8 +41,8 @@ namespace HyperCPU {
       {0, 0, 0, 0, 0, 0, 0, 0, 0b00000011, 0, 0b00000011, 0},                                                               // JMGR
       {0, 0, 0, 0, 0, 0, 0, 0, 0b00000011, 0, 0b00000011, 0},                                                               // JML
       {SUPPORT_ALL, SUPPORT_ALL, SUPPORT_ALL, SUPPORT_ALL, SUPPORT_ALL, SUPPORT_ALL, SUPPORT_ALL, SUPPORT_ALL, 0, 0, 0, 0}, // CMP
-      {},
-      {},
+      {0, 0, 0, 0, 0, 0, 0, 0, SUPPORT_ALL, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, SUPPORT_ALL, 0, 0, 0},
       {},
       {},
       {},

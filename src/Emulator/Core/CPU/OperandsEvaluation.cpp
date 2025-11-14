@@ -97,6 +97,8 @@ HyperCPU::OperandContainer HyperCPU::CPU::GetRegister(OperandContainer& op1) {
     return OperandContainer{xgdp};
   case HyperCPU::Reg::XIVT:
     return OperandContainer{xivt};
+  case HyperCPU::Reg::XFST:
+    return OperandContainer{xfst};
   default:
     throw std::runtime_error("Invalid register");
   }
