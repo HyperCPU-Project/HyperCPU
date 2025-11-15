@@ -424,8 +424,7 @@ HCAsm::BinaryResult HCAsm::HCAsmCompiler::TransformToBinary(HCAsm::CompilerState
       default:
         transformer.EncodeInstruction(instruction);
         break;
-      }
-    }, [&binary, &ir, this](RawValue& raw) mutable -> void {
+      } }, [&binary, &ir, this](RawValue& raw) mutable -> void {
       switch (raw.mode) {
         case Mode::b8_str:
           binary.push(*std::get<std::shared_ptr<std::string>>(raw.value.variant));
