@@ -401,8 +401,8 @@ HCAsm::BinaryResult HCAsm::HCAsmCompiler::TransformToBinary(HCAsm::CompilerState
          .opcode = HyperCPU::Opcode::MOV,
          .op1 = Operand {
            .type = OperandType::reg,
-           .mode = Mode::b64,
-           .reg = HyperCPU::Reg::XFST
+           .reg = HyperCPU::Reg::XFST,
+           .mode = Mode::b64
          },
          .op2 = Operand {
            .type = OperandType::sint,
