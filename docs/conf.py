@@ -9,7 +9,7 @@
 project = "HyperCPU"
 copyright = "2024, HyperWinX"
 author = "HyperWinX"
-release = "0.0"
+release = "0.5.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

@@ -69,7 +69,7 @@ HCAsm::HCAsmCompiler::HCAsmCompiler()
   parser.token(R"lit("((?:\\[\s\S]|[^"\\])*)")lit")
       .symbol("string")
       .action(TokenizeString);
-  parser.token(R"(0s[0-9]+)")
+  parser.token(R"(0s\-?[0-9]+)")
       .symbol("sint")
       .action(TokenizeSignedInt);
   parser.token(R"(0u[0-9]+)")
@@ -215,6 +215,9 @@ std::uint8_t HCAsm::HCAsmCompiler::InstructionSize(HCAsm::Instruction& instr) {
   switch (instr.opcode) {
   case HyperCPU::Opcode::IRET:
     return 2;
+  case HyperCPU::Opcode::LODSB:
+  case HyperCPU::Opcode::STDSB:
+    return 17;
   default:
     break;
   }
@@ -366,7 +369,63 @@ HCAsm::BinaryResult HCAsm::HCAsmCompiler::TransformToBinary(HCAsm::CompilerState
   BinaryTransformer transformer(binary, &ir);
 
   for (auto& instr : ir.ir) {
-    VisitVariant(instr, [&transformer](Instruction& instruction) mutable -> void { transformer.EncodeInstruction(instruction); }, [&binary, &ir, this](RawValue& raw) mutable -> void {
+    VisitVariant(instr, [&transformer](Instruction& instruction) mutable -> void {
+      switch (instruction.opcode) {
+      case HyperCPU::Opcode::LODSB: {
+        auto instr = Instruction {
+           .opcode = HyperCPU::Opcode::MOV,
+           .op1 = Operand {
+             .type = OperandType::reg,
+             .mode = Mode::b64,
+             .reg = HyperCPU::Reg::XFST
+           },
+           .op2 = Operand {
+             .type = OperandType::sint,
+             .mode = Mode::b64,
+             .variant = instruction.op2.variant,
+           }
+         };
+         transformer.EncodeInstruction(instr);
+         instr = Instruction {
+           .opcode = HyperCPU::Opcode::LODSB,
+           .op1 = instruction.op1,
+           .op2 = Operand {
+             .type = OperandType::none
+           }
+         };
+         transformer.EncodeInstruction(instr);
+         break;
+      }
+      case HyperCPU::Opcode::STDSB: {
+      auto instr = Instruction {
+         .opcode = HyperCPU::Opcode::MOV,
+         .op1 = Operand {
+           .type = OperandType::reg,
+           .mode = Mode::b64,
+           .reg = HyperCPU::Reg::XFST
+         },
+         .op2 = Operand {
+           .type = OperandType::sint,
+           .mode = Mode::b64,
+           .variant = instruction.op2.variant,
+         }
+       };
+       transformer.EncodeInstruction(instr);
+       instr = Instruction {
+         .opcode = HyperCPU::Opcode::STDSB,
+         .op1 = instruction.op1,
+         .op2 = Operand {
+          .type = OperandType::none
+         }
+       };
+       transformer.EncodeInstruction(instr);
+       break;
+    }
+      default:
+        transformer.EncodeInstruction(instruction);
+        break;
+      }
+    }, [&binary, &ir, this](RawValue& raw) mutable -> void {
       switch (raw.mode) {
         case Mode::b8_str:
           binary.push(*std::get<std::shared_ptr<std::string>>(raw.value.variant));

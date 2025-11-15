@@ -47,4 +47,5 @@ constexpr inline const auto registers_assoc = mapbox::eternal::hash_map<mapbox::
      {"xsp", HyperCPU::Reg::XSP},
      {"xip", HyperCPU::Reg::XIP},
      {"xgdp", HyperCPU::Reg::XGDP},
-     {"xivt", HyperCPU::Reg::XIVT}});
+     {"xivt", HyperCPU::Reg::XIVT},
+    {"xfst", HyperCPU::Reg::XFST},});

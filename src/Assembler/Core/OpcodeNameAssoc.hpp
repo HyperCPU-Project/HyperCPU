@@ -28,7 +28,7 @@ constexpr inline const auto opcode_assoc = mapbox::eternal::hash_map<mapbox::ete
      {"halt", HyperCPU::Opcode::HALT},
      {"loivt", HyperCPU::Opcode::LOIVT},
      {"intr", HyperCPU::Opcode::INTR},
-     {"ret", HyperCPU::Opcode::RET},
+     //{"ret", HyperCPU::Opcode::RET},
      {"iret", HyperCPU::Opcode::IRET},
      {"mov", HyperCPU::Opcode::MOV},
      {"read", HyperCPU::Opcode::READ},
@@ -42,4 +42,6 @@ constexpr inline const auto opcode_assoc = mapbox::eternal::hash_map<mapbox::ete
      {"jme", HyperCPU::Opcode::JME},
      {"jmgr", HyperCPU::Opcode::JMGR},
      {"jml", HyperCPU::Opcode::JML},
-     {"cmp", HyperCPU::Opcode::CMP}});
+     {"cmp", HyperCPU::Opcode::CMP},
+    {"lodsb", HyperCPU::Opcode::LODSB},
+    {"stdsb", HyperCPU::Opcode::STDSB},});

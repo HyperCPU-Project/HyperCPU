@@ -35,6 +35,7 @@ add_library(hcpu-core STATIC
     Core/CPU/InstructionsImpl/ADC.cpp
     Core/CPU/InstructionsImpl/SUB.cpp
     Core/CPU/InstructionsImpl/LODSB.cpp
+    Core/CPU/InstructionsImpl/STDSB.cpp
     Core/CPU/Interrupts/InterruptHandler.cpp
     Core/CPU/IO/Simple.cpp
     Core/CPU/CPU.cpp

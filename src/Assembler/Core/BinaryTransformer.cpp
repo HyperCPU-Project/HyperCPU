@@ -149,7 +149,7 @@ void HCAsm::BinaryTransformer::EncodeInstruction(HCAsm::Instruction& instr) {
   encoded_operands |= (static_cast<std::uint8_t>(md) << 4);
   encoded_operands |= static_cast<std::uint8_t>(types);
 
-  res.push(static_cast<std::uint8_t>(encoded_operands));
+  res.push(encoded_operands);
 
   switch (types) {
   case HyperCPU::OperandTypes::R_R:
@@ -195,7 +195,7 @@ void HCAsm::BinaryTransformer::EncodeInstruction(HCAsm::Instruction& instr) {
         res.push(static_cast<std::int32_t>(std::get<std::int64_t>(instr.op2.variant)));
         break;
       case HCAsm::Mode::b64:
-        res.push(static_cast<std::int64_t>(std::get<std::int64_t>(instr.op2.variant)));
+        res.push(std::get<std::int64_t>(instr.op2.variant));
         break;
       default:
         HyperCPU::unreachable();
