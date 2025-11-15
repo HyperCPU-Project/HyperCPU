@@ -9,9 +9,9 @@
 HyperCPU::SimpleIOImpl::SimpleIOImpl()
     : state(CurrentState::Default),
       was_printing(true),
-      printing(true),
-      newt(oldt) {
+      printing(true) {
   tcgetattr(STDIN_FILENO, &oldt);
+  std::memcpy(&newt, &oldt, sizeof(struct termios));
 
   newt.c_lflag &= ~(ICANON | ECHO);
   newt.c_cc[VMIN] = 1;
