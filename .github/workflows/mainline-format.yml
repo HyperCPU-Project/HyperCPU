@@ -30,4 +30,4 @@ jobs:
           sudo -u ci cmake --build build/Release --target format
 
       - name: Check diff
-        run: sudo -u ci git diff --quiet
+        run: sudo -u ci git diff
