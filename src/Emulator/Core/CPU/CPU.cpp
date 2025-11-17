@@ -64,6 +64,8 @@ HyperCPU::CPU::CPU(std::uint16_t core_count, std::uint64_t mem_size,
       io_ctl(std::make_unique<SimpleIOImpl>()) {
   // Initializing all register pointers
   std::memset(&data, 0, sizeof(data));
+  *xbp = mem_size;
+  *xsp = mem_size;
 
   // TODO: Use std::bind instead of lambdas
   opcode_handler_assoc[static_cast<std::uint16_t>(HyperCPU::Opcode::HALT)] =
