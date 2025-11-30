@@ -13,7 +13,8 @@ class HyperCPU(ConanFile):
         "argparse/3.2",
         "eternal/1.0.1",
         "fmt/11.0.2",
-        "re2/20250722"
+        "re2/20250722",
+        "tl-expected/20190710"
     ]
     generators = ["CMakeToolchain", "CMakeDeps"]
 

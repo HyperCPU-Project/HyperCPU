@@ -14,9 +14,20 @@ target_link_libraries(hcasm-core PUBLIC
     hcpu-common
 )
 
+add_library(hcasm-parser
+    Tokenizer/Tokenizer.cpp
+    Parser/ASTBuilder.cpp
+)
+target_include_directories(hcasm-parser PUBLIC ${PROJECT_SOURCE_DIR}/src)
+target_link_libraries(hcasm-parser PUBLIC
+    eternal::eternal
+    tl::expected
+)
+
 add_executable(hcasm
   Main.cpp
 )
 target_link_libraries(hcasm PUBLIC
     hcasm-core
+    hcasm-parser
 )

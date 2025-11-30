@@ -113,5 +113,5 @@ add_executable(modular-tests
     EmulatorCore/MemoryControllers/ST.cpp
     EmulatorCore/Stack/Stack.cpp
 )
-target_link_libraries(modular-tests PUBLIC hcpu-core hcasm-core GTest::gtest GTest::gtest_main pog-hpp fixtures)
+target_link_libraries(modular-tests PUBLIC hcpu-core hcasm-core hcasm-parser GTest::gtest GTest::gtest_main pog-hpp fixtures)
 target_include_directories(modular-tests PUBLIC ${PROJECT_SOURCE_DIR})
