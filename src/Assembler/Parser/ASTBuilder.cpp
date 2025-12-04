@@ -8,17 +8,23 @@ HCAsm::NodeProgram HCAsm::ASTBuilder::ParseProgram() {
     if (!stmt) {
       break;
     }
-    prog.stmts.push_back(stmt.value());
+    prog.stmts.push_back(stmt);
   }
 
   return prog;
 }
 
-std::optional<HCAsm::NodeStatement*> HCAsm::ASTBuilder::ParseStatement() {
-
+HCAsm::PtrType<HCAsm::NodeStatement>::type HCAsm::ASTBuilder::ParseStatement() {
+  if (auto label = ParseLabel()) {
+    NodeStatement stmt = {
+      std::move(label)
+    };
+    return pool.allocate<NodeStatement>(std::move(stmt));
+  }
+  return PtrType<NodeStatement>::type{nullptr};
 }
 
-std::optional<HCAsm::NodeLabel*> HCAsm::ASTBuilder::ParseLabel() {
+HCAsm::PtrType<HCAsm::NodeLabel>::type HCAsm::ASTBuilder::ParseLabel() {
   if (TryPeek(TokenType::DOT) &&
       TryPeek(TokenType::ATTR, 1) &&
       TryPeek(TokenType::OPEN_PARENTHESIS, 2) &&
@@ -30,7 +36,28 @@ std::optional<HCAsm::NodeLabel*> HCAsm::ASTBuilder::ParseLabel() {
     Consume();
     Consume();
     auto attr = Consume();
+    Consume();
+    auto label = Consume();
+    Consume();
+    NodeLabel lbl = {
+      .name=std::move(label),
+      .is_start_label=attr.lexeme == "entry"
+    };
+    return pool.allocate<NodeLabel>(std::move(lbl));
   }
+
+  if (TryPeek(TokenType::IDENTIFIER) &&
+      TryPeek(TokenType::COLON, 1)) {
+    auto label = Consume();
+    Consume();
+    NodeLabel lbl = {
+      .name = std::move(label),
+      .is_start_label = false
+    };
+    return pool.allocate<NodeLabel>(std::move(lbl));
+  }
+
+  return PtrType<NodeLabel>::type{nullptr};
 }
 
 std::optional<HCAsm::Token> HCAsm::ASTBuilder::TryConsume(TokenType type) {

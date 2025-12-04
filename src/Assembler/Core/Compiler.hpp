@@ -48,7 +48,7 @@ namespace HCAsm {
     HyperCPU::Reg reg;
     enum Mode mode;
     bool needs_resolve;
-    std::array<hpool::Ptr<pog::TokenWithLineSpec<Value>, hpool::ReallocationPolicy::OffsetRealloc>, 2> tokens;
+    std::array<HPool::Ptr<pog::TokenWithLineSpec<Value>>, 2> tokens;
     std::variant<std::uint64_t, std::int64_t, std::shared_ptr<std::string>> variant;
   };
 
@@ -126,7 +126,7 @@ namespace HCAsm {
 
   // Needs improvements and optimizations
   struct CompilerState {
-    CompilerState(hpool::HPool<pog::TokenWithLineSpec<Value>, hpool::ReallocationPolicy::OffsetRealloc>& pool)
+    CompilerState(HPool::HPool<pog::TokenWithLineSpec<Value>>& pool)
         : pool(pool), code_size(0), entry_point(0) {
     }
 
@@ -134,7 +134,7 @@ namespace HCAsm {
     std::vector<pog::TokenWithLineSpec<Value>> tmp_args;
     std::vector<std::variant<Instruction, Label, RawValue>> ir;
     std::unordered_map<std::string, std::uint64_t> labels;
-    hpool::HPool<pog::TokenWithLineSpec<Value>, hpool::ReallocationPolicy::OffsetRealloc>& pool;
+    HPool::HPool<pog::TokenWithLineSpec<Value>>& pool;
     std::uint64_t code_size;
     std::uint32_t entry_point;
   };
@@ -243,7 +243,7 @@ namespace HCAsm {
     pog::Parser<Value> parser;
     CompilerState* state;
     std::queue<std::string> files;
-    hpool::HPool<pog::TokenWithLineSpec<Value>, hpool::ReallocationPolicy::OffsetRealloc> pool;
+    HPool::HPool<pog::TokenWithLineSpec<Value>> pool;
 
     constexpr inline std::uint8_t OperandSize(const OperandType op);
     std::uint8_t InstructionSize(Instruction& instr);

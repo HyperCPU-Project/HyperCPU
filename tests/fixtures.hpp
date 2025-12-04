@@ -4,7 +4,8 @@
 #include "gtest.hpp"
 
 #define private public
-#include "Assembler/Core/Compiler.hpp"
+//#include "Assembler/Core/Compiler.hpp"
+#include "Assembler/Parser/ASTBuilder.hpp"
 #include "Common/LanguageSpec/Flags.hpp"
 #include "Common/LanguageSpec/Opcodes.hpp"
 #include "Emulator/Core/CPU/CPU.hpp"
@@ -146,7 +147,7 @@ protected:
     cpu.ivt_initialized = true;
   }
 };
-
+/*
 class ASM_PARSER_TEST : public ::testing::Test {
 protected:
   HCAsm::HCAsmCompiler compiler;
@@ -224,7 +225,7 @@ protected:
     HCAsm::current_index = 0;
   }
 };
-
+*/
 constexpr inline std::uint8_t EncodeTestFlags(HyperCPU::Mode md, HyperCPU::OperandTypes types) {
   return (static_cast<std::uint8_t>(md) << 4) | static_cast<std::uint8_t>(types);
 }

@@ -184,7 +184,7 @@ Value HCAsm::ParseOperand9(pog::Parser<Value>& parser, std::vector<pog::TokenWit
                 parser.get_compiler_state()->pool.allocate(std::move(args[0]))},
         }};
   } else {
-    parser.get_compiler_state()->tmp_args = args;
+    parser.get_compiler_state()->tmp_args = std::move(args);
     return {
         .val = Operand{
             .type = HCAsm::OperandType::label,
