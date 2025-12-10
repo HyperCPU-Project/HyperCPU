@@ -10,6 +10,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CPACK_GENERATOR "TGZ")
 set(CPACK_PACKAGE_FILE_NAME "hypercpu-${CMAKE_BUILD_TYPE}")
+# Termux issues.
+if("${CMAKE_SOURCE_DIR}" MATCHES "\/data\/data\/com\.termux*")
+  add_definitions(-DSPDLOG_USE_STD_FORMAT=ON)
+endif()
 
 find_package(GTest REQUIRED)
 find_package(argparse REQUIRED)
@@ -24,6 +28,8 @@ include_directories(foreign/HPool)
 check_ipo_supported(RESULT SUPPORTED OUTPUT ERR)
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-macro-redefined")
 
 # TODO: Enable UBSan and fix all errors
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "debug")
