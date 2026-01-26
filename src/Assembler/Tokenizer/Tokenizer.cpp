@@ -43,7 +43,48 @@ static constexpr auto ident_assoc = mapbox::eternal::map<mapbox::eternal::string
       {"lodsb", HCAsm::TokenType::LODSB},
       {"stdsb", HCAsm::TokenType::STDSB},
       {"attr", HCAsm::TokenType::ATTR},
-      {"x0", HCAsm::TokenType::X0}
+      {"x0",   HCAsm::TokenType::X0},
+      {"x1",   HCAsm::TokenType::X1},
+      {"x2",   HCAsm::TokenType::X2},
+      {"x3",   HCAsm::TokenType::X3},
+      {"x4",   HCAsm::TokenType::X4},
+      {"x5",   HCAsm::TokenType::X5},
+      {"x6",   HCAsm::TokenType::X6},
+      {"x7",   HCAsm::TokenType::X7},
+      {"xh0",  HCAsm::TokenType::XH0},
+      {"xh1",  HCAsm::TokenType::XH1},
+      {"xh2",  HCAsm::TokenType::XH2},
+      {"xh3",  HCAsm::TokenType::XH3},
+      {"xh4",  HCAsm::TokenType::XH4},
+      {"xh5",  HCAsm::TokenType::XH5},
+      {"xh6",  HCAsm::TokenType::XH6},
+      {"xh7",  HCAsm::TokenType::XH7},
+      {"xl0",  HCAsm::TokenType::XL0},
+      {"xl1",  HCAsm::TokenType::XL1},
+      {"xl2",  HCAsm::TokenType::XL2},
+      {"xl3",  HCAsm::TokenType::XL3},
+      {"xl4",  HCAsm::TokenType::XL4},
+      {"xl5",  HCAsm::TokenType::XL5},
+      {"xl6",  HCAsm::TokenType::XL6},
+      {"xl7",  HCAsm::TokenType::XL7},
+      {"xll0",  HCAsm::TokenType::XLL0},
+      {"xll1",  HCAsm::TokenType::XLL1},
+      {"xll2",  HCAsm::TokenType::XLL2},
+      {"xll3",  HCAsm::TokenType::XLL3},
+      {"xllh0", HCAsm::TokenType::XLLH0},
+      {"xllh1", HCAsm::TokenType::XLLH1},
+      {"xllh2", HCAsm::TokenType::XLLH2},
+      {"xllh3", HCAsm::TokenType::XLLH3},
+      {"xlll0", HCAsm::TokenType::XLLL0},
+      {"xlll1", HCAsm::TokenType::XLLL1},
+      {"xlll2", HCAsm::TokenType::XLLL2},
+      {"xlll3", HCAsm::TokenType::XLLL3},
+      {"xbp",  HCAsm::TokenType::XBP},
+      {"xsp",  HCAsm::TokenType::XSP},
+      {"xip",  HCAsm::TokenType::XIP},
+      {"xgdp", HCAsm::TokenType::XGDP},
+      {"xivt", HCAsm::TokenType::XIVT},
+      {"xfst", HCAsm::TokenType::XFST}
 });
 
 char HCAsm::Tokenizer::Peek(std::uint8_t offset) {
@@ -153,8 +194,9 @@ HCAsm::Token HCAsm::Tokenizer::GetNextToken() {
         lexeme.push_back(ch);
         Advance();
         continue;
-      } else if (std::isdigit(ch)) {
-        state = TokenizerState::INT_LIT;
+      }
+      if (ch == '0') {
+        state = TokenizerState::START_INT_LIT;
         lexeme.push_back(ch);
         Advance();
         continue;
@@ -165,7 +207,7 @@ HCAsm::Token HCAsm::Tokenizer::GetNextToken() {
         Advance();
         continue;
       case '\'':
-        state = TokenizerState::STRING_LIT;
+        state = TokenizerState::CHAR_LIT;
         Advance();
         continue;
       case '\0':
@@ -196,32 +238,87 @@ HCAsm::Token HCAsm::Tokenizer::GetNextToken() {
         return CreateToken(TokenType::STRING_LITERAL, lexeme);
       }
       break;
-    case TokenizerState::INT_LIT:
-      if (ch == '.') {
+    case TokenizerState::START_INT_LIT:
+      switch (ch) {
+      case '.':
         lexeme.push_back(ch);
         state = TokenizerState::FLOAT_LIT;
-        Advance();
-      } else if (std::isdigit(ch)) {
-        lexeme.push_back(ch);
-        Advance();
-      } else if (ch == 'u') {
-        lexeme.push_back(ch);
-        Advance();
-        return CreateToken(TokenType::INT_LITERAL, lexeme);
-      } else {
-        return CreateToken(TokenType::INT_LITERAL, lexeme);
+        break;
+      case 's':
+        lexeme.clear();
+        state = TokenizerState::SINT_LIT;
+        break;
+      case 'u':
+        lexeme.clear();
+        state = TokenizerState::UINT_LIT;
+        break;
+      case 'x':
+        lexeme.clear();
+        state = TokenizerState::HEX_LIT;
+        break;
+      case 'b':
+        lexeme.clear();
+        state = TokenizerState::BINARY_LIT;
+        break;
+      default:
+        //TODO: handle error
+        std::abort();
       }
       break;
     case TokenizerState::FLOAT_LIT:
       if (ch == '.') {
         throw std::runtime_error("Multiple dots in a float literal");
-      } else if (std::isdigit(ch)) {
+      }
+      if (std::isdigit(ch)) {
         lexeme.push_back(ch);
         Advance();
       } else {
         return CreateToken(TokenType::FLOAT_LITERAL, lexeme);
       }
       break;
+    case TokenizerState::SINT_LIT:
+      if (std::isdigit(ch)) {
+        lexeme.push_back(ch);
+        Advance();
+      } else {
+        return CreateToken(TokenType::SINT_LITERAL, lexeme);
+      }
+      break;
+    case TokenizerState::UINT_LIT:
+      if (std::isdigit(ch)) {
+        lexeme.push_back(ch);
+        Advance();
+      } else {
+        return CreateToken(TokenType::UINT_LITERAL, lexeme);
+      }
+      break;
+    case TokenizerState::BINARY_LIT:
+      if (std::isdigit(ch)) {
+        lexeme.push_back(ch);
+        Advance();
+      } else {
+        return CreateToken(TokenType::UINT_LITERAL, std::string {
+          std::to_string(std::stoul(lexeme, nullptr, 2))
+        });
+      }
+      break;
+    case TokenizerState::HEX_LIT:
+      if (std::isdigit(ch)) {
+        lexeme.push_back(ch);
+        Advance();
+      } else {
+        return CreateToken(TokenType::UINT_LITERAL, std::string {
+          std::to_string(std::stoul(lexeme, nullptr, 16))
+        });
+      }
+      break;
+    case TokenizerState::CHAR_LIT:
+      lexeme.push_back(ch);
+      if (Peek() != '\'') {
+        throw std::runtime_error{"Not closed char lit"};
+      }
+      Advance();
+      return CreateToken(TokenType::CHAR_LITERAL, lexeme);
     default:
       std::abort();
     }

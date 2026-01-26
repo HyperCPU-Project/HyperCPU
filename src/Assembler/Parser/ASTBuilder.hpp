@@ -5,6 +5,7 @@
 #include "Assembler/Tokenizer/Tokenizer.hpp"
 #include "Common/LanguageSpec/Registers.hpp"
 #include "hpool.hpp"
+#include "Assembler/Misc.hpp"
 
 namespace HCAsm {
   struct NodeOpRegister;
@@ -17,6 +18,7 @@ namespace HCAsm {
   struct Node_b16SImm;
   struct Node_b32SImm;
   struct Node_b64SImm;
+  struct Node_Register;
   struct NodeOperand;
   struct NodeInstruction;
   struct NodeLabel;
@@ -37,12 +39,16 @@ namespace HCAsm {
         Node_b16SImm,
         Node_b32SImm,
         Node_b64SImm,
+        Node_Register,
         NodeOperand,
         NodeInstruction,
         NodeLabel,
         NodeStatement,
         NodeProgram>>;
   };
+
+  template<typename T>
+  using PtrTypeT = PtrType<T>::type;
 
   struct NodeOpRegister {
     HyperCPU::Reg reg;
@@ -84,22 +90,18 @@ namespace HCAsm {
     std::int64_t imm;
   };
 
+  struct Node_Register {
+    RegisterType reg;
+  };
+
   struct NodeOperand {
     std::variant<
-      PtrType<NodeOpRegister>::type,
-      PtrType<Node_b8UImm>::type,
-      PtrType<Node_b16UImm>::type,
-      PtrType<Node_b32UImm>::type,
-      PtrType<Node_b64UImm>::type,
-      PtrType<Node_b8SImm>::type,
-      PtrType<Node_b16SImm>::type,
-      PtrType<Node_b32SImm>::type,
-      PtrType<Node_b64SImm>::type> op;
+      PtrType<Node_Register>::type> op;
   };
 
   struct NodeInstruction {
     TokenType opcode;
-
+    PtrType<NodeOperand>::type operand1, operand2;
   };
 
   struct NodeLabel {
@@ -130,9 +132,11 @@ namespace HCAsm {
     std::vector<Token>& m_tokens;
     PtrType<NodeStatement>::type ParseStatement();
     PtrType<NodeLabel>::type ParseLabel();
+    PtrType<NodeInstruction>::type ParseInstruction();
+    PtrType<NodeOperand>::type ParseOperand();
 
     std::optional<Token> TryConsume(TokenType);
-    Token Peek(std::uint8_t offset = 0);
+    const Token& Peek(std::uint8_t offset = 0);
     bool TryPeek(TokenType type, std::uint8_t offset = 0); // Is used only to verify if there is a specific token at specific offset
     Token Consume();
 
@@ -149,6 +153,7 @@ namespace HCAsm {
       Node_b16SImm,
       Node_b32SImm,
       Node_b64SImm,
+      Node_Register,
       NodeOperand,
       NodeInstruction,
       NodeLabel,

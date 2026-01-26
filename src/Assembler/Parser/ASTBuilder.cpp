@@ -60,6 +60,23 @@ HCAsm::PtrType<HCAsm::NodeLabel>::type HCAsm::ASTBuilder::ParseLabel() {
   return PtrType<NodeLabel>::type{nullptr};
 }
 
+HCAsm::PtrType<HCAsm::NodeInstruction>::type HCAsm::ASTBuilder::ParseInstruction() {
+
+}
+
+HCAsm::PtrType<HCAsm::NodeOperand>::type HCAsm::ASTBuilder::ParseOperand() {
+  const Token& tok = Peek();
+  if (static_cast<std::uint16_t>(tok.type) >= static_cast<std::uint16_t>(TokenType::X0) &&
+      static_cast<std::uint16_t>(tok.type) <= static_cast<std::uint16_t>(TokenType::XFST))
+  {
+    auto reg = pool.allocate<Node_Register>();
+    reg->reg = static_cast<RegisterType>(tok.type);
+    auto op = pool.allocate<NodeOperand>();
+    op->op = reg;
+    return op;
+  } else
+}
+
 std::optional<HCAsm::Token> HCAsm::ASTBuilder::TryConsume(TokenType type) {
   if (Peek().type == type) {
     return Consume();
@@ -67,8 +84,8 @@ std::optional<HCAsm::Token> HCAsm::ASTBuilder::TryConsume(TokenType type) {
   return std::nullopt;
 }
 
-HCAsm::Token HCAsm::ASTBuilder::Peek(std::uint8_t offset) {
-  return m_tokens[m_current_token + offset];
+const HCAsm::Token& HCAsm::ASTBuilder::Peek(std::uint8_t offset) {
+  return m_tokens.at(m_current_token + offset);
 }
 
 bool HCAsm::ASTBuilder::TryPeek(TokenType type, std::uint8_t offset) {
