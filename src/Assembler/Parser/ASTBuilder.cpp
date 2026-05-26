@@ -66,6 +66,8 @@ HCAsm::PtrType<HCAsm::NodeInstruction>::type HCAsm::ASTBuilder::ParseInstruction
 
 HCAsm::PtrType<HCAsm::NodeOperand>::type HCAsm::ASTBuilder::ParseOperand() {
   const Token& tok = Peek();
+
+  // Parse regular register, like: x0
   if (static_cast<std::uint16_t>(tok.type) >= static_cast<std::uint16_t>(TokenType::X0) &&
       static_cast<std::uint16_t>(tok.type) <= static_cast<std::uint16_t>(TokenType::XFST))
   {
@@ -73,8 +75,38 @@ HCAsm::PtrType<HCAsm::NodeOperand>::type HCAsm::ASTBuilder::ParseOperand() {
     reg->reg = static_cast<RegisterType>(tok.type);
     auto op = pool.allocate<NodeOperand>();
     op->op = reg;
+    Skip();
     return op;
-  } else
+  }
+
+  // Parse register like address, like: [x0]
+  if (tok.type == TokenType::OPEN_BRACKET &&
+    static_cast<std::uint16_t>(Peek(1).type) >= static_cast<std::uint16_t>(TokenType::X0) &&
+    static_cast<std::uint16_t>(Peek(1).type) <= static_cast<std::uint16_t>(TokenType::XFST) &&
+    Peek(2).type == TokenType::CLOSE_BRACKET) {
+    auto reg = pool.allocate<Node_Register>();
+    reg->reg = static_cast<RegisterType>(Peek(1).type);
+    auto addr_reg = pool.allocate<Node_Addr>();
+    addr_reg->op = reg;
+    auto op = pool.allocate<NodeOperand>();
+    op->op = addr_reg;
+    Skip(3);
+    return op;
+  }
+
+  // Parse imm value like address, like: [0x0]
+  if (tok.type == TokenType::OPEN_BRACKET &&
+    Peek(1).type == TokenType::UINT_LITERAL &&
+    Peek(2).type == TokenType::CLOSE_BRACKET) {
+    auto uint = pool.allocate<Node_b64UImm>();
+    uint->imm = std::stoull(Peek(1).lexeme);
+    auto addr = pool.allocate<Node_Addr>();
+    addr->op = uint;
+    auto op = pool.allocate<NodeOperand>();
+    op->op = addr;
+    Skip(3);
+    return op;
+  }
 }
 
 std::optional<HCAsm::Token> HCAsm::ASTBuilder::TryConsume(TokenType type) {
@@ -95,4 +127,8 @@ bool HCAsm::ASTBuilder::TryPeek(TokenType type, std::uint8_t offset) {
 
 HCAsm::Token HCAsm::ASTBuilder::Consume() {
   return m_tokens[m_current_token++];
+}
+
+void HCAsm::ASTBuilder::Skip(int tokens) {
+  m_current_token += tokens;
 }

@@ -118,6 +118,7 @@ target_include_directories(modular-tests PUBLIC ${PROJECT_SOURCE_DIR})
 
 add_executable(new-parser-tests
     AssemblerCore/NewParser/Statements.cpp
+        AssemblerCore/NewParser/Operands.cpp
 )
 target_link_libraries(new-parser-tests PUBLIC hcasm-parser GTest::gtest GTest::gtest_main fixtures fmt::fmt re2::re2 spdlog::spdlog)
 target_include_directories(new-parser-tests PUBLIC ${PROJECT_SOURCE_DIR})

@@ -240,24 +240,29 @@ HCAsm::Token HCAsm::Tokenizer::GetNextToken() {
       break;
     case TokenizerState::START_INT_LIT:
       switch (ch) {
-      case '.':
+      case 'f':
         lexeme.push_back(ch);
+        Advance();
         state = TokenizerState::FLOAT_LIT;
         break;
       case 's':
         lexeme.clear();
+        Advance();
         state = TokenizerState::SINT_LIT;
         break;
       case 'u':
         lexeme.clear();
+        Advance();
         state = TokenizerState::UINT_LIT;
         break;
       case 'x':
         lexeme.clear();
+        Advance();
         state = TokenizerState::HEX_LIT;
         break;
       case 'b':
         lexeme.clear();
+        Advance();
         state = TokenizerState::BINARY_LIT;
         break;
       default:
@@ -269,6 +274,7 @@ HCAsm::Token HCAsm::Tokenizer::GetNextToken() {
       if (ch == '.') {
         throw std::runtime_error("Multiple dots in a float literal");
       }
+      // TODO: Fix dot.
       if (std::isdigit(ch)) {
         lexeme.push_back(ch);
         Advance();

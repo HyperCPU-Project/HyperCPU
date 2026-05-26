@@ -10,6 +10,7 @@
 namespace HCAsm {
   struct NodeOpRegister;
   struct NodeOpAddr;
+  struct Node_Addr;
   struct Node_b8UImm;
   struct Node_b16UImm;
   struct Node_b32UImm;
@@ -31,6 +32,7 @@ namespace HCAsm {
       std::variant<
         NodeOpRegister,
         NodeOpAddr,
+        Node_Addr,
         Node_b8UImm,
         Node_b16UImm,
         Node_b32UImm,
@@ -94,9 +96,16 @@ namespace HCAsm {
     RegisterType reg;
   };
 
+  struct Node_Addr {
+    std::variant<
+      PtrTypeT<Node_Register>,
+      PtrTypeT<Node_b64UImm>> op;
+  };
+
   struct NodeOperand {
     std::variant<
-      PtrType<Node_Register>::type> op;
+      PtrTypeT<Node_Register>,
+      PtrTypeT<Node_Addr>> op;
   };
 
   struct NodeInstruction {
@@ -139,12 +148,14 @@ namespace HCAsm {
     const Token& Peek(std::uint8_t offset = 0);
     bool TryPeek(TokenType type, std::uint8_t offset = 0); // Is used only to verify if there is a specific token at specific offset
     Token Consume();
+    void Skip(int tokens = 1);
 
     std::uint32_t m_current_token = 0;
 
     HPool::HPool<
       NodeOpRegister,
       NodeOpAddr,
+      Node_Addr,
       Node_b8UImm,
       Node_b16UImm,
       Node_b32UImm,

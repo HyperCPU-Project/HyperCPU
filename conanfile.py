@@ -9,10 +9,10 @@ class HyperCPU(ConanFile):
     author = "HyperCPU Project"
     requires = [
         "gtest/1.14.0",
-        "spdlog/1.15.0",
+        "spdlog/1.17.0",
         "argparse/3.2",
         "eternal/1.0.1",
-        "fmt/11.0.2",
+        "fmt/12.1.0",
         "re2/20250722",
         "tl-expected/20190710"
     ]
