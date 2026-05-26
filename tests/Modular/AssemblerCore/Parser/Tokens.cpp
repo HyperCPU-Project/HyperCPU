@@ -1,5 +1,5 @@
-#include <stdexcept>
 #include "gtest/gtest.h"
+#include <stdexcept>
 
 #define private public
 #include "Assembler/Tokenizer/Tokenizer.hpp"
@@ -157,7 +157,7 @@ TEST(Tokenizer, ShfrToken) {
 }
 
 TEST(Tokenizer, ShflToken) {
-  std:: string test{"shfl"};
+  std::string test{"shfl"};
   HCAsm::Tokenizer tokenizer(test);
   ASSERT_EQ(tokenizer.GetNextToken().type, HCAsm::TokenType::SHFL);
 }
@@ -374,8 +374,7 @@ TEST(Tokenizer, FloatLitMultipleDots) {
     } catch (std::runtime_error& err) {
       ASSERT_STREQ(err.what(), "Multiple dots in a float literal");
       throw;
-    }
-  }, std::runtime_error);
+    } }, std::runtime_error);
 }
 
 // Identifier test (unknown token)

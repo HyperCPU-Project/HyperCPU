@@ -4,7 +4,7 @@
 #include "gtest.hpp"
 
 #define private public
-//#include "Assembler/Core/Compiler.hpp"
+// #include "Assembler/Core/Compiler.hpp"
 #include "Assembler/Parser/ASTBuilder.hpp"
 #include "Common/LanguageSpec/Flags.hpp"
 #include "Common/LanguageSpec/Opcodes.hpp"

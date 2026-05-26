@@ -2,10 +2,10 @@
 
 #include <vector>
 
+#include "Assembler/Misc.hpp"
 #include "Assembler/Tokenizer/Tokenizer.hpp"
 #include "Common/LanguageSpec/Registers.hpp"
 #include "hpool.hpp"
-#include "Assembler/Misc.hpp"
 
 namespace HCAsm {
   struct NodeOpRegister;
@@ -26,30 +26,30 @@ namespace HCAsm {
   struct NodeStatement;
   struct NodeProgram;
 
-  template<typename T>
+  template <typename T>
   struct PtrType {
     using type = HPool::Ptr<T,
-      std::variant<
-        NodeOpRegister,
-        NodeOpAddr,
-        Node_Addr,
-        Node_b8UImm,
-        Node_b16UImm,
-        Node_b32UImm,
-        Node_b64UImm,
-        Node_b8SImm,
-        Node_b16SImm,
-        Node_b32SImm,
-        Node_b64SImm,
-        Node_Register,
-        NodeOperand,
-        NodeInstruction,
-        NodeLabel,
-        NodeStatement,
-        NodeProgram>>;
+                            std::variant<
+                                NodeOpRegister,
+                                NodeOpAddr,
+                                Node_Addr,
+                                Node_b8UImm,
+                                Node_b16UImm,
+                                Node_b32UImm,
+                                Node_b64UImm,
+                                Node_b8SImm,
+                                Node_b16SImm,
+                                Node_b32SImm,
+                                Node_b64SImm,
+                                Node_Register,
+                                NodeOperand,
+                                NodeInstruction,
+                                NodeLabel,
+                                NodeStatement,
+                                NodeProgram>>;
   };
 
-  template<typename T>
+  template <typename T>
   using PtrTypeT = PtrType<T>::type;
 
   struct NodeOpRegister {
@@ -98,14 +98,24 @@ namespace HCAsm {
 
   struct Node_Addr {
     std::variant<
-      PtrTypeT<Node_Register>,
-      PtrTypeT<Node_b64UImm>> op;
+        PtrTypeT<Node_Register>,
+        PtrTypeT<Node_b64UImm>>
+        op;
   };
 
   struct NodeOperand {
     std::variant<
-      PtrTypeT<Node_Register>,
-      PtrTypeT<Node_Addr>> op;
+        PtrTypeT<Node_Register>,
+        PtrTypeT<Node_Addr>,
+        PtrTypeT<Node_b64UImm>,
+        PtrTypeT<Node_b64SImm>,
+        PtrTypeT<Node_b32UImm>,
+        PtrTypeT<Node_b32SImm>,
+        PtrTypeT<Node_b16UImm>,
+        PtrTypeT<Node_b16SImm>,
+        PtrTypeT<Node_b8UImm>,
+        PtrTypeT<Node_b8SImm>>
+        op;
   };
 
   struct NodeInstruction {
@@ -120,23 +130,26 @@ namespace HCAsm {
 
   struct NodeStatement {
     std::variant<
-      PtrType<NodeInstruction>::type,
-      PtrType<NodeLabel>::type> stmt;
+        PtrType<NodeInstruction>::type,
+        PtrType<NodeLabel>::type>
+        stmt;
   };
 
   struct NodeProgram {
     std::vector<PtrType<NodeStatement>::type> stmts;
   };
 
-  template<typename T>
+  template <typename T>
   struct Pointer {
   };
 
   class ASTBuilder {
   public:
-    ASTBuilder(std::vector<Token>& tokens) : m_tokens(tokens), pool(128) { }
+    ASTBuilder(std::vector<Token>& tokens) : m_tokens(tokens), pool(128) {
+    }
 
     NodeProgram ParseProgram();
+
   private:
     std::vector<Token>& m_tokens;
     PtrType<NodeStatement>::type ParseStatement();
@@ -153,22 +166,23 @@ namespace HCAsm {
     std::uint32_t m_current_token = 0;
 
     HPool::HPool<
-      NodeOpRegister,
-      NodeOpAddr,
-      Node_Addr,
-      Node_b8UImm,
-      Node_b16UImm,
-      Node_b32UImm,
-      Node_b64UImm,
-      Node_b8SImm,
-      Node_b16SImm,
-      Node_b32SImm,
-      Node_b64SImm,
-      Node_Register,
-      NodeOperand,
-      NodeInstruction,
-      NodeLabel,
-      NodeStatement,
-      NodeProgram> pool;
+        NodeOpRegister,
+        NodeOpAddr,
+        Node_Addr,
+        Node_b8UImm,
+        Node_b16UImm,
+        Node_b32UImm,
+        Node_b64UImm,
+        Node_b8SImm,
+        Node_b16SImm,
+        Node_b32SImm,
+        Node_b64SImm,
+        Node_Register,
+        NodeOperand,
+        NodeInstruction,
+        NodeLabel,
+        NodeStatement,
+        NodeProgram>
+        pool;
   };
-}
+} // namespace HCAsm

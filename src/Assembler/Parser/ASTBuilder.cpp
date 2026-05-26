@@ -17,8 +17,7 @@ HCAsm::NodeProgram HCAsm::ASTBuilder::ParseProgram() {
 HCAsm::PtrType<HCAsm::NodeStatement>::type HCAsm::ASTBuilder::ParseStatement() {
   if (auto label = ParseLabel()) {
     NodeStatement stmt = {
-      std::move(label)
-    };
+        std::move(label)};
     return pool.allocate<NodeStatement>(std::move(stmt));
   }
   return PtrType<NodeStatement>::type{nullptr};
@@ -40,9 +39,8 @@ HCAsm::PtrType<HCAsm::NodeLabel>::type HCAsm::ASTBuilder::ParseLabel() {
     auto label = Consume();
     Consume();
     NodeLabel lbl = {
-      .name=std::move(label),
-      .is_start_label=attr.lexeme == "entry"
-    };
+        .name = std::move(label),
+        .is_start_label = attr.lexeme == "entry"};
     return pool.allocate<NodeLabel>(std::move(lbl));
   }
 
@@ -51,9 +49,8 @@ HCAsm::PtrType<HCAsm::NodeLabel>::type HCAsm::ASTBuilder::ParseLabel() {
     auto label = Consume();
     Consume();
     NodeLabel lbl = {
-      .name = std::move(label),
-      .is_start_label = false
-    };
+        .name = std::move(label),
+        .is_start_label = false};
     return pool.allocate<NodeLabel>(std::move(lbl));
   }
 
@@ -61,7 +58,6 @@ HCAsm::PtrType<HCAsm::NodeLabel>::type HCAsm::ASTBuilder::ParseLabel() {
 }
 
 HCAsm::PtrType<HCAsm::NodeInstruction>::type HCAsm::ASTBuilder::ParseInstruction() {
-
 }
 
 HCAsm::PtrType<HCAsm::NodeOperand>::type HCAsm::ASTBuilder::ParseOperand() {
@@ -69,8 +65,7 @@ HCAsm::PtrType<HCAsm::NodeOperand>::type HCAsm::ASTBuilder::ParseOperand() {
 
   // Parse regular register, like: x0
   if (static_cast<std::uint16_t>(tok.type) >= static_cast<std::uint16_t>(TokenType::X0) &&
-      static_cast<std::uint16_t>(tok.type) <= static_cast<std::uint16_t>(TokenType::XFST))
-  {
+      static_cast<std::uint16_t>(tok.type) <= static_cast<std::uint16_t>(TokenType::XFST)) {
     auto reg = pool.allocate<Node_Register>();
     reg->reg = static_cast<RegisterType>(tok.type);
     auto op = pool.allocate<NodeOperand>();
@@ -79,11 +74,116 @@ HCAsm::PtrType<HCAsm::NodeOperand>::type HCAsm::ASTBuilder::ParseOperand() {
     return op;
   }
 
+  // Parse regular numbers, like: 0x69
+  if (tok.type == TokenType::UINT_LITERAL) {
+    auto uint = pool.allocate<Node_b64UImm>();
+    std::uint64_t res = std::stoull(tok.lexeme);
+    std::memcpy(&uint->imm, &res, sizeof(std::uint64_t));
+    auto op = pool.allocate<NodeOperand>();
+    op->op = uint;
+    Skip();
+    return op;
+  }
+  if (tok.type == TokenType::SINT_LITERAL) {
+    auto uint = pool.allocate<Node_b64UImm>();
+    std::int64_t res = std::stoll(tok.lexeme);
+    std::memcpy(&uint->imm, &res, sizeof(std::uint64_t));
+    auto op = pool.allocate<NodeOperand>();
+    op->op = uint;
+    Skip();
+    return op;
+  }
+
+  // Parse regular numbers with specified size, like: b8 0x69
+  if ((tok.type >= TokenType::B8 && tok.type <= TokenType::B64) &&
+      Peek(1).type == TokenType::UINT_LITERAL) {
+    switch (tok.type) {
+    case TokenType::B8: {
+      auto uint = pool.allocate<Node_b8UImm>();
+      std::uint64_t res = std::stoull(Peek(1).lexeme);
+      std::memcpy(&uint->imm, &res, sizeof(std::uint8_t));
+      auto op = pool.allocate<NodeOperand>();
+      op->op = uint;
+      Skip();
+      return op;
+    }
+    case TokenType::B16: {
+      auto uint = pool.allocate<Node_b16UImm>();
+      std::uint64_t res = std::stoull(Peek(1).lexeme);
+      std::memcpy(&uint->imm, &res, sizeof(std::uint16_t));
+      auto op = pool.allocate<NodeOperand>();
+      op->op = uint;
+      Skip();
+      return op;
+    }
+    case TokenType::B32: {
+      auto uint = pool.allocate<Node_b32UImm>();
+      std::uint64_t res = std::stoull(Peek(1).lexeme);
+      std::memcpy(&uint->imm, &res, sizeof(std::uint32_t));
+      auto op = pool.allocate<NodeOperand>();
+      op->op = uint;
+      Skip();
+      return op;
+    }
+    case TokenType::B64: {
+      auto uint = pool.allocate<Node_b64UImm>();
+      std::uint64_t res = std::stoull(Peek(1).lexeme);
+      std::memcpy(&uint->imm, &res, sizeof(std::uint64_t));
+      auto op = pool.allocate<NodeOperand>();
+      op->op = uint;
+      Skip();
+      return op;
+    }
+    }
+  }
+
+  if ((tok.type >= TokenType::B8 && tok.type <= TokenType::B64) &&
+      Peek(1).type == TokenType::SINT_LITERAL) {
+    switch (tok.type) {
+    case TokenType::B8: {
+      auto sint = pool.allocate<Node_b8SImm>();
+      std::int64_t res = std::stoll(Peek(1).lexeme);
+      std::memcpy(&sint->imm, &res, sizeof(std::int8_t));
+      auto op = pool.allocate<NodeOperand>();
+      op->op = sint;
+      Skip();
+      return op;
+    }
+    case TokenType::B16: {
+      auto sint = pool.allocate<Node_b16SImm>();
+      std::int64_t res = std::stoll(Peek(1).lexeme);
+      std::memcpy(&sint->imm, &res, sizeof(std::int16_t));
+      auto op = pool.allocate<NodeOperand>();
+      op->op = sint;
+      Skip();
+      return op;
+    }
+    case TokenType::B32: {
+      auto sint = pool.allocate<Node_b32SImm>();
+      std::int64_t res = std::stoll(Peek(1).lexeme);
+      std::memcpy(&sint->imm, &res, sizeof(std::int32_t));
+      auto op = pool.allocate<NodeOperand>();
+      op->op = sint;
+      Skip();
+      return op;
+    }
+    case TokenType::B64: {
+      auto sint = pool.allocate<Node_b64SImm>();
+      std::int64_t res = std::stoll(Peek(1).lexeme);
+      std::memcpy(&sint->imm, &res, sizeof(std::int64_t));
+      auto op = pool.allocate<NodeOperand>();
+      op->op = sint;
+      Skip();
+      return op;
+    }
+    }
+  }
+
   // Parse register like address, like: [x0]
   if (tok.type == TokenType::OPEN_BRACKET &&
-    static_cast<std::uint16_t>(Peek(1).type) >= static_cast<std::uint16_t>(TokenType::X0) &&
-    static_cast<std::uint16_t>(Peek(1).type) <= static_cast<std::uint16_t>(TokenType::XFST) &&
-    Peek(2).type == TokenType::CLOSE_BRACKET) {
+      static_cast<std::uint16_t>(Peek(1).type) >= static_cast<std::uint16_t>(TokenType::X0) &&
+      static_cast<std::uint16_t>(Peek(1).type) <= static_cast<std::uint16_t>(TokenType::XFST) &&
+      Peek(2).type == TokenType::CLOSE_BRACKET) {
     auto reg = pool.allocate<Node_Register>();
     reg->reg = static_cast<RegisterType>(Peek(1).type);
     auto addr_reg = pool.allocate<Node_Addr>();
@@ -96,8 +196,8 @@ HCAsm::PtrType<HCAsm::NodeOperand>::type HCAsm::ASTBuilder::ParseOperand() {
 
   // Parse imm value like address, like: [0x0]
   if (tok.type == TokenType::OPEN_BRACKET &&
-    Peek(1).type == TokenType::UINT_LITERAL &&
-    Peek(2).type == TokenType::CLOSE_BRACKET) {
+      Peek(1).type == TokenType::UINT_LITERAL &&
+      Peek(2).type == TokenType::CLOSE_BRACKET) {
     auto uint = pool.allocate<Node_b64UImm>();
     uint->imm = std::stoull(Peek(1).lexeme);
     auto addr = pool.allocate<Node_Addr>();
@@ -123,7 +223,6 @@ const HCAsm::Token& HCAsm::ASTBuilder::Peek(std::uint8_t offset) {
 bool HCAsm::ASTBuilder::TryPeek(TokenType type, std::uint8_t offset) {
   return !(m_current_token + offset >= m_tokens.size() || m_tokens[m_current_token + offset].type != type);
 }
-
 
 HCAsm::Token HCAsm::ASTBuilder::Consume() {
   return m_tokens[m_current_token++];
