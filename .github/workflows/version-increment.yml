@@ -42,6 +42,6 @@ jobs:
           tools/increment_version.py --increment ${{ matrix.increment }} >> $GITHUB_OUTPUT
 
       - name: Commit changes
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@v10
         with:
           message: "Increment ${{ matrix.increment }} version to ${{ steps.increment.outputs }}"
